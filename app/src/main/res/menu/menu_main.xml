@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.ContactsActivity">
+    <item
+        android:id="@+id/displaySettings"
+        android:orderInCategory="100"
+        android:title="@string/display_settings_title"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/grantPermissions"
+        android:orderInCategory="101"
+        android:title="Grant Permissions"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/aboutApp"
+        android:orderInCategory="102"
+        android:title="@string/about_contacts_title"
+        app:showAsAction="never"/>
+</menu>

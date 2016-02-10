@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <MultiSelectListPreference
+        android:title="@string/accounts_to_display_key"
+        android:key="@string/accounts_to_display_key"
+        android:summary="The accounts to display contacts from"/>
+    <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
+
+    <SwitchPreference
+        android:title="@string/phones_only_key"
+        android:key="@string/phones_only_key"
+        android:summary="Filter contacts to only those with phone numbers"
+        android:defaultValue="true"/>
+
+    <ListPreference
+        android:title="@string/sort_order_key"
+        android:key="@string/sort_order_key"
+        android:summary="The order to sort the contacts in"
+        android:entries="@array/sort_order_display_values"
+        android:entryValues="@array/sort_order_values"/>
+
+    <!--<ListPreference-->
+        <!--android:title="@string/sort_by_key"-->
+        <!--android:key="@string/sort_by_key"-->
+        <!--android:summary="First or last name to sort contacts by (Not Working)"-->
+        <!--android:entries="@array/sort_by_values"-->
+        <!--android:entryValues="@array/sort_by_values"/>-->
+
+    <!--<ListPreference-->
+        <!--android:title="@string/name_format_key"-->
+        <!--android:key="@string/name_format_key"-->
+        <!--android:summary="The format to display the contacts' names (Not Working)"-->
+        <!--android:entries="@array/name_format_values"-->
+        <!--android:entryValues="@array/name_format_values"/>-->
+
+</PreferenceScreen>
