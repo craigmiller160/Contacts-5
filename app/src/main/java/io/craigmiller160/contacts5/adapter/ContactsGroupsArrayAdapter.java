@@ -2,7 +2,6 @@ package io.craigmiller160.contacts5.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
 import io.craigmiller160.contacts5.controller.GroupSelectionController;
 import io.craigmiller160.contacts5.model.ContactGroup;
 
@@ -40,7 +38,7 @@ public class ContactsGroupsArrayAdapter extends ArrayAdapter<ContactGroup> {
         TextView accountTextView = (TextView) view.findViewById(R.id.accountName);
         final ContactGroup group = groupsList.get(position);
         nameTextView.setText(group.getGroupName() + " (" + group.getGroupSize() + ")");
-        accountTextView.setText(group.getGroupAccountName());
+        accountTextView.setText(group.getAccountName());
 //        view.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

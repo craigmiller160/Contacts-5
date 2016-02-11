@@ -1,18 +1,27 @@
 package io.craigmiller160.contacts5.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 /**
  * Created by Craig on 1/20/2016.
  */
-public class Contact {
+public class Contact implements Comparable<Contact>{
 
     private long id;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String displayName;
+    private Uri uri;
+    private ContactGroup group;
+    private Bitmap photo;
+    private String accountName;
 
     public Contact(){}
 
-    public Contact(long id, String name){
+    public Contact(long id, String displayName){
         this.id = id;
-        this.name = name;
+        this.displayName = displayName;
     }
 
     public long getId(){
@@ -23,12 +32,60 @@ public class Contact {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
+    }
+
+    public ContactGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(ContactGroup group) {
+        this.group = group;
+    }
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
+
+    public void setAccountName(String accountName){
+        this.accountName = accountName;
+    }
+
+    public String getAccountName(){
+        return accountName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -39,19 +96,35 @@ public class Contact {
         Contact contact = (Contact) o;
 
         if (id != contact.id) return false;
-        return !(name != null ? !name.equals(contact.name) : contact.name != null);
+        if (firstName != null ? !firstName.equals(contact.firstName) : contact.firstName != null)
+            return false;
+        if (lastName != null ? !lastName.equals(contact.lastName) : contact.lastName != null)
+            return false;
+        if (displayName != null ? !displayName.equals(contact.displayName) : contact.displayName != null)
+            return false;
+        if (uri != null ? !uri.equals(contact.uri) : contact.uri != null) return false;
+        return !(accountName != null ? !accountName.equals(contact.accountName) : contact.accountName != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        result = 31 * result + (uri != null ? uri.hashCode() : 0);
+        result = 31 * result + (accountName != null ? accountName.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString(){
-        return name;
+        return displayName;
+    }
+
+    @Override
+    public int compareTo(Contact another) {
+        return displayName.compareToIgnoreCase(another.displayName);
     }
 }

@@ -8,7 +8,6 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -82,7 +81,7 @@ public class ContactsRetrievalService {
                 if(ContactsPreferences.getInstance().getAccountsToDisplay().contains(accountName)){
                     contact = new Contact();
                     contact.setId(contactId);
-                    contact.setName(contactCursor.getString(contactCursor.getColumnIndex(ENTITY_CONTACT_NAME)));
+                    contact.setDisplayName(contactCursor.getString(contactCursor.getColumnIndex(ENTITY_CONTACT_NAME)));
                 }
             }
         }
@@ -261,7 +260,7 @@ public class ContactsRetrievalService {
 
         Contact contact = new Contact();
         contact.setId(contactCursor.getLong(contactCursor.getColumnIndex(CONTACT_ID)));
-        contact.setName(contactCursor.getString(contactCursor.getColumnIndex(CONTACT_NAME)));
+        contact.setDisplayName(contactCursor.getString(contactCursor.getColumnIndex(CONTACT_NAME)));
 
         return contact;
     }
@@ -280,7 +279,7 @@ public class ContactsRetrievalService {
                 while(!cursor.isAfterLast()){
                     Contact contact = new Contact();
                     contact.setId(cursor.getLong(cursor.getColumnIndex(GROUP_MEMBER_CONTACT_ID)));
-                    contact.setName(cursor.getString(cursor.getColumnIndex(GROUP_MEMBER_CONTACT_NAME)));
+                    contact.setDisplayName(cursor.getString(cursor.getColumnIndex(GROUP_MEMBER_CONTACT_NAME)));
 
                     contactsList.add(contact);
 
@@ -337,7 +336,7 @@ public class ContactsRetrievalService {
                         ContactGroup group = new ContactGroup();
                         group.setGroupId(groupCursor.getLong(groupCursor.getColumnIndex(GROUP_ID)));
                         group.setGroupName(groupCursor.getString(groupCursor.getColumnIndex(GROUP_TITLE)));
-                        group.setGroupAccountName(groupCursor.getString(groupCursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
+                        group.setAccountName(groupCursor.getString(groupCursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
 
                         if(displaySettings.getPhonesOnly()){
                             group.setGroupSize(groupCursor.getInt(groupCursor.getColumnIndex(GROUP_COUNT_WITH_PHONES)));
@@ -394,7 +393,7 @@ public class ContactsRetrievalService {
 
         @Override
         public int compare(Contact c1, Contact c2) {
-            return c1.getName().compareToIgnoreCase(c2.getName());
+            return c1.getDisplayName().compareToIgnoreCase(c2.getDisplayName());
         }
     }
 
@@ -402,7 +401,7 @@ public class ContactsRetrievalService {
 
         @Override
         public int compare(Contact c1, Contact c2) {
-            return c1.getName().compareToIgnoreCase(c2.getName()) * -1;
+            return c1.getDisplayName().compareToIgnoreCase(c2.getDisplayName()) * -1;
         }
     }
 
