@@ -9,9 +9,25 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
+ * A special implementation of the List interface
+ * that maintains a sort order at all times. The side
+ * effects of this are inconsistent index values (positions
+ * are constantly changing every time the contents of
+ * the list changes) and the inability to insert elements
+ * at specific positions. However, if a sorted collection
+ * that can be accessed by index number is needed, this
+ * is a great option.
+ *
+ * The sort order is maintained by a comparator. By default,
+ * the comparator used compares the toString() values of
+ * the items in the collection. However, this is only used
+ * if a custom comparator is not provided, and it is very
+ * recommended to do so based on how this list is going
+ * to be used.
+ *
  * Created by Craig on 2/10/2016.
  */
-public class SortedList<T extends Comparable<? super T>> implements List<T> {
+public class SortedList<T> implements List<T> {
 
     /**
      * An underlying ArrayList that this class wraps around.
@@ -30,7 +46,12 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 
     public SortedList(Comparator<T> comparator){
         this.list = new ArrayList<>();
-        this.comparator = comparator;
+        if(comparator != null){
+            this.comparator = comparator;
+        }
+        else{
+            this.comparator = new DefaultComparator();
+        }
     }
 
     public void setComparator(Comparator<T> comparator){
@@ -59,14 +80,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
 
     @Override
     public boolean add(T object) {
-        int result;
-        if(comparator == null){
-            result = Collections.binarySearch(list, object);
-        }
-        else{
-            result = Collections.binarySearch(list, object, comparator);
-        }
-
+        int result = Collections.binarySearch(list, object, comparator);
         if(result < 0){
             int index = (result + 1) * -1;
             list.add(index, object);
@@ -95,12 +109,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
     public boolean addAll(Collection<? extends T> collection) {
         boolean result = list.addAll(collection);
         if(result){
-            if(comparator == null){
-                Collections.sort(list);
-            }
-            else{
-                Collections.sort(list, comparator);
-            }
+            Collections.sort(list, comparator);
         }
         return result;
     }
@@ -180,13 +189,7 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
     @Override
     public T set(int location, T object) {
         T result = list.set(location, object);
-        if(comparator == null){
-            Collections.sort(list);
-        }
-        else{
-            Collections.sort(list, comparator);
-        }
-
+        Collections.sort(list, comparator);
         return result;
     }
 
@@ -208,5 +211,13 @@ public class SortedList<T extends Comparable<? super T>> implements List<T> {
     @Override
     public <T1> T1[] toArray(T1[] array) {
         return list.toArray(array);
+    }
+
+    private class DefaultComparator implements Comparator<T>{
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            return o1.toString().compareTo(o2.toString());
+        }
     }
 }
