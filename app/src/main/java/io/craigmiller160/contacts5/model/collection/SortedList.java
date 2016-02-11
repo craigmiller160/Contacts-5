@@ -19,7 +19,9 @@ import java.util.ListIterator;
  * is a great option.
  *
  * The sort order is maintained by a comparator. By default,
- * the comparator used compares the toString() values of
+ * the comparator used checks if the values in the list
+ * implement Comparable, and uses compareTo(...) if they do.
+ * If they don't, it compares the toString() values of
  * the items in the collection. However, this is only used
  * if a custom comparator is not provided, and it is very
  * recommended to do so based on how this list is going
@@ -217,6 +219,9 @@ public class SortedList<T> implements List<T> {
 
         @Override
         public int compare(Object o1, Object o2) {
+            if(o1 instanceof Comparable && o2 instanceof Comparable){
+                return ((Comparable) o1).compareTo(o2);
+            }
             return o1.toString().compareTo(o2.toString());
         }
     }
