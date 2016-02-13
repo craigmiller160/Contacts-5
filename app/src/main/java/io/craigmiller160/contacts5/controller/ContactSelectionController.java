@@ -29,7 +29,7 @@ public class ContactSelectionController implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Log.i(TAG, "Opening action view for contact. Contact: " + contact.getName());
+        Log.i(TAG, "Opening action view for contact. Contact: " + contact.getDisplayName());
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(contact.getId()));
         intent.setData(uri);
