@@ -43,26 +43,72 @@ public class SortedList<T> implements List<T> {
     private Comparator<T> comparator;
 
     public SortedList(){
-        this(null);
+        this(null, null);
+    }
+
+    public SortedList(Collection<T> collection){
+        this(collection, null);
     }
 
     public SortedList(Comparator<T> comparator){
+        this(null, comparator);
+    }
+
+    public SortedList(Collection<T> collection, Comparator<T> comparator){
         this.list = new ArrayList<>();
+        setComparator(comparator);
+
+        if(collection != null){
+            addAll(collection);
+        }
+    }
+
+    public void setComparator(Comparator<T> comparator){
         if(comparator != null){
             this.comparator = comparator;
         }
         else{
             this.comparator = new DefaultComparator();
         }
+
+        Collections.sort(list, this.comparator);
     }
 
-    public void setComparator(Comparator<T> comparator){
-        this.comparator = comparator;
-        Collections.sort(list, comparator);
-    }
-
-    public Comparator<T> getComparator(Comparator<T> comparator){
+    public Comparator<T> getComparator(){
         return comparator;
+    }
+
+    /**
+     * This is a special and powerful method that bypasses
+     * the sorting process of this collection and simply
+     * places the contents of the list into the underlying
+     * list unchanged. This should only be done if you are
+     * certain that the list being set is already in the
+     * same sort order that this collection already maintains.
+     *
+     * The main use case for this method is when retrieving a
+     * large amount of pre-sorted data that will then be
+     * dumped into this list. In that case, the extra sorting
+     * would hinder performance, and is only valuable for maintaining
+     * the order while the data is being manipulated.
+     *
+     * Because this method could break the contract of this class,
+     * namely that all items will always maintain the specified
+     * sort order, it should be used very carefully and very
+     * sparingly.
+     *
+     * Lastly, when invoked, all previous entries in the list will
+     * be erased and the new data will replace it.
+     *
+     * @param preSortedList the pre-sorted list to add
+     */
+    public void setPreSortedList(List<T> preSortedList){
+        if(preSortedList != null){
+            this.list = preSortedList;
+        }
+        else{
+            this.list = new ArrayList<>();
+        }
     }
 
     /**
@@ -82,14 +128,17 @@ public class SortedList<T> implements List<T> {
 
     @Override
     public boolean add(T object) {
-        int result = Collections.binarySearch(list, object, comparator);
-        if(result < 0){
-            int index = (result + 1) * -1;
-            list.add(index, object);
-            return true;
-        }
-        list.add(result, object);
+        int position = getSortedPosition(object);
+        list.add(position, object);
         return true;
+    }
+
+    private int getSortedPosition(T object){
+        int result = Collections.binarySearch(list, object, comparator);
+        if (result < 0) {
+            return (result + 1) * -1;
+        }
+        return result;
     }
 
     /**
@@ -190,9 +239,12 @@ public class SortedList<T> implements List<T> {
 
     @Override
     public T set(int location, T object) {
-        T result = list.set(location, object);
-        Collections.sort(list, comparator);
-        return result;
+        if(object != null){
+            int newPosition = getSortedPosition(object);
+            list.remove(location);
+            list.add(newPosition, object);
+        }
+        return object;
     }
 
     @Override
