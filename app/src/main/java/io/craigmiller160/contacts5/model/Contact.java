@@ -3,6 +3,9 @@ package io.craigmiller160.contacts5.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Craig on 1/20/2016.
  */
@@ -13,15 +16,18 @@ public class Contact implements Comparable<Contact>{
     private String lastName;
     private String displayName;
     private Uri uri;
-    private ContactGroup group;
+    private List<ContactGroup> groups;
     private Bitmap photo;
     private String accountName;
 
-    public Contact(){}
+    public Contact(){
+        groups = new ArrayList<>();
+    }
 
     public Contact(long id, String displayName){
         this.id = id;
         this.displayName = displayName;
+        groups = new ArrayList<>();
     }
 
     public long getId(){
@@ -48,12 +54,25 @@ public class Contact implements Comparable<Contact>{
         this.uri = uri;
     }
 
-    public ContactGroup getGroup() {
-        return group;
+    public List<ContactGroup> getGroups() {
+        return groups;
     }
 
-    public void setGroup(ContactGroup group) {
-        this.group = group;
+    public void setGroups(List<ContactGroup> groups) {
+        if(groups != null){
+            this.groups = groups;
+        }
+        else{
+            this.groups = new ArrayList<>();
+        }
+    }
+
+    public void addGroup(ContactGroup group){
+        this.groups.add(group);
+    }
+
+    public void removeGroup(ContactGroup group){
+        this.groups.remove(group);
     }
 
     public Bitmap getPhoto() {

@@ -45,7 +45,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
 
         TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
         final Contact contact = contactsList.get(position);
-        nameTextView.setText(contact.getName());
+        nameTextView.setText(contact.getDisplayName());
         view.setOnClickListener(new ContactSelectionController(contact, position));
 
         return view;

@@ -72,7 +72,6 @@ public class ContactGroup implements Comparable<ContactGroup>{
         ContactGroup that = (ContactGroup) o;
 
         if (groupId != that.groupId) return false;
-        if (groupSize != that.groupSize) return false;
         if (groupName != null ? !groupName.equals(that.groupName) : that.groupName != null)
             return false;
         if (accountName != null ? !accountName.equals(that.accountName) : that.accountName != null)
@@ -85,7 +84,6 @@ public class ContactGroup implements Comparable<ContactGroup>{
     public int hashCode() {
         int result = (int) (groupId ^ (groupId >>> 32));
         result = 31 * result + (groupName != null ? groupName.hashCode() : 0);
-        result = 31 * result + groupSize;
         result = 31 * result + (accountName != null ? accountName.hashCode() : 0);
         result = 31 * result + (uri != null ? uri.hashCode() : 0);
         return result;
