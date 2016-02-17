@@ -26,8 +26,4 @@ public abstract class AbstractModel {
         support.fireIndexedPropertyChange(propName, index, oldValue, newValue);
     }
 
-    public abstract void setModelProperty(String propName, Object...values);
-
-    public abstract void getModelProperty(String propName, Object...params);
-
 }
