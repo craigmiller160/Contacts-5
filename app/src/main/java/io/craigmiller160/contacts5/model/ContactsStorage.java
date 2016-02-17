@@ -53,18 +53,21 @@ public class ContactsStorage {
         }
     }
 
-    public void removeContact(Contact contact){
+    public boolean removeContact(Contact contact){
+        boolean result = false;
         if(contact != null){
-            allContacts.remove(contact);
+            result = allContacts.remove(contact);
             contactGroups.removeValue(contact);
         }
+        return result;
     }
 
-    public void removeContact(int index){
+    public Contact removeContact(int index){
         Contact contact = allContacts.remove(index);
         if(contact != null){
             contactGroups.removeValue(contact);
         }
+        return contact;
     }
 
     public Contact getContact(int index){
