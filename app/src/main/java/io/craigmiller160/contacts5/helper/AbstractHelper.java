@@ -60,6 +60,7 @@ public abstract class AbstractHelper implements Helper, PropertyChangeListener{
 
     @Override
     public void addController(String controllerName, AbstractController controller) {
+        controller.setHelper(this);
         registeredControllers.put(controllerName, controller);
     }
 

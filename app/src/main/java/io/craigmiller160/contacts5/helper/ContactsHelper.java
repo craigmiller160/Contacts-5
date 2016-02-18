@@ -24,6 +24,12 @@ public class ContactsHelper extends AbstractReflectiveHelper {
     public static final String CONTACT_IN_GROUP_AT_INDEX_PROP = "ContactInGroupAtIndex";
     public static final String SELECTED_INDEX_PROPERTY = "SelectedIndex";
 
+    /*
+     * Controller names
+     */
+    public static final String CONTACTS_ACTIVITY_CONTROLLER = "ContactsActivityController";
+    public static final String ADD_CONTACT_CONTROLLER = "AddContactController";
+
     private ContactsModel contactsModel;
 
     @Override
