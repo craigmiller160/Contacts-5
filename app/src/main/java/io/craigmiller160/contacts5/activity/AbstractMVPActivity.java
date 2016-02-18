@@ -29,17 +29,17 @@ public abstract class AbstractMVPActivity extends AppCompatActivity{
     protected abstract String getActivityControllerName();
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected final void onActivityResult(int requestCode, int resultCode, Intent data){
         activityController.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public final void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         activityController.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected(MenuItem item) {
         return activityController.onOptionsItemSelected(item);
     }
 
