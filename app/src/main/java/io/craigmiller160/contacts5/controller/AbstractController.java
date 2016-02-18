@@ -9,7 +9,13 @@ public abstract class AbstractController {
 
     private Helper helper;
 
+    protected AbstractController(){}
+
     protected AbstractController(Helper helper){
+        this.helper = helper;
+    }
+
+    public void setHelper(Helper helper){
         this.helper = helper;
     }
 
