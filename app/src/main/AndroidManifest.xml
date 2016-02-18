@@ -11,7 +11,7 @@
     <!-- TODO configure full app backup on marshmallow option -->
 
     <application
-        android:name=".ContactsApplication"
+        android:name=".application.ContactsApplication"
         android:allowBackup="true"
         android:icon="@drawable/contacts5icon"
         android:label="@string/app_name"
