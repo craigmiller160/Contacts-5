@@ -5,7 +5,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import io.craigmiller160.contacts5.ContactsApplication;
+import io.craigmiller160.contacts5.application.ContactsApplication;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.Contact;
@@ -15,6 +15,7 @@ import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 /**
  * Created by Craig on 2/6/2016.
  */
+@Deprecated
 public class ContactUpdateController {
 
     private static final String TAG = "ContactUpdateController";
