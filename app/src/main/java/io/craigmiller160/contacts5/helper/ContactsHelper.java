@@ -23,12 +23,15 @@ public class ContactsHelper extends AbstractReflectiveHelper {
     public static final String GROUP_AT_INDEX_PROP = "GroupAtIndex";
     public static final String CONTACT_IN_GROUP_AT_INDEX_PROP = "ContactInGroupAtIndex";
     public static final String SELECTED_INDEX_PROPERTY = "SelectedIndex";
+    public static final String CONTACT_COUNT_PROPERTY = "ContactCount";
+    public static final String GROUP_COUNT_PROP = "GroupCount";
 
     /*
      * Controller names
      */
     public static final String CONTACTS_ACTIVITY_CONTROLLER = "ContactsActivityController";
     public static final String ADD_CONTACT_CONTROLLER = "AddContactController";
+    public static final String CONTACTS_IN_GROUP_ACTIVITY_CONTROLLER = "ContactsInGroupActivityController";
 
     private ContactsModel contactsModel;
 
@@ -51,6 +54,7 @@ public class ContactsHelper extends AbstractReflectiveHelper {
     //TODO decide if these methods are necessary, or if the reflective invocation will be enough?
 
     public Contact getContactAtIndex(int index){
+        System.out.println("GetContactAtIndex: " + index); //TODO delete this
         return contactsModel.getContactAtIndex(index);
     }
 
@@ -60,11 +64,5 @@ public class ContactsHelper extends AbstractReflectiveHelper {
 
     public ContactGroup getGroupAtIndex(int index){
         return contactsModel.getGroupAtIndex(index);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        //TODO probably moving this into AbstractHelper, with a special method call that
-        // gets reflectively implemented in AbstractReflectiveHelper
     }
 }

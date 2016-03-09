@@ -3,6 +3,7 @@ package io.craigmiller160.contacts5.model.collection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -176,15 +177,21 @@ public class MultiValueMap<K,V> implements Map<K,Collection<V>> {
      */
     public V removeValue(V value){
         Set<K> keySet = keySet();
+        List<K> keysToRemove = new ArrayList<>();
         for(K k : keySet){
             Collection<V> c = map.get(k);
             if(c != null){
                 c.remove(value);
                 if(c.size() == 0){
-                    remove(k);
+                    keysToRemove.add(k);
                 }
             }
         }
+
+        for(K k : keysToRemove){
+            remove(k);
+        }
+
         return value;
     }
 

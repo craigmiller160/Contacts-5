@@ -1,5 +1,9 @@
 package io.craigmiller160.contacts5.helper;
 
+import android.os.Handler;
+import android.os.Looper;
+
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,13 +26,13 @@ public abstract class AbstractHelper implements Helper, PropertyChangeListener{
     //TODO document how Helpers are not thread-safe
 
     private Set<AbstractModel> registeredModels;
-    private List<MVPView> registeredViews;
+    private Set<MVPView> registeredViews;
     private Map<String,AbstractController> registeredControllers;
 
     protected AbstractHelper(){
         registeredModels = new HashSet<>();
         registeredControllers = new HashMap<>();
-        registeredViews = new ArrayList<>();
+        registeredViews = new HashSet<>();
     }
 
     @Override
@@ -88,7 +92,7 @@ public abstract class AbstractHelper implements Helper, PropertyChangeListener{
 
     @Override
     public synchronized Collection<MVPView> getViews() {
-        return registeredViews;
+        return new ArrayList<>(registeredViews);
     }
 
     @Override
@@ -99,5 +103,29 @@ public abstract class AbstractHelper implements Helper, PropertyChangeListener{
     @Override
     public synchronized void addView(MVPView view) {
         registeredViews.add(view);
+        System.out.println("Adding View: " + view.getClass().getName() + " Size: " + registeredViews.size()); //TODO delete this
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent event) {
+        if(Looper.myLooper() != Looper.getMainLooper()){
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    updateView(event);
+                }
+            });
+        }
+        else {
+            updateView(event);
+        }
+    }
+
+    private void updateView(PropertyChangeEvent event){
+        Collection<MVPView> views = getViews();
+        for(MVPView view : views){
+            view.updateView(event);
+        }
     }
 }

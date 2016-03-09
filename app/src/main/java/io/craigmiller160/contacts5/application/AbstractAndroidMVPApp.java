@@ -2,8 +2,12 @@ package io.craigmiller160.contacts5.application;
 
 import android.app.Activity;
 import android.app.Application;
+import android.util.Log;
 import android.view.View;
 
+import java.util.Arrays;
+
+import io.craigmiller160.contacts5.MVPException;
 import io.craigmiller160.contacts5.controller.AbstractAndroidController;
 import io.craigmiller160.contacts5.controller.AbstractController;
 import io.craigmiller160.contacts5.helper.Helper;
@@ -14,6 +18,8 @@ import io.craigmiller160.contacts5.view.MVPView;
  * Created by Craig on 2/17/2016.
  */
 public abstract class AbstractAndroidMVPApp extends Application{
+
+    private static final String TAG = "AbstractMVPApp";
 
     private Helper helper;
 
@@ -29,10 +35,34 @@ public abstract class AbstractAndroidMVPApp extends Application{
 
     protected abstract HelperBuilder createHelperBuilder();
 
+    public Helper getHelper(){
+        return helper;
+    }
+
     public AbstractController getController(String controllerName, Activity activity){
         AbstractAndroidController controller = (AbstractAndroidController) helper.getController(controllerName);
         controller.setActivity(activity);
         return controller;
+    }
+
+    public Object getModelProperty(String propName, Object...params){
+        Object result = null;
+        try{
+            result = helper.getModelProperty(propName, params);
+        }
+        catch(MVPException ex){
+            Log.e(TAG, "Unable to get property. Name: " + propName + " Params: " + Arrays.toString(params), ex);
+        }
+        return result;
+    }
+
+    public void setModelProperty(String propName, Object...values){
+        try{
+            helper.setModelProperty(propName, values);
+        }
+        catch(MVPException ex){
+            Log.e(TAG, "Unable to set property. Name: " + propName + " Values: " + Arrays.toString(values), ex);
+        }
     }
 
     public View.OnClickListener getOnClickController(String controllerName, Activity activity){

@@ -2,14 +2,18 @@ package io.craigmiller160.contacts5.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.beans.PropertyChangeEvent;
+
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.TabsPagerAdapter;
+import io.craigmiller160.contacts5.application.ContactsApplication;
 import io.craigmiller160.contacts5.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.fragment.ContactsGroupsPage;
 import io.craigmiller160.contacts5.service.ContactsPreferences;
@@ -17,6 +21,8 @@ import io.craigmiller160.contacts5.service.PermissionsManager;
 
 import static io.craigmiller160.contacts5.helper.ContactsHelper.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.helper.ContactsHelper.CONTACTS_ACTIVITY_CONTROLLER;
+import static io.craigmiller160.contacts5.helper.ContactsHelper.CONTACTS_STORAGE_PROP;
+import static io.craigmiller160.contacts5.helper.ContactsHelper.CONTACT_COUNT_PROPERTY;
 
 public class ContactsActivity extends AbstractMVPActivity {
 
@@ -29,6 +35,9 @@ public class ContactsActivity extends AbstractMVPActivity {
     public static final String INTENT_KEY_FINISH_ACTIVITY_ON_SAVE_COMPLETED = "finishActivityOnSaveCompleted";
 
     private TabsPagerAdapter tabsAdapter;
+
+    private Fragment allContactsPage;
+    private Fragment contactGroupsPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +55,23 @@ public class ContactsActivity extends AbstractMVPActivity {
         findViewById(R.id.addContact).setOnClickListener(getMVPApplication().getOnClickController(ADD_CONTACT_CONTROLLER, this));
 
         configureTabs();
+
+        //TODO ensure this isn't called multiple times by screen rotation
+        int count = (Integer) getMVPApplication().getModelProperty(CONTACT_COUNT_PROPERTY);
+        if(count == 0){
+            ContactsApplication.getInstance().loadAllContacts();
+        }
     }
 
     private void configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
         tabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-        tabsAdapter.addFragmentPage(new AllContactsPage(), AllContactsPage.TITLE);
-        tabsAdapter.addFragmentPage(new ContactsGroupsPage(), ContactsGroupsPage.TITLE);
+
+        allContactsPage = new AllContactsPage();
+        contactGroupsPage = new ContactsGroupsPage();
+
+        tabsAdapter.addFragmentPage(allContactsPage, AllContactsPage.TITLE);
+        tabsAdapter.addFragmentPage(contactGroupsPage, ContactsGroupsPage.TITLE);
         viewPager.setAdapter(tabsAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -92,5 +111,22 @@ public class ContactsActivity extends AbstractMVPActivity {
     @Override
     protected String getActivityControllerName() {
         return CONTACTS_ACTIVITY_CONTROLLER;
+    }
+
+    private void updateLists(){
+        Log.d(TAG, "Updating contacts ListViews for changes");
+        if(allContactsPage != null){
+            ((AllContactsPage) allContactsPage).notifyStorageChanged();
+        }
+        if(contactGroupsPage != null){
+            ((ContactsGroupsPage) contactGroupsPage).notifyStorageChanged();
+        }
+    }
+
+    @Override
+    public void updateView(PropertyChangeEvent event) {
+        if(event.getPropertyName().equals(CONTACTS_STORAGE_PROP)){
+            updateLists();
+        }
     }
 }

@@ -17,17 +17,20 @@ public class Contact implements Comparable<Contact>{
     private String displayName;
     private Uri uri;
     private List<ContactGroup> groups;
+    private List<Long> groupIds;
     private Bitmap photo;
     private String accountName;
 
     public Contact(){
         groups = new ArrayList<>();
+        groupIds = new ArrayList<>();
     }
 
     public Contact(long id, String displayName){
         this.id = id;
         this.displayName = displayName;
         groups = new ArrayList<>();
+        groupIds = new ArrayList<>();
     }
 
     public long getId(){
@@ -105,6 +108,25 @@ public class Contact implements Comparable<Contact>{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setGroupIds(List<Long> groupIds){
+        if(groupIds != null){
+            this.groupIds = groupIds;
+        }
+        this.groupIds = new ArrayList<>();
+    }
+
+    public List<Long> getGroupIds(){
+        return groupIds;
+    }
+
+    public void addGroupId(Long groupId){
+        this.groupIds.add(groupId);
+    }
+
+    public void removeGroupId(Integer groupId){
+        this.groupIds.remove(groupId);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.service;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -10,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.craigmiller160.contacts5.ContactsApplication;
 import io.craigmiller160.contacts5.R;
 
 /**

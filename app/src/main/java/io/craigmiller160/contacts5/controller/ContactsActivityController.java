@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -20,7 +19,7 @@ import io.craigmiller160.contacts5.application.ContactsApplication;
 import io.craigmiller160.contacts5.helper.Helper;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.LookupContact;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ContactsRetrievalService2;
 import io.craigmiller160.contacts5.service.PermissionsManager;
 
 import static io.craigmiller160.contacts5.activity.ContactsActivity.*;
@@ -31,7 +30,7 @@ import static io.craigmiller160.contacts5.activity.ContactsActivity.*;
 public class ContactsActivityController extends AbstractActivityController{
 
     private static final String TAG = "ContactsActivityControl";
-    ContactsRetrievalService service = new ContactsRetrievalService();
+    ContactsRetrievalService2 service = new ContactsRetrievalService2();
 
     public ContactsActivityController(){}
 
@@ -130,11 +129,11 @@ public class ContactsActivityController extends AbstractActivityController{
             Contact contact = service.getContact(getActivity(), lookupContact.getContactId());
             if(contact != null){
                 Log.i(TAG, "Updating list with modified contact");
-                adapter.replace(contact, lookupContact.getPosition());
+                //TODO adapter.replace(contact, lookupContact.getPosition());
             }
             else{
                 Log.i(TAG, "Removing deleted contact from list");
-                adapter.remove(lookupContact.getPosition());
+                //TODO adapter.remove(lookupContact.getPosition());
             }
         }
     }

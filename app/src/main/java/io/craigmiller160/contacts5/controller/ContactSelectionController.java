@@ -7,7 +7,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 
-import io.craigmiller160.contacts5.ContactsApplication;
+import io.craigmiller160.contacts5.application.ContactsApplication;
 import io.craigmiller160.contacts5.activity.ContactsActivity;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.LookupContact;

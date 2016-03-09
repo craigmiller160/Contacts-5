@@ -6,14 +6,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsGroupsArrayAdapter;
+import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ContactsRetrievalService2;
+import io.craigmiller160.contacts5.service.ContactsService;
+import io.craigmiller160.contacts5.service.ContactsServiceFactory;
 import io.craigmiller160.contacts5.service.PermissionsManager;
 
 
@@ -26,7 +30,15 @@ public class ContactsGroupsPage extends Fragment {
 
     public static final String TITLE = "Groups";
 
-    private ContactsRetrievalService contactsService = new ContactsRetrievalService();
+    private ContactsService contactsService = ContactsServiceFactory.getInstance().getContactsService();
+
+    private ArrayAdapter<ContactGroup> groupArrayAdapter;
+
+    public void notifyStorageChanged(){
+        if(groupArrayAdapter != null){
+            groupArrayAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
@@ -37,8 +49,9 @@ public class ContactsGroupsPage extends Fragment {
             view.setDivider(null);
             view.setFastScrollEnabled(true);
 
-            List<ContactGroup> groupsList = contactsService.getAllGroups(getActivity());
-            view.setAdapter(new ContactsGroupsArrayAdapter(getActivity(), groupsList));
+            groupArrayAdapter = new ContactsGroupsArrayAdapter(getActivity());
+
+            view.setAdapter(groupArrayAdapter);
             return view;
         }
         else{

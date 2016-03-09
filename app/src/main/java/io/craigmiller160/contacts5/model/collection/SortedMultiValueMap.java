@@ -19,9 +19,8 @@ public class SortedMultiValueMap<K,V> extends MultiValueMap<K,V> {
     }
 
     public SortedMultiValueMap(Comparator<K> keyComparator, Comparator<V> valueComparator){
-        setKeyComparator(keyComparator);
-        setValueComparator(valueComparator);
         sortedKeys = new SortedList<>(keyComparator);
+        setValueComparator(valueComparator);
     }
 
     @Override

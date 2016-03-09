@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import io.craigmiller160.contacts5.model.collection.MultiValueMap;
 import io.craigmiller160.contacts5.model.collection.SortedList;
 import io.craigmiller160.contacts5.model.collection.SortedMultiValueMap;
 
@@ -14,7 +15,8 @@ import io.craigmiller160.contacts5.model.collection.SortedMultiValueMap;
 public class ContactsStorage {
 
     private SortedList<Contact> allContacts;
-    private SortedMultiValueMap<ContactGroup, Contact> contactGroups;
+    private SortedList<ContactGroup> allGroups; //TODO need to keep this in sync with contactGroups
+    private SortedMultiValueMap<Long, Contact> contactGroups;
 
     public ContactsStorage(){
         this(null, null);
@@ -23,18 +25,21 @@ public class ContactsStorage {
     public ContactsStorage(Comparator<Contact> contactComparator,
                            Comparator<ContactGroup> groupComparator){
         allContacts = new SortedList<>(contactComparator);
-        contactGroups = new SortedMultiValueMap<>(groupComparator, contactComparator);
+        allGroups = new SortedList<>(groupComparator);
+        contactGroups = new SortedMultiValueMap<>();
+        contactGroups.setValueComparator(contactComparator);
     }
 
     public void clear(){
         allContacts.clear();
+        allGroups.clear();
         contactGroups.clear();
     }
 
     public void addContact(Contact contact){
         if(contact != null){
             allContacts.add(contact);
-            List<ContactGroup> groups = contact.getGroups();
+            List<Long> groups = contact.getGroupIds();
             if(groups != null && groups.size() > 0){
                 contactGroups.putValueInMultipleCollections(groups, contact);
             }
@@ -45,11 +50,17 @@ public class ContactsStorage {
         if(allContacts != null){
             this.allContacts = allContacts;
             for(Contact c : allContacts){
-                List<ContactGroup> groups = c.getGroups();
+                List<Long> groups = c.getGroupIds();
                 if(groups != null && groups.size() > 0){
                     contactGroups.putValueInMultipleCollections(groups, c);
                 }
             }
+        }
+    }
+
+    public void addAllGroups(SortedList<ContactGroup> groups){
+        if(groups != null){
+            this.allGroups.addAll(groups);
         }
     }
 
@@ -58,6 +69,7 @@ public class ContactsStorage {
         if(contact != null){
             result = allContacts.remove(contact);
             contactGroups.removeValue(contact);
+            //TODO need to update all groups here
         }
         return result;
     }
@@ -78,29 +90,56 @@ public class ContactsStorage {
         Contact oldContact = allContacts.get(index);
         allContacts.set(index, contact);
         contactGroups.removeValue(oldContact);
-        List<ContactGroup> groups = contact.getGroups();
+        List<Long> groups = contact.getGroupIds();
         if(groups != null){
-            for(ContactGroup group : groups){
-                contactGroups.putValue(group, contact);
+            for(Long id : groups){
+                contactGroups.putValue(id, contact);
             }
         }
     }
 
+    public void addGroup(ContactGroup group){
+        allGroups.add(group);
+    }
+
+    public void removeGroup(ContactGroup group){
+        allGroups.remove(group);
+    }
+
+    public void removeGroup(int index){
+        allGroups.remove(index);
+    }
+
     public ContactGroup getGroup(int index){
-        return contactGroups.getSortedKeys().get(index);
+        return allGroups.get(index);
     }
 
     public int getGroupSize(ContactGroup group){
-        return contactGroups.get(group).size();
+        if(group == null){
+            return 0;
+        }
+
+        Collection<Contact> groupMembers = contactGroups.get(group.getGroupId());
+        if(groupMembers != null){
+            return groupMembers.size();
+        }
+        return 0;
     }
 
     public int getGroupSize(int index){
-        ContactGroup group = contactGroups.getSortedKeys().get(index);
-        return contactGroups.get(group).size();
+        if(index < allGroups.size()){
+            return 0;
+        }
+        ContactGroup group = allGroups.get(index);
+        return getGroupSize(group);
     }
 
     public Contact getContactInGroup(ContactGroup group, int index){
-        return ((SortedList<Contact>) contactGroups.get(group)).get(index);
+        Collection<Contact> groupMembers = contactGroups.get(group.getGroupId());
+        if(groupMembers != null && groupMembers instanceof List){
+            return ((List<Contact>) groupMembers).get(index);
+        }
+        return null;
     }
 
     public void setContactComparator(Comparator<Contact> contactComparator){
@@ -109,7 +148,7 @@ public class ContactsStorage {
     }
 
     public void setGroupComparator(Comparator<ContactGroup> groupComparator){
-        contactGroups.setKeyComparator(groupComparator);
+        allGroups.setComparator(groupComparator);
     }
 
     public int getContactCount(){
@@ -117,7 +156,7 @@ public class ContactsStorage {
     }
 
     public int getGroupCount(){
-        return contactGroups.size();
+        return allGroups.size();
     }
 
 }

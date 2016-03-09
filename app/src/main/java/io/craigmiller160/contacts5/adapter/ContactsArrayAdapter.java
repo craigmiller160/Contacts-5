@@ -15,23 +15,26 @@ import java.util.List;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.application.ContactsApplication;
 import io.craigmiller160.contacts5.controller.ContactSelectionController;
 import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ContactsStorage;
+
+import static io.craigmiller160.contacts5.helper.ContactsHelper.*;
 
 /**
  * Created by Craig on 1/22/2016.
  */
 public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements SectionIndexer{
 
-    private List<Contact> contactsList;
-
     private ListView listView; //TODO if I don't end up using it, remove this as a requirement
+
+    //TODO need this to be able to differentiate between group use and all contacts use
 
     private Map<String,Object> sectionMap;
 
-    public ContactsArrayAdapter(Activity activity, List<Contact> contactsList, ListView listView){
-        super(activity, R.layout.contacts_list_row, contactsList);
-        this.contactsList = contactsList;
+    public ContactsArrayAdapter(Activity activity, ListView listView){
+        super(activity, R.layout.contacts_list_row);
         this.listView = listView;
     }
 
@@ -44,50 +47,57 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
         }
 
         TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
-        final Contact contact = contactsList.get(position);
-        nameTextView.setText(contact.getDisplayName());
+        final Contact contact = (Contact) ContactsApplication.getInstance().getModelProperty(CONTACT_AT_INDEX_PROP, position);
+        if(contact != null){
+            nameTextView.setText(contact.getDisplayName());
+        }
         view.setOnClickListener(new ContactSelectionController(contact, position));
 
         return view;
+    }
+
+    @Override
+    public int getCount(){
+        return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
     }
 
 //    private View createView(int position, ViewGroup parent){
 //
 //    }
 
-    @Override
-    public void add(Contact contact){
-        contactsList.add(contact);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void insert(Contact contact, int position){
-        contactsList.add(position, contact);
-        notifyDataSetChanged();
-    }
-
-    public void replace(Contact contact, int position){
-        contactsList.set(position, contact);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void remove(Contact contact){
-        contactsList.remove(contact);
-        notifyDataSetChanged();
-    }
-
-    public void remove(int position){
-        contactsList.remove(position);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void sort(Comparator<? super Contact> comparator){
-        //TODO custom implementation needed here
-        super.sort(comparator);
-    }
+//    @Override
+//    public void add(Contact contact){
+//        contactsList.add(contact);
+//        notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void insert(Contact contact, int position){
+//        contactsList.add(position, contact);
+//        notifyDataSetChanged();
+//    }
+//
+//    public void replace(Contact contact, int position){
+//        contactsList.set(position, contact);
+//        notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void remove(Contact contact){
+//        contactsList.remove(contact);
+//        notifyDataSetChanged();
+//    }
+//
+//    public void remove(int position){
+//        contactsList.remove(position);
+//        notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void sort(Comparator<? super Contact> comparator){
+//        //TODO custom implementation needed here
+//        super.sort(comparator);
+//    }
 
     //TODO none of this model/prop change stuff is really necessary. just use the array adapter api methods
     //TODO use the adapter api methods way way more

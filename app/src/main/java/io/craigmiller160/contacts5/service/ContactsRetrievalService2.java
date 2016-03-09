@@ -23,7 +23,7 @@ import io.craigmiller160.contacts5.model.ContactGroup;
 /**
  * Created by Craig on 1/20/2016.
  */
-public class ContactsRetrievalService {
+public class ContactsRetrievalService2 {
 
     private ContactsPreferences displaySettings = ContactsPreferences.getInstance();
 

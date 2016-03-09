@@ -2,30 +2,28 @@ package io.craigmiller160.contacts5.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
-import io.craigmiller160.contacts5.controller.ContactUpdateController;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ContactsRetrievalService2;
+
+import static io.craigmiller160.contacts5.helper.ContactsHelper.*;
 
 /**
  * Created by Craig on 2/3/2016.
  */
-public class ContactsInGroupActivity extends AppCompatActivity {
+public class ContactsInGroupActivity extends AbstractMVPActivity {
 
     private static final String TAG = "ContactsInGroupActivity";
 
-    private ContactsRetrievalService contactsService = new ContactsRetrievalService();
-
-    private ContactUpdateController contactUpdateController = new ContactUpdateController(this);
+    private ContactsRetrievalService2 contactsService = new ContactsRetrievalService2();
 
     @Override
     public void onCreate(Bundle bundle){
@@ -54,7 +52,7 @@ public class ContactsInGroupActivity extends AppCompatActivity {
         if(groupId >= 0){
             Log.i(TAG, "Displaying contacts from group: " + groupName);
             List<Contact> contactsList = contactsService.getAllContactsInGroup(this, groupId);
-            listView.setAdapter(new ContactsArrayAdapter(this, contactsList, listView));
+            listView.setAdapter(new ContactsArrayAdapter(this, listView));
         }
         else{
             Log.e(TAG, "Group ID: " + -1);
@@ -63,23 +61,12 @@ public class ContactsInGroupActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            finish();
-            return true;
-        }
-
-        return false;
+    protected String getActivityControllerName() {
+        return CONTACTS_IN_GROUP_ACTIVITY_CONTROLLER;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == ContactsActivity.CONTACT_ACTION_VIEW_ID){
-            contactUpdateController.contactModified();
-        }
+    public void updateView(PropertyChangeEvent event) {
+
     }
-
-
 }

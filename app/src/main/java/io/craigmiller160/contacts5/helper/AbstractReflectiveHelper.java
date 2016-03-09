@@ -9,6 +9,7 @@ import java.util.List;
 
 import io.craigmiller160.contacts5.MVPException;
 import io.craigmiller160.contacts5.model.AbstractModel;
+import io.craigmiller160.contacts5.view.MVPView;
 import io.craigmiller160.reflection.FindAndInvoke;
 
 /**
@@ -25,10 +26,11 @@ public abstract class AbstractReflectiveHelper extends AbstractHelper{
             result = FindAndInvoke.findAndInvokeMethod(getModels(), "get" + propName, params);
         }
         catch(InvocationTargetException ex){
-            throw new MVPException("Failed to set model property: " + propName + " " + Arrays.toString(params), ex.getCause());
+            throw new MVPException("Failed to get model property: " + propName + " " + Arrays.toString(params), ex.getCause());
         }
         catch(ReflectiveOperationException ex){
-            throw new MVPException("Failed to set model property: " + propName + " " + Arrays.toString(params), ex);
+            ex.printStackTrace(); //TODO delete this
+            throw new MVPException("Failed to get model property: " + propName + " " + Arrays.toString(params), ex);
         }
         return result;
     }
@@ -44,22 +46,5 @@ public abstract class AbstractReflectiveHelper extends AbstractHelper{
         catch(ReflectiveOperationException ex){
             throw new MVPException("Failed to set model property: " + propName + " " + Arrays.toString(values), ex);
         }
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        //TODO indexed property change events might need special handling here
-
-        try{
-            FindAndInvoke.findAndInvokeMethod(getViews(), "set" + event.getPropertyName(),
-                    event.getNewValue());
-        }
-        catch(InvocationTargetException ex){
-            ex.getCause().printStackTrace();
-        }
-        catch(ReflectiveOperationException ex){
-            ex.printStackTrace();
-        }
-        //TODO figure out better way to handle exceptions
     }
 }
