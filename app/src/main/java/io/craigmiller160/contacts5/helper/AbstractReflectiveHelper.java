@@ -1,16 +1,10 @@
 package io.craigmiller160.contacts5.helper;
 
-import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import io.craigmiller160.contacts5.MVPException;
-import io.craigmiller160.contacts5.model.AbstractModel;
-import io.craigmiller160.contacts5.view.MVPView;
-import io.craigmiller160.reflection.FindAndInvoke;
+import io.craigmiller160.utils.reflect.FindAndInvoke;
 
 /**
  * Created by Craig on 2/14/2016.
