@@ -15,6 +15,7 @@ public class ContactsConfigurationBuilder {
         LocusConfiguration config = new LocusConfiguration();
 
         config.addClassName("io.craigmiller160.contacts5.model.DisplayPrefsModel");
+        config.addClassName("io.craigmiller160.contacts5.controller.AddContactController");
 
         return config;
     }

@@ -14,7 +14,7 @@ import io.craigmiller160.contacts5.old.adapter.ContactsGroupsArrayAdapter;
 import io.craigmiller160.contacts5.old.model.ContactGroup;
 import io.craigmiller160.contacts5.old.service.ContactsService;
 import io.craigmiller160.contacts5.old.service.ContactsServiceFactory;
-import io.craigmiller160.contacts5.old.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsManager;
 
 
 /**

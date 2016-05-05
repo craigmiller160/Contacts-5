@@ -17,7 +17,7 @@ import io.craigmiller160.contacts5.old.application.ContactsApplication;
 import io.craigmiller160.contacts5.old.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.old.fragment.ContactsGroupsPage;
 import io.craigmiller160.contacts5.old.service.ContactsPreferences;
-import io.craigmiller160.contacts5.old.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsManager;
 
 import static io.craigmiller160.contacts5.old.helper.ContactsHelper.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.old.helper.ContactsHelper.CONTACTS_ACTIVITY_CONTROLLER;

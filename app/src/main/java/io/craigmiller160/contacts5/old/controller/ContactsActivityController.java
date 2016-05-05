@@ -20,7 +20,7 @@ import io.craigmiller160.contacts5.old.helper.Helper;
 import io.craigmiller160.contacts5.old.model.Contact;
 import io.craigmiller160.contacts5.old.model.LookupContact;
 import io.craigmiller160.contacts5.old.service.ContactsRetrievalService2;
-import io.craigmiller160.contacts5.old.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsManager;
 
 import static io.craigmiller160.contacts5.old.activity.ContactsActivity.*;
 

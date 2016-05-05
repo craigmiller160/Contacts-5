@@ -11,7 +11,7 @@ import android.widget.ListView;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.old.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.old.model.Contact;
-import io.craigmiller160.contacts5.old.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsManager;
 
 /**
 * Created by Craig on 1/24/2016.
