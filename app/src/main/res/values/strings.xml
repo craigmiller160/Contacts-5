@@ -98,4 +98,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="about_contacts_title">About Contacts5+</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>
