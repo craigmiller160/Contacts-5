@@ -14,7 +14,7 @@ public abstract class AbstractReflectiveHelper extends AbstractHelper{
     public final Object getModelProperty(String propName, Object...params) throws MVPException{
         Object result = null;
 //        try{
-            result = FindAndInvoke.findOneAndInvokeMethod(getModels(), "get" + propName, params);
+            //result = FindAndInvoke.findOneAndInvokeMethod(getModels(), "get" + propName, params);
 //        }
 //        catch(InvocationTargetException ex){
 //            throw new MVPException("Failed to get model property: " + propName + " " + Arrays.toString(params), ex.getCause());
@@ -29,7 +29,7 @@ public abstract class AbstractReflectiveHelper extends AbstractHelper{
     @Override
     public final void setModelProperty(String propName, Object...values) throws MVPException{
 //        try{
-            FindAndInvoke.findOneAndInvokeMethod(getModels(), "set" + propName, values);
+            //FindAndInvoke.findOneAndInvokeMethod(getModels(), "set" + propName, values);
 //        }
 //        catch(InvocationTargetException ex){
 //            throw new MVPException("Failed to set model property: " + propName + " " + Arrays.toString(values), ex.getCause());
