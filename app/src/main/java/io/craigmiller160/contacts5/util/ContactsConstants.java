@@ -23,4 +23,12 @@ public class ContactsConstants {
     public static final String NAME_FORMAT_PROP = "NameFormat";
     public static final String PHONES_ONLY_PROP = "PhonesOnly";
 
+    /*
+     * Result codes
+     */
+
+    public static final int SETTINGS_ACTIVITY_ID = 301;
+    public static final int CONTACT_ACTION_VIEW_ID = 302;
+    public static final int NEW_CONTACT_VIEW_ID = 303;
+
 }

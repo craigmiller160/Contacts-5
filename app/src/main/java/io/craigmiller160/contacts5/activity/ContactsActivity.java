@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.old.activity.DisplaySettingsActivity;
 import io.craigmiller160.contacts5.old.adapter.TabsPagerAdapter;
 import io.craigmiller160.contacts5.old.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.old.fragment.ContactsGroupsPage;
@@ -26,9 +25,6 @@ import io.craigmiller160.contacts5.view.ContactsActivityView;
 import io.craigmiller160.locus.Locus;
 import io.craigmiller160.locus.LocusDebug;
 
-import static io.craigmiller160.contacts5.old.activity.ContactsActivity.CONTACT_ACTION_VIEW_ID;
-import static io.craigmiller160.contacts5.old.activity.ContactsActivity.NEW_CONTACT_VIEW_ID;
-import static io.craigmiller160.contacts5.old.activity.ContactsActivity.SETTINGS_ACTIVITY_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
@@ -49,23 +45,24 @@ public class ContactsActivity extends AndroidActivity {
     }
 
     @Override
-    protected AndroidActivityView getView() {
+    protected AndroidActivityView getAndroidView() {
         return new ContactsActivityView(this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO review and restore this code
-//        if(requestCode == SETTINGS_ACTIVITY_ID){
-//            //Using a handler here so that recreate will be called after main thread has finished current task
-//            Handler h = new Handler();
-//            h.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    getActivity().recreate();
-//                }
-//            });
-//        }
+        if(requestCode == SETTINGS_ACTIVITY_ID){
+            //TODO review threading use here
+            //Using a handler here so that recreate will be called after main thread has finished current task
+            Handler h = new Handler();
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    recreate();
+                }
+            });
+        }
 //        else if(requestCode == CONTACT_ACTION_VIEW_ID){
 //            if(data != null){
 //                System.out.println("View Contact: Data Not Null");

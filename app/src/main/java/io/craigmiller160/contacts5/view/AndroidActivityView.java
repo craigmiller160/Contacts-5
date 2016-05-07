@@ -15,7 +15,7 @@ public abstract class AndroidActivityView {
 
     protected AndroidActivityView(Activity activity){
         this.activity = activity;
-        activity.setContentView(getContentViewId());
+        activity.setContentView(getViewResourceId());
         onCreate();
     }
 
@@ -38,7 +38,7 @@ public abstract class AndroidActivityView {
 
     protected abstract void onCreate();
 
-    protected abstract int getContentViewId();
+    protected abstract int getViewResourceId();
 
     public abstract boolean onCreateOptionsMenu(Menu menu);
 

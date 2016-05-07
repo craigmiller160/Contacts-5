@@ -1,4 +1,4 @@
-package io.craigmiller160.contacts5.old.activity;
+package io.craigmiller160.contacts5.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

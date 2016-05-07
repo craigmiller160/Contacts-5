@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.activity.AppCompatPreferenceActivity;
 import io.craigmiller160.contacts5.old.service.AccountService;
 import io.craigmiller160.contacts5.old.service.ContactsPreferences;
 
@@ -33,7 +34,7 @@ import java.util.Set;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class DisplaySettingsActivity extends AppCompatPreferenceActivity{
+public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     //TODO clean up this mess of a class with all the default crap
 

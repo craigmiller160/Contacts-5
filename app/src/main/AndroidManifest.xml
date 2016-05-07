@@ -26,15 +26,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".old.activity.DisplaySettingsActivity"-->
-            <!--android:label="@string/display_settings_title"-->
-            <!--android:parentActivityName=".old.activity.ContactsActivity"-->
-            <!--android:theme="@style/AppTheme.PreferencesTheme">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".old.activity.ContactsActivity" />-->
-        <!--</activity>-->
+        <activity
+            android:name=".activity.DisplaySettingsActivity"
+            android:label="@string/display_settings_title"
+            android:parentActivityName=".activity.ContactsActivity"
+            android:theme="@style/AppTheme.PreferencesTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".old.activity.ContactsActivity" />
+        </activity>
         <!--<activity-->
             <!--android:name=".old.activity.ContactsInGroupActivity"-->
             <!--android:label="@string/contacts_activity_name"-->

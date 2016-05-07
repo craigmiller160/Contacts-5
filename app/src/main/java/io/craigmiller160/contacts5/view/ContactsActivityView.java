@@ -49,7 +49,7 @@ public class ContactsActivityView extends AndroidActivityView {
     }
 
     @Override
-    protected int getContentViewId() {
+    protected int getViewResourceId() {
         return R.layout.activity_contacts;
     }
 

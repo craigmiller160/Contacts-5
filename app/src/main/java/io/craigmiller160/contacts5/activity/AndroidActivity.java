@@ -15,12 +15,12 @@ public abstract class AndroidActivity extends AppCompatActivity {
 
     private AndroidActivityView androidActivityView;
 
-    protected abstract AndroidActivityView getView();
+    protected abstract AndroidActivityView getAndroidView();
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        this.androidActivityView = getView();
+        this.androidActivityView = getAndroidView();
     }
 
     @Override
