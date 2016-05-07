@@ -14,7 +14,11 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  * Created by craig on 5/4/16.
  */
 @LController(name=ADD_CONTACT_CONTROLLER)
-public class AddContactController implements View.OnClickListener {
+public class AddContactController extends AbstractAndroidController implements View.OnClickListener {
+
+    public AddContactController(Activity activity) {
+        super(activity);
+    }
 
     @Override
     public void onClick(View view) {

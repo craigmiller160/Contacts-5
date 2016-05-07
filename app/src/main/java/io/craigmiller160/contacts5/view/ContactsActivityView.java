@@ -29,7 +29,7 @@ public class ContactsActivityView extends AndroidActivityView {
 
         findViewById(R.id.addContact).setOnClickListener(
                 Locus.controller.getController(
-                        ADD_CONTACT_CONTROLLER, View.OnClickListener.class, this)
+                        ADD_CONTACT_CONTROLLER, View.OnClickListener.class, getActivity())
         );
     }
 

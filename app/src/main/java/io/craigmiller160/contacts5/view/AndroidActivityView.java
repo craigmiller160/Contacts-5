@@ -2,7 +2,6 @@ package io.craigmiller160.contacts5.view;
 
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AndroidException;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.View;
