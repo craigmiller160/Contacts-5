@@ -17,6 +17,7 @@ public class ContactsConfigurationBuilder {
         config.addClassName("io.craigmiller160.contacts5.model.DisplayPrefsModel");
         config.addClassName("io.craigmiller160.contacts5.controller.AddContactController");
         config.addClassName("io.craigmiller160.contacts5.controller.DisplaySettingsController");
+        config.setUIThreadExecutorClassName("io.craigmiller160.contacts5.util.DroidUIThreadExecutor");
 
         return config;
     }
