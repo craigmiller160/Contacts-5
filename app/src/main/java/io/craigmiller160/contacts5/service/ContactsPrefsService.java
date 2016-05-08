@@ -23,10 +23,12 @@ public class ContactsPrefsService {
 
     private final Context context;
     private final AccountService accountService;
+    private final ResourceService resources;
 
-    ContactsPrefsService(Context context, AccountService accountService){
+    ContactsPrefsService(Context context, AccountService accountService, ResourceService resources){
         this.context = context;
         this.accountService = accountService;
+        this.resources = resources;
     }
 
 
@@ -39,22 +41,22 @@ public class ContactsPrefsService {
         //until manually changed
         String[] accountNames = accountService.getAllContactAccountNames();
         if(accountNames.length > 0){
-            Set<String> accountsToDisplay = displaySettings.getStringSet(context.getString(R.string.accounts_to_display_prop),
+            Set<String> accountsToDisplay = displaySettings.getStringSet(resources.getString(R.string.accounts_to_display_prop),
                     new HashSet<>(Arrays.asList(accountNames)));
-            Locus.model.setValue(ACCOUNTS_TO_DISPLAY_PROP, accountsToDisplay);
+            Locus.model.setValue(resources.getString(R.string.accounts_to_display_prop), accountsToDisplay);
         }
 
         String sortOrder = displaySettings.getString(context.getString(R.string.sort_order_prop),
-                context.getResources().getStringArray(R.array.sort_order_values)[0]);
-        Locus.model.setValue(SORT_ORDER_PROP, sortOrder);
+                resources.getStringArray(R.array.sort_order_values)[0]);
+        Locus.model.setValue(resources.getString(R.string.sort_order_prop), sortOrder);
 
         String sortBy = displaySettings.getString(context.getString(R.string.sort_by_prop),
-                context.getResources().getStringArray(R.array.sort_by_values)[0]);
-        Locus.model.setValue(SORT_BY_PROP, sortBy);
+                resources.getStringArray(R.array.sort_by_values)[0]);
+        Locus.model.setValue(resources.getString(R.string.sort_by_prop), sortBy);
 
         boolean phonesOnly = displaySettings.getBoolean(
-                context.getString(R.string.phones_only_prop), true);
-        Locus.model.setValue(PHONES_ONLY_PROP, phonesOnly);
+                resources.getString(R.string.phones_only_prop), true);
+        Locus.model.setValue(resources.getString(R.string.phones_only_prop), phonesOnly);
 
     }
 
@@ -62,23 +64,27 @@ public class ContactsPrefsService {
         Log.d(TAG, "Storing preferences in SharedPreferences");
         SharedPreferences.Editor settingsEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
-        Set<String> accountsToDisplay = Locus.model.getValue(ACCOUNTS_TO_DISPLAY_PROP, Set.class);
+        Set<String> accountsToDisplay = Locus.model.getValue(
+                resources.getString(R.string.accounts_to_display_prop), Set.class);
         if(accountsToDisplay != null){
-            settingsEditor.putStringSet(context.getString(R.string.accounts_to_display_prop), accountsToDisplay);
+            settingsEditor.putStringSet(resources.getString(R.string.accounts_to_display_prop), accountsToDisplay);
         }
 
-        String sortOrder = Locus.model.getValue(SORT_ORDER_PROP, String.class);
+        String sortOrder = Locus.model.getValue(
+                resources.getString(R.string.sort_order_prop), String.class);
         if(sortOrder != null){
-            settingsEditor.putString(context.getString(R.string.sort_order_prop), sortOrder);
+            settingsEditor.putString(resources.getString(R.string.sort_order_prop), sortOrder);
         }
 
-        String sortBy = Locus.model.getValue(SORT_BY_PROP, String.class);
+        String sortBy = Locus.model.getValue(
+                resources.getString(R.string.sort_by_prop), String.class);
         if(sortBy != null){
-            settingsEditor.putString(context.getString(R.string.sort_by_prop), sortBy);
+            settingsEditor.putString(resources.getString(R.string.sort_by_prop), sortBy);
         }
 
-        boolean phonesOnly = Locus.model.getValue(PHONES_ONLY_PROP, Boolean.class);
-        settingsEditor.putBoolean(context.getString(R.string.phones_only_prop), phonesOnly);
+        boolean phonesOnly = Locus.model.getValue(
+                resources.getString(R.string.phones_only_prop), Boolean.class);
+        settingsEditor.putBoolean(resources.getString(R.string.phones_only_prop), phonesOnly);
 
     }
 

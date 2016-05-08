@@ -149,20 +149,21 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     mPref.setEntryValues(accountNames);
 
                     //Get the values to be selected and set them
-                    Set<String> accountsToDisplay = Locus.model.getValue(ACCOUNTS_TO_DISPLAY_PROP, Set.class);
+                    Set<String> accountsToDisplay = Locus.model.getValue(
+                            resources.getString(R.string.accounts_to_display_prop), Set.class);
                     if(accountsToDisplay != null){
                         mPref.setValues(accountsToDisplay);
                     }
                 }
             }
             else if(key.equals(resources.getString(R.string.sort_order_prop))){
-                String sortOrder = Locus.model.getValue(SORT_ORDER_PROP, String.class);
+                String sortOrder = Locus.model.getValue(resources.getString(R.string.sort_order_prop), String.class);
                 if(sortOrder != null){
                     pref.setDefaultValue(sortOrder);
                 }
             }
             else if(key.equals(resources.getString(R.string.sort_by_prop))){
-                String sortBy = Locus.model.getValue(SORT_BY_PROP, String.class);
+                String sortBy = Locus.model.getValue(resources.getString(R.string.sort_by_prop), String.class);
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);
                 }

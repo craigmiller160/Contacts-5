@@ -33,23 +33,23 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
         String key = preference.getKey();
         Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
         if(key.equals(resources.getString(R.string.accounts_to_display_prop))){
-            Locus.model.setValue(ACCOUNTS_TO_DISPLAY_PROP, newValue);
+            Locus.model.setValue(resources.getString(R.string.accounts_to_display_prop), newValue);
             return true;
         }
         else if(key.equals(resources.getString(R.string.sort_order_prop))){
-            Locus.model.setValue(SORT_ORDER_PROP, newValue);
+            Locus.model.setValue(resources.getString(R.string.sort_order_prop), newValue);
             return true;
         }
         else if(key.equals(resources.getString(R.string.sort_by_prop))){
-            Locus.model.setValue(SORT_BY_PROP, newValue);
+            Locus.model.setValue(resources.getString(R.string.sort_by_prop), newValue);
             return true;
         }
         else if(key.equals(resources.getString(R.string.name_format_prop))){
-            Locus.model.setValue(NAME_FORMAT_PROP, newValue);
+            Locus.model.setValue(resources.getString(R.string.name_format_prop), newValue);
             return true;
         }
         else if(key.equals(resources.getString(R.string.phones_only_prop))){
-            Locus.model.setValue(PHONES_ONLY_PROP, newValue);
+            Locus.model.setValue(resources.getString(R.string.phones_only_prop), newValue);
             return true;
         }
 

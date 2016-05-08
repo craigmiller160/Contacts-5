@@ -1,4 +1,4 @@
-package io.craigmiller160.contacts5.old.adapter;
+package io.craigmiller160.contacts5.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

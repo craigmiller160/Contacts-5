@@ -15,6 +15,8 @@ import org.reflections.scanners.ResourcesScanner;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.AccountService;
+import io.craigmiller160.contacts5.service.ContactsPrefsService;
+import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
@@ -32,16 +34,24 @@ public class ContactsActivity extends AndroidActivity {
 
     private PermissionsService permissionsService;
     private ResourceService resources;
+    private ContactsRetrievalService contactsService;
+    private ContactsPrefsService contactsPrefsService;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
         this.resources = ServiceFactory.getInstance().getResourceService();
+        this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
+        this.contactsPrefsService = ServiceFactory.getInstance().getContactsPrefsService();
 
-        //Check permissions
+        //Check permissions and load contacts
         if(!permissionsService.hasReadContactsPermission()){
             permissionsService.requestReadContactsPermission(this);
+        }
+        else{
+            contactsPrefsService.loadAllPreferences();
+            contactsService.loadAllContacts();
         }
     }
 

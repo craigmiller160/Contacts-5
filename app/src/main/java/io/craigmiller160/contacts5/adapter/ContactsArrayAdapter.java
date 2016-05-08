@@ -1,4 +1,4 @@
-package io.craigmiller160.contacts5.old.adapter;
+package io.craigmiller160.contacts5.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,11 +13,7 @@ import android.widget.TextView;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.old.application.ContactsApplication;
-import io.craigmiller160.contacts5.old.controller.ContactSelectionController;
-import io.craigmiller160.contacts5.old.model.Contact;
-
-import static io.craigmiller160.contacts5.old.helper.ContactsHelper.*;
+import io.craigmiller160.contacts5.model.Contact;
 
 /**
  * Created by Craig on 1/22/2016.
@@ -44,18 +40,19 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
         }
 
         TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
-        final Contact contact = (Contact) ContactsApplication.getInstance().getModelProperty(CONTACT_AT_INDEX_PROP, position);
-        if(contact != null){
-            nameTextView.setText(contact.getDisplayName());
-        }
-        view.setOnClickListener(new ContactSelectionController(contact, position));
+//        final Contact contact = (Contact) ContactsApplication.getInstance().getModelProperty(CONTACT_AT_INDEX_PROP, position);
+//        if(contact != null){
+//            nameTextView.setText(contact.getDisplayName());
+//        }
+//        view.setOnClickListener(new ContactSelectionController(contact, position));
 
         return view;
     }
 
     @Override
     public int getCount(){
-        return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
+        //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
+        return 0;
     }
 
 //    private View createView(int position, ViewGroup parent){

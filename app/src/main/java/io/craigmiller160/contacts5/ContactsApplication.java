@@ -5,6 +5,7 @@ import android.app.Application;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.util.ContactsConfigurationBuilder;
+import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import io.craigmiller160.locus.Locus;
 import io.craigmiller160.locus.util.LocusConfiguration;
 
@@ -27,7 +28,7 @@ public class ContactsApplication extends Application {
             ServiceFactory.initialize(this);
         }
 
-        ServiceFactory.getInstance().getContactsPrefsService().loadAllPreferences();
+        Thread.setDefaultUncaughtExceptionHandler(new ContactsThreadFactory.ContactsUncaughtExceptionHandler()); //TODO move this if it works
     }
 
 }

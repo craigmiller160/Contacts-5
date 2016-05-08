@@ -63,7 +63,11 @@ public class ServiceFactory {
     }
 
     public ContactsPrefsService getContactsPrefsService(){
-        return new ContactsPrefsService(context, getAccountService());
+        return new ContactsPrefsService(context, getAccountService(), getResourceService());
+    }
+
+    public ContactsRetrievalService getContactsRetrievalService(){
+        return new DefaultContactsRetrievalService(context, getResourceService());
     }
 
 }

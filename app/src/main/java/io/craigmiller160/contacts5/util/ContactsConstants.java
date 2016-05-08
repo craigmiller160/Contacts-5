@@ -18,16 +18,6 @@ public class ContactsConstants {
     public static final String DISPLAY_SETTINGS_CONTROLLER = "DisplaySettingsController";
 
     /*
-     * Model properties
-     */
-
-    public static final String ACCOUNTS_TO_DISPLAY_PROP = "AccountsToDisplay";
-    public static final String SORT_ORDER_PROP = "SortOrder";
-    public static final String SORT_BY_PROP = "SortBy";
-    public static final String NAME_FORMAT_PROP = "NameFormat";
-    public static final String PHONES_ONLY_PROP = "PhonesOnly";
-
-    /*
      * Result codes
      */
 

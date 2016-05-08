@@ -41,6 +41,9 @@
     <string name="sort_order_prop">SortOrder</string>
     <string name="phones_only_prop">PhonesOnly</string>
 
+    <string name="contacts_storage_prop">ContactsStorage</string>
+    <string name="contact_at_index_prop">ContactAtIndex</string>
+
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
 </resources>
