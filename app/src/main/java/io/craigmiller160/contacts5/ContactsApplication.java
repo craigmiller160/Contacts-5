@@ -2,6 +2,7 @@ package io.craigmiller160.contacts5;
 
 import android.app.Application;
 
+import io.craigmiller160.contacts5.service.ContactsPreferences;
 import io.craigmiller160.contacts5.util.ContactsConfigurationBuilder;
 import io.craigmiller160.locus.Locus;
 import io.craigmiller160.locus.util.LocusConfiguration;
@@ -20,6 +21,7 @@ public class ContactsApplication extends Application {
             LocusConfiguration config = ContactsConfigurationBuilder.buildConfiguration();
             Locus.initialize(config);
         }
+        ContactsPreferences.loadAllPreferences(this);
     }
 
 }

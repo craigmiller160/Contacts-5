@@ -1,6 +1,8 @@
 package io.craigmiller160.contacts5.model;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import io.craigmiller160.locus.annotations.LModel;
@@ -21,11 +23,15 @@ public class DisplayPrefsModel {
     private boolean phonesOnly;
 
     public synchronized Set<String> getAccountsToDisplay() {
-        return Collections.unmodifiableSet(accountsToDisplay);
+        return accountsToDisplay != null ? Collections.unmodifiableSet(accountsToDisplay) : null;
     }
 
     public synchronized void setAccountsToDisplay(Set<String> accountsToDisplay) {
         this.accountsToDisplay = accountsToDisplay;
+    }
+
+    public synchronized void setAccountsToDisplay(String[] accountsToDisplay){
+        this.accountsToDisplay = accountsToDisplay != null ? new HashSet<>(Arrays.asList(accountsToDisplay)) : null;
     }
 
     public synchronized String getSortOrder() {

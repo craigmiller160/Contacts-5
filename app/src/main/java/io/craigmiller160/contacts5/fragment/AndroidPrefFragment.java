@@ -1,4 +1,4 @@
-package io.craigmiller160.contacts5.activity;
+package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

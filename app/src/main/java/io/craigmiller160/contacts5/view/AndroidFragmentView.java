@@ -16,6 +16,10 @@ public abstract class AndroidFragmentView {
 
     protected AndroidFragmentView(Fragment fragment){
         this.fragment = fragment;
+        onCreate();
+    }
+
+    public void onCreate(){
         if(fragment instanceof PreferenceFragment){
             ((PreferenceFragment) fragment).addPreferencesFromResource(getViewResourceId());
         }

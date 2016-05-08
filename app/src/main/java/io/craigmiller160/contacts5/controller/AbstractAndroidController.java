@@ -1,20 +1,21 @@
 package io.craigmiller160.contacts5.controller;
 
 import android.app.Activity;
+import android.content.Context;
 
 /**
  * Created by craig on 5/4/16.
  */
 public class AbstractAndroidController {
 
-    private final Activity activity;
+    private final Context context;
 
-    protected AbstractAndroidController(Activity activity){
-        this.activity = activity;
+    protected AbstractAndroidController(Context context){
+        this.context = context;
     }
 
-    protected final Activity getActivity(){
-        return activity;
+    protected final Context getContext(){
+        return context;
     }
 
 }

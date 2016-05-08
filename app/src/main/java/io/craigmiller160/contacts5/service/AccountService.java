@@ -1,4 +1,4 @@
-package io.craigmiller160.contacts5.old.service;
+package io.craigmiller160.contacts5.service;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

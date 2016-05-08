@@ -17,7 +17,7 @@ import android.view.MenuItem;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.AppCompatPreferenceActivity;
-import io.craigmiller160.contacts5.old.service.AccountService;
+import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.old.service.ContactsPreferences;
 
 import java.util.List;

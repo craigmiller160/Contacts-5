@@ -1,6 +1,7 @@
 package io.craigmiller160.contacts5.controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
@@ -16,8 +17,8 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 @LController(name=ADD_CONTACT_CONTROLLER)
 public class AddContactController extends AbstractAndroidController implements View.OnClickListener {
 
-    public AddContactController(Activity activity) {
-        super(activity);
+    public AddContactController(Context context) {
+        super(context);
     }
 
     @Override
