@@ -2,21 +2,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <MultiSelectListPreference
-        android:title="@string/accounts_to_display_key"
-        android:key="@string/accounts_to_display_key"
-        android:summary="The accounts to display contacts from"/>
+        android:title="@string/accounts_to_display_prop"
+        android:key="@string/accounts_to_display_setting_label"
+        android:summary="@string/accounts_to_display_setting_description"/>
     <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
 
     <SwitchPreference
-        android:title="@string/phones_only_key"
-        android:key="@string/phones_only_key"
-        android:summary="Filter contacts to only those with phone numbers"
+        android:title="@string/phones_only_setting_label"
+        android:key="@string/phones_only_prop"
+        android:summary="@string/phones_only_setting_description"
         android:defaultValue="true"/>
 
     <ListPreference
-        android:title="@string/sort_order_key"
-        android:key="@string/sort_order_key"
-        android:summary="The order to sort the contacts in"
+        android:title="@string/sort_order_setting_label"
+        android:key="@string/sort_order_prop"
+        android:summary="@string/sort_order_setting_description"
         android:entries="@array/sort_order_display_values"
         android:entryValues="@array/sort_order_values"/>
 

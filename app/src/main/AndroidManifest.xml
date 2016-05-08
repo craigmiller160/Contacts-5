@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".activity.DisplaySettingsActivity"
-            android:label="@string/display_settings_title"
+            android:label="@string/display_settings_activity_name"
             android:parentActivityName=".activity.ContactsActivity"
             android:theme="@style/AppTheme.PreferencesTheme">
             <meta-data
