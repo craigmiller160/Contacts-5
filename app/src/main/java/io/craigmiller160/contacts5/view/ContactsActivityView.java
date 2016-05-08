@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.adapter.TabsPagerAdapter;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.locus.Locus;
@@ -39,7 +40,7 @@ public class ContactsActivityView extends AndroidActivityView {
     private void configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
         //TODO review and restore this code
-//        tabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        TabsPagerAdapter tabsAdapter = new TabsPagerAdapter(getAppCompatActivity().getSupportFragmentManager());
 //
 //        allContactsPage = new AllContactsPage();
 //        contactGroupsPage = new ContactsGroupsPage();

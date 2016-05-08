@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class ContactsActivity extends AndroidActivity {
         if(requestCode == SETTINGS_ACTIVITY_ID){
             //TODO review threading use here
             //Using a handler here so that recreate will be called after main thread has finished current task
-            Handler h = new Handler();
+            Handler h = new Handler(Looper.getMainLooper());
             h.post(new Runnable() {
                 @Override
                 public void run() {

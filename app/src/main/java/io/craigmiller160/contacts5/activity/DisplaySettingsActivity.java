@@ -98,7 +98,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             int id = item.getItemId();
             if (id == android.R.id.home) {
                 System.out.println("Activity: " + getActivity().getClass().getName()); //TODO delete this
-                startActivity(new Intent(getActivity(), io.craigmiller160.contacts5.old.activity.ContactsActivity.class));
+                startActivity(new Intent(getActivity(), ContactsActivity.class));
                 return true;
             }
 
