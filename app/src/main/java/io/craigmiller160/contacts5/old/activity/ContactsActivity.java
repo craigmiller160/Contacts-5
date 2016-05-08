@@ -17,7 +17,7 @@ import io.craigmiller160.contacts5.old.application.ContactsApplication;
 import io.craigmiller160.contacts5.old.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.old.fragment.ContactsGroupsPage;
 import io.craigmiller160.contacts5.old.service.ContactsPreferences;
-import io.craigmiller160.contacts5.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.old.helper.ContactsHelper.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.old.helper.ContactsHelper.CONTACTS_ACTIVITY_CONTROLLER;
@@ -44,10 +44,10 @@ public class ContactsActivity extends AbstractMVPActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         //Check permissions
-        if(!PermissionsManager.hasReadContactsPermission(this)){
-            Log.d(TAG, "Requesting Contacts permissions");
-            PermissionsManager.requestReadContactsPermission(this);
-        }
+//        if(!PermissionsService.hasReadContactsPermission(this)){
+//            Log.d(TAG, "Requesting Contacts permissions");
+//            PermissionsService.requestReadContactsPermission(this);
+//        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
         setSupportActionBar(toolbar);
@@ -88,7 +88,7 @@ public class ContactsActivity extends AbstractMVPActivity {
     public boolean onPrepareOptionsMenu(Menu menu){
         MenuItem item = menu.findItem(R.id.grantPermissions);
         if(item != null){
-            item.setVisible(!PermissionsManager.hasReadContactsPermission(this));
+//            item.setVisible(!PermissionsService.hasReadContactsPermission(this));
         }
 
         return super.onPrepareOptionsMenu(menu);

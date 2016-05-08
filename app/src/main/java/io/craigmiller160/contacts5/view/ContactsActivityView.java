@@ -8,7 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.locus.Locus;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
@@ -17,6 +18,8 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CON
  * Created by craig on 5/4/16.
  */
 public class ContactsActivityView extends AndroidActivityView {
+
+    private final PermissionsService permissionsService = ServiceFactory.getInstance().getPermissionsService();
 
     public ContactsActivityView(Activity activity) {
         super(activity);
@@ -63,7 +66,7 @@ public class ContactsActivityView extends AndroidActivityView {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.grantPermissions);
         if(item != null){
-            item.setVisible(!PermissionsManager.hasReadContactsPermission(getActivity()));
+            item.setVisible(!permissionsService.hasReadContactsPermission());
         }
 
         return true;

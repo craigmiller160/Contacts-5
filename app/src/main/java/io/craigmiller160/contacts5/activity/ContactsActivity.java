@@ -6,24 +6,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.old.adapter.TabsPagerAdapter;
-import io.craigmiller160.contacts5.old.fragment.AllContactsPage;
-import io.craigmiller160.contacts5.old.fragment.ContactsGroupsPage;
-import io.craigmiller160.contacts5.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.AccountService;
+import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.view.AndroidActivityView;
 import io.craigmiller160.contacts5.view.ContactsActivityView;
-import io.craigmiller160.locus.Locus;
-import io.craigmiller160.locus.LocusDebug;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -34,13 +26,16 @@ public class ContactsActivity extends AndroidActivity {
 
     private static final String TAG = "ContactsActivity";
 
+    private PermissionsService permissionsService;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
 
         //Check permissions
-        if(!PermissionsManager.hasReadContactsPermission(this)){
-            PermissionsManager.requestReadContactsPermission(this);
+        if(!permissionsService.hasReadContactsPermission()){
+            permissionsService.requestReadContactsPermission(this);
         }
     }
 
@@ -89,7 +84,7 @@ public class ContactsActivity extends AndroidActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PermissionsManager.CONTACTS_PERMISSION_REQUEST:
+            case PermissionsService.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Contacts Permission Granted");
                     Intent intent = new Intent(this, ContactsActivity.class);
@@ -105,7 +100,7 @@ public class ContactsActivity extends AndroidActivity {
                                 @Override
                                 public void onClick(View v) {
                                     Log.d(TAG, "Requesting Contacts permissions from snackbar");
-                                    PermissionsManager.requestReadContactsPermission(ContactsActivity.this);
+                                    permissionsService.requestReadContactsPermission(ContactsActivity.this);
                                 }
                             });
                     snackbar.setActionTextColor(Color.YELLOW);
@@ -124,9 +119,9 @@ public class ContactsActivity extends AndroidActivity {
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
-            if(!PermissionsManager.hasReadContactsPermission(this)){
+            if(!permissionsService.hasReadContactsPermission()){
                 Log.i(TAG, "Requesting Permissions from menu item");
-                PermissionsManager.requestReadContactsPermission(this);
+                permissionsService.requestReadContactsPermission(this);
             }
         }
 

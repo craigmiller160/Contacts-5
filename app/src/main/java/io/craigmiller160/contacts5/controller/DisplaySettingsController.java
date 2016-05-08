@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.preference.Preference;
 import android.util.Log;
@@ -29,23 +28,23 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
         Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
-        if(key.equals(getContext().getString(R.string.accounts_to_display_key))){
+        if(key.equals(getContext().getString(R.string.accounts_to_display_prop))){
             Locus.model.setValue(ACCOUNTS_TO_DISPLAY_PROP, newValue);
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.sort_order_key))){
+        else if(key.equals(getContext().getString(R.string.sort_order_prop))){
             Locus.model.setValue(SORT_ORDER_PROP, newValue);
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.sort_by_key))){
+        else if(key.equals(getContext().getString(R.string.sort_by_prop))){
             Locus.model.setValue(SORT_BY_PROP, newValue);
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.name_format_key))){
+        else if(key.equals(getContext().getString(R.string.name_format_prop))){
             Locus.model.setValue(NAME_FORMAT_PROP, newValue);
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.phones_only_key))){
+        else if(key.equals(getContext().getString(R.string.phones_only_prop))){
             Locus.model.setValue(PHONES_ONLY_PROP, newValue);
             return true;
         }

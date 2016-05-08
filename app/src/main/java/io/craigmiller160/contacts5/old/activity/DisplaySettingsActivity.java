@@ -141,10 +141,10 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     private static void loadAccountsToListPref(Preference pref, Context context){
         //TODO IllegalArgumentException if this test fails?
         if(pref instanceof MultiSelectListPreference){
-            MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
-            String[] accountNames = AccountService.getAllContactAccountNames(context);
-            mPref.setEntries(accountNames);
-            mPref.setEntryValues(accountNames); //TODO consider having a different set of values... maybe...
+//            MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
+//            String[] accountNames = AccountService.getAllContactAccountNames(context);
+//            mPref.setEntries(accountNames);
+//            mPref.setEntryValues(accountNames); //TODO consider having a different set of values... maybe...
         }
     }
 
@@ -162,22 +162,22 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     private static void setInitialValue(Preference pref, Context context){
         //This requires the settings to have been configured at startup
         String key = pref.getKey();
-        if(key.equals(context.getString(R.string.accounts_to_display_key))){
+        if(key.equals(context.getString(R.string.accounts_to_display_prop))){
             setInitialValueAccountsPref(pref, context);
         }
-        else if(key.equals(context.getString(R.string.sort_order_key))){
+        else if(key.equals(context.getString(R.string.sort_order_prop))){
             String sortOrder = settings.getSortOrder();
             if(sortOrder != null){
                 pref.setDefaultValue(sortOrder);
             }
         }
-        else if(key.equals(context.getString(R.string.sort_by_key))){
+        else if(key.equals(context.getString(R.string.sort_by_prop))){
             String sortBy = settings.getSortBy();
             if(sortBy != null){
                 pref.setDefaultValue(sortBy);
             }
         }
-        else if(key.equals(context.getString(R.string.name_format_key))){
+        else if(key.equals(context.getString(R.string.name_format_prop))){
             String nameFormat = settings.getNameFormat();
             if(nameFormat != null){
                 pref.setDefaultValue(nameFormat);
@@ -186,7 +186,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     }
 
     private static void configurePreference(Preference pref, Context context){
-        if(pref.getKey().equals(context.getString(R.string.accounts_to_display_key))){
+        if(pref.getKey().equals(context.getString(R.string.accounts_to_display_prop))){
             loadAccountsToListPref(pref, context);
         }
 
@@ -205,11 +205,11 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
 
 
-            configurePreference(findPreference(getResources().getString(R.string.accounts_to_display_key)), getActivity());
-            configurePreference(findPreference(getResources().getString(R.string.sort_order_key)), getActivity());
+            configurePreference(findPreference(getResources().getString(R.string.accounts_to_display_prop)), getActivity());
+            configurePreference(findPreference(getResources().getString(R.string.sort_order_prop)), getActivity());
             //configurePreference(findPreference(getResources().getString(R.string.sort_by_key)), getActivity());
             //configurePreference(findPreference(getResources().getString(R.string.name_format_key)), getActivity());
-            configurePreference(findPreference(getResources().getString(R.string.phones_only_key)), getActivity());
+            configurePreference(findPreference(getResources().getString(R.string.phones_only_prop)), getActivity());
         }
 
         @Override
@@ -238,23 +238,23 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String key = preference.getKey();
             Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
-            if(key.equals(context.getString(R.string.accounts_to_display_key))){
+            if(key.equals(context.getString(R.string.accounts_to_display_prop))){
                 settings.setDisplaySettingProperty(key, newValue, context);
                 return true;
             }
-            else if(key.equals(context.getString(R.string.sort_order_key))){
+            else if(key.equals(context.getString(R.string.sort_order_prop))){
                 settings.setDisplaySettingProperty(key, newValue, context);
                 return true;
             }
-            else if(key.equals(context.getString(R.string.sort_by_key))){
+            else if(key.equals(context.getString(R.string.sort_by_prop))){
                 settings.setDisplaySettingProperty(key, newValue, context);
                 return true;
             }
-            else if(key.equals(context.getString(R.string.name_format_key))){
+            else if(key.equals(context.getString(R.string.name_format_prop))){
                 settings.setDisplaySettingProperty(key, newValue, context);
                 return true;
             }
-            else if(key.equals(context.getString(R.string.phones_only_key))){
+            else if(key.equals(context.getString(R.string.phones_only_prop))){
                 settings.setDisplaySettingProperty(key, newValue, context);
                 return true;
             }

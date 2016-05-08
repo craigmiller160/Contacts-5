@@ -20,7 +20,7 @@ import io.craigmiller160.contacts5.old.helper.Helper;
 import io.craigmiller160.contacts5.old.model.Contact;
 import io.craigmiller160.contacts5.old.model.LookupContact;
 import io.craigmiller160.contacts5.old.service.ContactsRetrievalService2;
-import io.craigmiller160.contacts5.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.old.activity.ContactsActivity.*;
 
@@ -77,7 +77,7 @@ public class ContactsActivityController extends AbstractActivityController{
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PermissionsManager.CONTACTS_PERMISSION_REQUEST:
+            case PermissionsService.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Contacts Permission Granted");
                     Intent intent = new Intent(getActivity(), ContactsActivity.class);
@@ -88,16 +88,16 @@ public class ContactsActivityController extends AbstractActivityController{
                     Log.e(TAG, "Contacts permission denied");
                     View view = getActivity().findViewById(R.id.contactsActivityLayout);
                     //TODO move text to Strings
-                    Snackbar snackbar = Snackbar.make(view, "Permission Denied!", Snackbar.LENGTH_LONG)
-                            .setAction("GRANT", new View.OnClickListener(){
-                                @Override
-                                public void onClick(View v) {
-                                    Log.d(TAG, "Requesting Contacts permissions from snackbar");
-                                    PermissionsManager.requestReadContactsPermission(getActivity());
-                                }
-                            });
-                    snackbar.setActionTextColor(Color.YELLOW);
-                    snackbar.show();
+//                    Snackbar snackbar = Snackbar.make(view, "Permission Denied!", Snackbar.LENGTH_LONG)
+//                            .setAction("GRANT", new View.OnClickListener(){
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Log.d(TAG, "Requesting Contacts permissions from snackbar");
+//                                    PermissionsService.requestReadContactsPermission(getActivity());
+//                                }
+//                            });
+//                    snackbar.setActionTextColor(Color.YELLOW);
+//                    snackbar.show();
                 }
         }
     }
@@ -111,10 +111,10 @@ public class ContactsActivityController extends AbstractActivityController{
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
-            if(!PermissionsManager.hasReadContactsPermission(getActivity())){
-                Log.i(TAG, "Requesting Permissions from menu item");
-                PermissionsManager.requestReadContactsPermission(getActivity());
-            }
+//            if(!PermissionsService.hasReadContactsPermission(getActivity())){
+//                Log.i(TAG, "Requesting Permissions from menu item");
+//                PermissionsService.requestReadContactsPermission(getActivity());
+//            }
         }
 
         return false;

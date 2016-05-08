@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <MultiSelectListPreference
-        android:title="@string/accounts_to_display_prop"
-        android:key="@string/accounts_to_display_setting_label"
+        android:title="@string/accounts_to_display_setting_label"
+        android:key="@string/accounts_to_display_prop"
         android:summary="@string/accounts_to_display_setting_description"/>
     <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
 

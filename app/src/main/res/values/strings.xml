@@ -25,14 +25,14 @@
         <item>ASC</item>
         <item>DESC</item>
     </string-array>
-    <!--<string-array name="sort_by_values">-->
-        <!--<item>First name</item>-->
-        <!--<item>Last name</item>-->
-    <!--</string-array>-->
-    <!--<string-array name="name_format_values">-->
-        <!--<item>First name first</item>-->
-        <!--<item>Last name first</item>-->
-    <!--</string-array>-->
+    <string-array name="sort_by_values">
+        <item>First name</item>
+        <item>Last name</item>
+    </string-array>
+    <string-array name="name_format_values">
+        <item>First name first</item>
+        <item>Last name first</item>
+    </string-array>
 
     <!-- Property Names -->
     <string name="accounts_to_display_prop">AccountsToDisplay</string>

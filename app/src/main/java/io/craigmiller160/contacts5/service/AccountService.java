@@ -14,14 +14,20 @@ public class AccountService {
 
     private static final String GOOGLE_ACCOUNT = "com.google";
 
+    private final Context context;
+
+    AccountService(Context context){
+        this.context = context;
+    }
+
     //TODO currently only retrieves Google accounts
-    public static Account[] getAllContactAccounts(Context context){
+    public Account[] getAllContactAccounts(){
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         return accountManager.getAccountsByType(GOOGLE_ACCOUNT);
     }
 
     //TODO currently only retrieves Google accounts
-    public static String[] getAllContactAccountNames(Context context){
+    public String[] getAllContactAccountNames(){
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_ACCOUNT);
         String[] accountNames = new String[accounts.length];
@@ -32,7 +38,7 @@ public class AccountService {
         return accountNames;
     }
 
-    public static int getAccountCount(Context context){
+    public int getAccountCount(){
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_ACCOUNT);
 

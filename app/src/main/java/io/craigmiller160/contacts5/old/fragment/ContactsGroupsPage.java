@@ -14,7 +14,7 @@ import io.craigmiller160.contacts5.old.adapter.ContactsGroupsArrayAdapter;
 import io.craigmiller160.contacts5.old.model.ContactGroup;
 import io.craigmiller160.contacts5.old.service.ContactsService;
 import io.craigmiller160.contacts5.old.service.ContactsServiceFactory;
-import io.craigmiller160.contacts5.service.PermissionsManager;
+import io.craigmiller160.contacts5.service.PermissionsService;
 
 
 /**
@@ -38,23 +38,24 @@ public class ContactsGroupsPage extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
-        if(PermissionsManager.hasReadContactsPermission(getActivity())){
-            Log.d(TAG, "Building list of groups for Groups page");
-
-            ListView view = (ListView) inflater.inflate(R.layout.content_contacts_list, container, false);
-            view.setDivider(null);
-            view.setFastScrollEnabled(true);
-
-            groupArrayAdapter = new ContactsGroupsArrayAdapter(getActivity());
-
-            view.setAdapter(groupArrayAdapter);
-            return view;
-        }
-        else{
-            Log.d(TAG, "Displaying no permissions page on Groups tab");
-            View view = inflater.inflate(R.layout.content_no_permissions, container, false);
-            return view;
-        }
+//        if(PermissionsService.hasReadContactsPermission(getActivity())){
+//            Log.d(TAG, "Building list of groups for Groups page");
+//
+//            ListView view = (ListView) inflater.inflate(R.layout.content_contacts_list, container, false);
+//            view.setDivider(null);
+//            view.setFastScrollEnabled(true);
+//
+//            groupArrayAdapter = new ContactsGroupsArrayAdapter(getActivity());
+//
+//            view.setAdapter(groupArrayAdapter);
+//            return view;
+//        }
+//        else{
+//            Log.d(TAG, "Displaying no permissions page on Groups tab");
+//            View view = inflater.inflate(R.layout.content_no_permissions, container, false);
+//            return view;
+//        }
+        return null;
     }
 
 }

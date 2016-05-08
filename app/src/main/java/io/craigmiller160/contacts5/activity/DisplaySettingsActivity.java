@@ -16,7 +16,8 @@ import java.util.Set;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.AndroidPrefFragment;
 import io.craigmiller160.contacts5.service.AccountService;
-import io.craigmiller160.contacts5.service.ContactsPreferences;
+import io.craigmiller160.contacts5.service.ContactsPrefsService;
+import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.view.AndroidFragmentView;
 import io.craigmiller160.locus.Locus;
 
@@ -29,9 +30,13 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static final String TAG = "DisplaySettingsActivity";
 
+    private ContactsPrefsService contactsPrefsService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.contactsPrefsService = ServiceFactory.getInstance().getContactsPrefsService();
+
         setupActionBar();
 
         getFragmentManager().beginTransaction().replace(
@@ -61,7 +66,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         if(id == android.R.id.home){
             Log.d(TAG, "Leaving Display Settings");
-            ContactsPreferences.saveAllPreferences(this);
+            contactsPrefsService.saveAllPreferences();
             finish();
             return true;
         }
@@ -102,6 +107,8 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static class DisplaySettingsFragmentView extends AndroidFragmentView{
 
+        private AccountService accountService;
+
         public DisplaySettingsFragmentView(Fragment fragment) {
             super(fragment);
         }
@@ -110,10 +117,11 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         public void onCreate(){
             super.onCreate();
             getFragment().setHasOptionsMenu(true);
+            this.accountService = ServiceFactory.getInstance().getAccountService();
 
-            configurePreference(findPreference(R.string.accounts_to_display_key));
-            configurePreference(findPreference(R.string.sort_order_key));
-            configurePreference(findPreference(R.string.phones_only_key));
+            configurePreference(findPreference(R.string.accounts_to_display_prop));
+            configurePreference(findPreference(R.string.sort_order_prop));
+            configurePreference(findPreference(R.string.phones_only_prop));
         }
 
         private Preference findPreference(int prefId){
@@ -127,13 +135,14 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         private void configurePreference(Preference pref){
             String key = pref.getKey();
-            if(key.equals(getFragment().getString(R.string.accounts_to_display_key))){
+            if(key.equals(getFragment().getString(R.string.accounts_to_display_prop))){
                 //TODO consider illegal argument exception
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
                     //Set the initial list of all account names
-                    String[] accountNames = AccountService.getAllContactAccountNames(getFragment().getActivity());
+                    System.out.println("SERVICE NULL: " + (accountService == null)); //TODO delete this
+                    String[] accountNames = accountService.getAllContactAccountNames();
                     mPref.setEntries(accountNames);
                     mPref.setEntryValues(accountNames);
 
@@ -144,13 +153,13 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     }
                 }
             }
-            else if(key.equals(getFragment().getString(R.string.sort_order_key))){
+            else if(key.equals(getFragment().getString(R.string.sort_order_prop))){
                 String sortOrder = Locus.model.getValue(SORT_ORDER_PROP, String.class);
                 if(sortOrder != null){
                     pref.setDefaultValue(sortOrder);
                 }
             }
-            else if(key.equals(getFragment().getString(R.string.sort_by_key))){
+            else if(key.equals(getFragment().getString(R.string.sort_by_prop))){
                 String sortBy = Locus.model.getValue(SORT_BY_PROP, String.class);
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);

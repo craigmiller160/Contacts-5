@@ -30,7 +30,7 @@ public class ContactsPreferences {
 //    private static final String NAME_FORMAT_KEY = "Name Format";
 //    private static final String SORT_ORDER_KEY = "Sort Order";
 
-    private static final String TAG = "ContactsPreferences";
+    private static final String TAG = "ContactsPrefsService";
 
     private static ContactsPreferences instance;
     private static final Object instanceLock = new Object();
@@ -63,27 +63,27 @@ public class ContactsPreferences {
         //Test how many accounts can be loaded. If 0, app doesn't have contacts permission
         //Don't set this field without permission, because it will set a 0 value that will persist
         //until manually changed
-        String[] accountNames = AccountService.getAllContactAccountNames(context);
-        if(accountNames.length > 0){
-            setAccountsToDisplay(displaySettings.getStringSet(
-                    context.getString(R.string.accounts_to_display_key),
-                    new HashSet<String>(Arrays.asList(accountNames))));
-        }
-
-        setSortOrder(displaySettings.getString(
-                context.getString(R.string.sort_order_key),
-                context.getResources().getStringArray(R.array.sort_order_values)[0]), context);
-
-        setSortBy(displaySettings.getString(
-                context.getString(R.string.sort_by_key),
-                context.getResources().getStringArray(R.array.sort_by_values)[0]), context);
-
-        setNameFormat(displaySettings.getString(
-                context.getString(R.string.name_format_key),
-                context.getResources().getStringArray(R.array.name_format_values)[0]), context);
-
-        setPhonesOnly(displaySettings.getBoolean(
-                context.getString(R.string.phones_only_key), true));
+//        String[] accountNames = AccountService.getAllContactAccountNames(context);
+//        if(accountNames.length > 0){
+//            setAccountsToDisplay(displaySettings.getStringSet(
+//                    context.getString(R.string.accounts_to_display_prop),
+//                    new HashSet<String>(Arrays.asList(accountNames))));
+//        }
+//
+//        setSortOrder(displaySettings.getString(
+//                context.getString(R.string.sort_order_prop),
+//                context.getResources().getStringArray(R.array.sort_order_values)[0]), context);
+//
+//        setSortBy(displaySettings.getString(
+//                context.getString(R.string.sort_by_prop),
+//                context.getResources().getStringArray(R.array.sort_by_values)[0]), context);
+//
+//        setNameFormat(displaySettings.getString(
+//                context.getString(R.string.name_format_prop),
+//                context.getResources().getStringArray(R.array.name_format_values)[0]), context);
+//
+//        setPhonesOnly(displaySettings.getBoolean(
+//                context.getString(R.string.phones_only_prop), true));
     }
 
     public void storeSavedPreferences(Context context){
@@ -119,26 +119,26 @@ public class ContactsPreferences {
 
         if(accountsToDisplay != null){
             settingsEditor.putStringSet(
-                    context.getString(R.string.accounts_to_display_key), accountsToDisplay);
+                    context.getString(R.string.accounts_to_display_prop), accountsToDisplay);
         }
 
         if(sortOrder != null){
             settingsEditor.putString(
-                    context.getString(R.string.sort_order_key), sortOrder);
+                    context.getString(R.string.sort_order_prop), sortOrder);
         }
 
         if(sortBy != null){
             settingsEditor.putString(
-                    context.getString(R.string.sort_by_key), sortBy);
+                    context.getString(R.string.sort_by_prop), sortBy);
         }
 
         if(nameFormat != null){
             settingsEditor.putString(
-                    context.getString(R.string.name_format_key), nameFormat);
+                    context.getString(R.string.name_format_prop), nameFormat);
         }
 
         settingsEditor.putBoolean(
-                context.getString(R.string.phones_only_key), phonesOnly);
+                context.getString(R.string.phones_only_prop), phonesOnly);
 
         settingsEditor.apply();
     }
@@ -181,19 +181,19 @@ public class ContactsPreferences {
     }
 
     public void setDisplaySettingProperty(String propertyName, Object value, Context context){
-        if(propertyName.equals(context.getString(R.string.accounts_to_display_key))){
+        if(propertyName.equals(context.getString(R.string.accounts_to_display_prop))){
             setAccountsToDisplay(value);
         }
-        else if(propertyName.equals(context.getString(R.string.sort_by_key))){
+        else if(propertyName.equals(context.getString(R.string.sort_by_prop))){
             setSortBy(value.toString(), context);
         }
-        else if(propertyName.equals(context.getString(R.string.sort_order_key))){
+        else if(propertyName.equals(context.getString(R.string.sort_order_prop))){
             setSortOrder(value.toString(), context);
         }
-        else if(propertyName.equals(context.getString(R.string.name_format_key))){
+        else if(propertyName.equals(context.getString(R.string.name_format_prop))){
             setNameFormat(value.toString(), context);
         }
-        else if(propertyName.equals(context.getString(R.string.phones_only_key))){
+        else if(propertyName.equals(context.getString(R.string.phones_only_prop))){
             if(value instanceof Boolean){
                 setPhonesOnly((Boolean) value); //TODO consider IllegalArgumentException here
             }
@@ -204,14 +204,14 @@ public class ContactsPreferences {
     }
 
     private void setNameFormat(String nameFormat, Context context){
-        String[] nameFormatValues = context.getResources().getStringArray(R.array.name_format_values);
-        if(!Arrays.asList(nameFormatValues).contains(nameFormat)){
-            throw new IllegalArgumentException("Invalid nameFormat value: " + nameFormat);
-        }
-
-        synchronized(this){
-            this.nameFormat = nameFormat;
-        }
+//        String[] nameFormatValues = context.getResources().getStringArray(R.array.name_format_values);
+//        if(!Arrays.asList(nameFormatValues).contains(nameFormat)){
+//            throw new IllegalArgumentException("Invalid nameFormat value: " + nameFormat);
+//        }
+//
+//        synchronized(this){
+//            this.nameFormat = nameFormat;
+//        }
     }
 
     private synchronized void setPhonesOnly(boolean phonesOnly){
@@ -219,14 +219,14 @@ public class ContactsPreferences {
     }
 
     private void setSortBy(String sortBy, Context context){
-        String[] sortByValues = context.getResources().getStringArray(R.array.sort_by_values);
-        if(!Arrays.asList(sortByValues).contains(sortBy)){
-            throw new IllegalArgumentException("Invalid sortBy value: " + sortBy);
-        }
-
-        synchronized(this){
-            this.sortBy = sortBy;
-        }
+//        String[] sortByValues = context.getResources().getStringArray(R.array.sort_by_values);
+//        if(!Arrays.asList(sortByValues).contains(sortBy)){
+//            throw new IllegalArgumentException("Invalid sortBy value: " + sortBy);
+//        }
+//
+//        synchronized(this){
+//            this.sortBy = sortBy;
+//        }
     }
 
     private void setSortOrder(String sortOrder, Context context){
