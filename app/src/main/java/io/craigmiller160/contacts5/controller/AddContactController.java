@@ -23,7 +23,7 @@ public class AddContactController extends AbstractAndroidController implements V
 
     @Override
     public void onClick(View view) {
-        Snackbar.make(view, "Button is working", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(view, "Button is working", Snackbar.LENGTH_SHORT).show(); //TODO delete this
 
         //TODO review and restore this code
 //        Intent intent = new Intent(Intent.ACTION_INSERT);

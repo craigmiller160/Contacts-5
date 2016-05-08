@@ -10,9 +10,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.reflections.scanners.ResourcesScanner;
+
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.view.AndroidActivityView;
 import io.craigmiller160.contacts5.view.ContactsActivityView;
@@ -27,11 +30,13 @@ public class ContactsActivity extends AndroidActivity {
     private static final String TAG = "ContactsActivity";
 
     private PermissionsService permissionsService;
+    private ResourceService resources;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
+        this.resources = ServiceFactory.getInstance().getResourceService();
 
         //Check permissions
         if(!permissionsService.hasReadContactsPermission()){
@@ -95,7 +100,7 @@ public class ContactsActivity extends AndroidActivity {
                     Log.e(TAG, "Contacts permission denied");
                     View view = findViewById(R.id.contactsActivityLayout);
                     //TODO move text to Strings
-                    Snackbar snackbar = Snackbar.make(view, "Permission Denied!", Snackbar.LENGTH_LONG)
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
                             .setAction("GRANT", new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v) {

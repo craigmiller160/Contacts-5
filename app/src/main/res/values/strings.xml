@@ -40,4 +40,7 @@
     <string name="name_format_prop">NameFormat</string>
     <string name="sort_order_prop">SortOrder</string>
     <string name="phones_only_prop">PhonesOnly</string>
+
+    <!-- Other Strings -->
+    <string name="permission_denied_snackbar_text">Permission Denied!</string>
 </resources>

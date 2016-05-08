@@ -17,6 +17,7 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.AndroidPrefFragment;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
+import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.view.AndroidFragmentView;
 import io.craigmiller160.locus.Locus;
@@ -108,6 +109,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     private static class DisplaySettingsFragmentView extends AndroidFragmentView{
 
         private AccountService accountService;
+        private ResourceService resources;
 
         public DisplaySettingsFragmentView(Fragment fragment) {
             super(fragment);
@@ -118,6 +120,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate();
             getFragment().setHasOptionsMenu(true);
             this.accountService = ServiceFactory.getInstance().getAccountService();
+            this.resources = ServiceFactory.getInstance().getResourceService();
 
             configurePreference(findPreference(R.string.accounts_to_display_prop));
             configurePreference(findPreference(R.string.sort_order_prop));
@@ -135,13 +138,12 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         private void configurePreference(Preference pref){
             String key = pref.getKey();
-            if(key.equals(getFragment().getString(R.string.accounts_to_display_prop))){
+            if(key.equals(resources.getString(R.string.accounts_to_display_prop))){
                 //TODO consider illegal argument exception
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
                     //Set the initial list of all account names
-                    System.out.println("SERVICE NULL: " + (accountService == null)); //TODO delete this
                     String[] accountNames = accountService.getAllContactAccountNames();
                     mPref.setEntries(accountNames);
                     mPref.setEntryValues(accountNames);
@@ -153,13 +155,13 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     }
                 }
             }
-            else if(key.equals(getFragment().getString(R.string.sort_order_prop))){
+            else if(key.equals(resources.getString(R.string.sort_order_prop))){
                 String sortOrder = Locus.model.getValue(SORT_ORDER_PROP, String.class);
                 if(sortOrder != null){
                     pref.setDefaultValue(sortOrder);
                 }
             }
-            else if(key.equals(getFragment().getString(R.string.sort_by_prop))){
+            else if(key.equals(resources.getString(R.string.sort_by_prop))){
                 String sortBy = Locus.model.getValue(SORT_BY_PROP, String.class);
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);
