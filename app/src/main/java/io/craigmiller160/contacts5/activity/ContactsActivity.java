@@ -14,6 +14,7 @@ import android.view.View;
 import org.reflections.scanners.ResourcesScanner;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
@@ -22,6 +23,7 @@ import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.view.AndroidActivityView;
 import io.craigmiller160.contacts5.view.ContactsActivityView;
+import io.craigmiller160.locus.Locus;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -51,7 +53,10 @@ public class ContactsActivity extends AndroidActivity {
         }
         else{
             contactsPrefsService.loadAllPreferences();
-            contactsService.loadAllContacts();
+            if(Locus.model.getValue(resources.getString(R.string.contacts_count_prop), Integer.class) == 0){
+                contactsService.loadAllContacts();
+            }
+
         }
     }
 
@@ -61,7 +66,7 @@ public class ContactsActivity extends AndroidActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         //TODO review and restore this code
         if(requestCode == SETTINGS_ACTIVITY_ID){
             //TODO review threading use here
@@ -70,6 +75,7 @@ public class ContactsActivity extends AndroidActivity {
             h.post(new Runnable() {
                 @Override
                 public void run() {
+                    Locus.model.setValue(resources.getString(R.string.contacts_storage_prop), new ContactsStorage());
                     recreate();
                 }
             });

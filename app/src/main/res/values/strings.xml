@@ -43,6 +43,7 @@
 
     <string name="contacts_storage_prop">ContactsStorage</string>
     <string name="contact_at_index_prop">ContactAtIndex</string>
+    <string name="contacts_count_prop">ContactCount</string>
 
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>

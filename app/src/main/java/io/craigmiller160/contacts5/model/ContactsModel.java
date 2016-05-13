@@ -22,4 +22,8 @@ public class ContactsModel {
         return storage.getContact(index);
     }
 
+    public synchronized int getContactCount(){
+        return storage != null ? storage.getContactCount() : 0;
+    }
+
 }

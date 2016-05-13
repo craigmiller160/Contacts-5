@@ -14,10 +14,16 @@ import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ContactsStorage;
+import io.craigmiller160.contacts5.service.ResourceService;
+import io.craigmiller160.contacts5.service.ServiceFactory;
+import io.craigmiller160.locus.Locus;
+import io.craigmiller160.locus.annotations.LView;
 
 /**
  * Created by Craig on 1/22/2016.
  */
+@LView
 public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements SectionIndexer{
 
     private ListView listView; //TODO if I don't end up using it, remove this as a requirement
@@ -25,10 +31,24 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
     //TODO need this to be able to differentiate between group use and all contacts use
 
     private Map<String,Object> sectionMap;
+    private final ResourceService resources;
 
     public ContactsArrayAdapter(Activity activity, ListView listView){
         super(activity, R.layout.contacts_list_row);
         this.listView = listView;
+        this.resources = ServiceFactory.getInstance().getResourceService();
+        Locus.view.registerView(this);
+    }
+
+    @Override
+    public void finalize() throws Throwable{
+        Locus.view.unregisterView(this);
+        super.finalize();
+    }
+
+    public void setContactsStorage(ContactsStorage storage){
+        //TODO come up with better approach here
+        notifyDataSetChanged();
     }
 
     @Override
@@ -40,10 +60,16 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
         }
 
         TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
-//        final Contact contact = (Contact) ContactsApplication.getInstance().getModelProperty(CONTACT_AT_INDEX_PROP, position);
-//        if(contact != null){
-//            nameTextView.setText(contact.getDisplayName());
-//        }
+        try{
+            Contact contact = Locus.model.getValue(resources.getString(R.string.contact_at_index_prop), Contact.class, position);
+            if(contact != null){
+                nameTextView.setText(contact.getDisplayName());
+            }
+        }
+        catch(Throwable t){
+            t.printStackTrace();
+        }
+
 //        view.setOnClickListener(new ContactSelectionController(contact, position));
 
         return view;
@@ -52,7 +78,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
     @Override
     public int getCount(){
         //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
-        return 0;
+        return Locus.model.getValue(resources.getString(R.string.contacts_count_prop), Integer.class);
     }
 
 //    private View createView(int position, ViewGroup parent){

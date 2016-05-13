@@ -15,10 +15,13 @@ public class ContactsConfigurationBuilder {
         LocusConfiguration config = new LocusConfiguration();
 
         config.addClassName("io.craigmiller160.contacts5.model.DisplayPrefsModel");
-        //config.addClassName("io.craigmiller160.contacts5.model.ContactsModel");
+        config.addClassName("io.craigmiller160.contacts5.model.ContactsModel");
         config.addClassName("io.craigmiller160.contacts5.controller.AddContactController");
         config.addClassName("io.craigmiller160.contacts5.controller.DisplaySettingsController");
-//        config.setUIThreadExecutorClassName("io.craigmiller160.contacts5.util.DroidUIThreadExecutor");
+        config.addClassName("io.craigmiller160.contacts5.adapter.ContactsArrayAdapter");
+        config.setUIThreadExecutorClassName("io.craigmiller160.contacts5.util.DroidUIThreadExecutor");
+
+        config.addScannerExclusion("android");
 
         return config;
     }
