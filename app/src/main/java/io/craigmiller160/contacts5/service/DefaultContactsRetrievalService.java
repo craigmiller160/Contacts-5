@@ -2,12 +2,15 @@ package io.craigmiller160.contacts5.service;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -21,8 +24,6 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.util.ContactsThreadFactory;
-import io.craigmiller160.locus.Locus;
-import io.craigmiller160.utils.reflect.ReflectiveException;
 
 /**
  * Created by craig on 5/8/16.
@@ -43,8 +44,8 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
 
     private static final ExecutorService executor = Executors.newCachedThreadPool();
 
-    public DefaultContactsRetrievalService(Context context, ResourceService resources) {
-        super(context, resources);
+    public DefaultContactsRetrievalService(Context context, ResourceService resources, AccountService accountService) {
+        super(context, resources, accountService);
     }
 
     @Override
@@ -52,11 +53,11 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
         System.out.println("START TIME: " + System.currentTimeMillis());
         if(Looper.myLooper() == Looper.getMainLooper()){
             System.out.println("ON MAIN LOOPER"); //TODO delete this
-            executor.submit(new ExecuteAllContactsQueriesTask(context, resources));
+            executor.submit(new ExecuteAllContactsQueriesTask(context, resources, accountService));
 
         }
         else{
-            new ExecuteAllContactsQueriesTask(context, resources).run();
+            new ExecuteAllContactsQueriesTask(context, resources, accountService).run();
         }
     }
 
@@ -64,16 +65,18 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
 
         private final Context context;
         private final ResourceService resources;
+        private final AccountService accountService;
 
-        public ExecuteAllContactsQueriesTask(Context context, ResourceService resources){
+        public ExecuteAllContactsQueriesTask(Context context, ResourceService resources, AccountService accountService){
             this.context = context;
             this.resources = resources;
+            this.accountService = accountService;
         }
 
         @Override
         public void run() {
             Future<ContactsStorage> getAllContactsFuture = DefaultContactsRetrievalService.executor.submit(new GetAllContactsTask(context, resources));
-            Future<Set<Long>> getExclusionsFuture = DefaultContactsRetrievalService.executor.submit(new GetExclusionsTask(context, resources));
+            Future<Set<Long>> getExclusionsFuture = DefaultContactsRetrievalService.executor.submit(new GetExclusionsTask(context, resources, accountService));
 
             //Thread.currentThread().setUncaughtExceptionHandler(new ContactsThreadFactory.ContactsUncaughtExceptionHandler());
 
@@ -97,7 +100,7 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
                 }
 
                 System.out.println("REMOVAL DONE : " + System.currentTimeMillis());
-                Locus.model.setValue("ContactsStorage", storage);
+                //TODO need to replace this part    Locus.model.setValue("ContactsStorage", storage);
 
                 System.out.println("END TIME: " + System.currentTimeMillis());
             }
@@ -149,7 +152,7 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
                     long contactId = -1;
                     Contact contact = null;
                     while(!cursor.isAfterLast()){
-                        if(Locus.model.getValue(resources.getString(R.string.phones_only_prop), Boolean.class)){
+                        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.phones_only_prop), true)){
                             if(cursor.getInt(cursor.getColumnIndex(DATA_HAS_PHONE_COLUMN)) < 1){
                                 if(!cursor.moveToNext()){
                                     break;
@@ -213,17 +216,21 @@ public class DefaultContactsRetrievalService extends AbstractContactsRetrievalSe
 
         private final Context context;
         private final ResourceService resources;
+        private final AccountService accountService;
 
-        public GetExclusionsTask(Context context, ResourceService resources){
+        public GetExclusionsTask(Context context, ResourceService resources, AccountService accountService){
             this.context = context;
             this.resources = resources;
+            this.accountService = accountService;
         }
 
         @Override
         public Set<Long> call() throws Exception {
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor exclusionCursor = null;
-            Set<String> accountsToDisplay = Locus.model.getValue(resources.getString(R.string.accounts_to_display_prop), Set.class);
+            Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(context)
+                    .getStringSet(context.getString(R.string.accounts_to_display_prop),
+                            accountService.getAllContactAccountNamesSet());
 
             try{
                 exclusionCursor = context.getContentResolver().query(

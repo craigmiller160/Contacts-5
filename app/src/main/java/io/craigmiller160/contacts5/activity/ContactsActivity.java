@@ -7,13 +7,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.reflections.scanners.ResourcesScanner;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.adapter.TabsPagerAdapter;
+import io.craigmiller160.contacts5.controller.ControllerFactory;
+import io.craigmiller160.contacts5.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
@@ -21,16 +28,15 @@ import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
-import io.craigmiller160.contacts5.view.AndroidActivityView;
-import io.craigmiller160.contacts5.view.ContactsActivityView;
-import io.craigmiller160.locus.Locus;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AndroidActivity {
+public class ContactsActivity extends AppCompatActivity {
+
+    //TODO ensure that the accounts to display preference is properly updated after permission is provided
 
     private static final String TAG = "ContactsActivity";
 
@@ -52,17 +58,49 @@ public class ContactsActivity extends AndroidActivity {
             permissionsService.requestReadContactsPermission(this);
         }
         else{
-            contactsPrefsService.loadAllPreferences();
-            if(Locus.model.getValue(resources.getString(R.string.contacts_count_prop), Integer.class) == 0){
-                contactsService.loadAllContacts();
-            }
+            //TODO need to qualify this by testing if contacts have already been loaded
+            contactsService.loadAllContacts();
 
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
+        setSupportActionBar(toolbar);
+
+        findViewById(R.id.addContact).setOnClickListener(
+                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
+
+        configureTabs();
+    }
+
+    private void configureTabs(){
+        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
+        //TODO review and restore this code
+        TabsPagerAdapter tabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+//
+        AllContactsPage allContactsPage = new AllContactsPage();
+//        contactGroupsPage = new ContactsGroupsPage();
+//
+        tabsAdapter.addFragmentPage(allContactsPage, AllContactsPage.TITLE);
+//        tabsAdapter.addFragmentPage(contactGroupsPage, ContactsGroupsPage.TITLE);
+        viewPager.setAdapter(tabsAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
-    protected AndroidActivityView getAndroidView() {
-        return new ContactsActivityView(this);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.grantPermissions);
+        if(item != null){
+            item.setVisible(!permissionsService.hasReadContactsPermission());
+        }
+
+        return true;
     }
 
     @Override
@@ -75,7 +113,7 @@ public class ContactsActivity extends AndroidActivity {
             h.post(new Runnable() {
                 @Override
                 public void run() {
-                    Locus.model.setValue(resources.getString(R.string.contacts_storage_prop), new ContactsStorage());
+                    //TODO replace this with something Locus.model.setValue(resources.getString(R.string.contacts_storage_prop), new ContactsStorage());
                     recreate();
                 }
             });

@@ -8,13 +8,24 @@ import android.util.AndroidRuntimeException;
  */
 public class ServiceFactory {
 
-    private Context context;
+    private final Context context;
+
+    private final AccountService accountService;
+    private final ContactsPrefsService contactsPrefsService;
+    private final ContactsRetrievalService contactsRetrievalService;
+    private final PermissionsService permissionsService;
+    private final ResourceService resourceService;
 
     private static ServiceFactory instance;
     private static final Object instanceLock = new Object();
 
     private ServiceFactory(Context context){
         this.context = context;
+        this.accountService = new AccountService(context);
+        this.resourceService = new ResourceService(context);
+        this.contactsPrefsService = new ContactsPrefsService(context, accountService, resourceService);
+        this.contactsRetrievalService = new DefaultContactsRetrievalService(context, resourceService, accountService);
+        this.permissionsService = new PermissionsService(context);
     }
 
     public static void initialize(Context context){
@@ -51,23 +62,23 @@ public class ServiceFactory {
     }
 
     public AccountService getAccountService(){
-        return new AccountService(context);
+        return accountService;
     }
 
     public PermissionsService getPermissionsService(){
-        return new PermissionsService(context);
+        return permissionsService;
     }
 
     public ResourceService getResourceService(){
-        return new ResourceService(context);
+        return resourceService;
     }
 
     public ContactsPrefsService getContactsPrefsService(){
-        return new ContactsPrefsService(context, getAccountService(), getResourceService());
+        return contactsPrefsService;
     }
 
     public ContactsRetrievalService getContactsRetrievalService(){
-        return new DefaultContactsRetrievalService(context, getResourceService());
+        return contactsRetrievalService;
     }
 
 }

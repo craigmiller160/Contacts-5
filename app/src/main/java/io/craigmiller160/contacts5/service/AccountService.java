@@ -5,6 +5,10 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Craig on 1/30/2016.
  */
@@ -36,6 +40,10 @@ public class AccountService {
             accountNames[i] = accounts[i].name;
         }
         return accountNames;
+    }
+
+    public Set<String> getAllContactAccountNamesSet(){
+        return new HashSet<>(Arrays.asList(getAllContactAccountNames()));
     }
 
     public int getAccountCount(){

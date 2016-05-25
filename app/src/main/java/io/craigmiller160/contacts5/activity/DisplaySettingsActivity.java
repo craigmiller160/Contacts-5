@@ -6,21 +6,19 @@ import android.os.Bundle;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.fragment.AndroidPrefFragment;
+import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
-import io.craigmiller160.contacts5.view.AndroidFragmentView;
-import io.craigmiller160.locus.Locus;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -67,7 +65,6 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         if(id == android.R.id.home){
             Log.d(TAG, "Leaving Display Settings");
-            contactsPrefsService.saveAllPreferences();
             finish();
             return true;
         }
@@ -80,17 +77,24 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         return DisplaySettingsFragment.class.getName().equals(fragmentName);
     }
 
-    public static class DisplaySettingsFragment extends AndroidPrefFragment {
+    public static class DisplaySettingsFragment extends PreferenceFragment {
+
+        private AccountService accountService;
+        private ResourceService resources;
 
         @Override
         public void onCreate(Bundle savedInstance){
             super.onCreate(savedInstance);
             Log.d(TAG, "Creating DisplaySettingsFragment"); //TODO delete this
-        }
+            setHasOptionsMenu(true);
+            this.accountService = ServiceFactory.getInstance().getAccountService();
+            this.resources = ServiceFactory.getInstance().getResourceService();
 
-        @Override
-        protected AndroidFragmentView getAndroidView() {
-            return new DisplaySettingsFragmentView(this);
+            configurePreference(findPreference(getString(R.string.accounts_to_display_prop)));
+            configurePreference(findPreference(getString(R.string.sort_order_prop)));
+            configurePreference(findPreference(getString(R.string.phones_only_prop)));
+
+
         }
 
         @Override
@@ -104,41 +108,10 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
             return false;
         }
-    }
-
-    private static class DisplaySettingsFragmentView extends AndroidFragmentView{
-
-        private AccountService accountService;
-        private ResourceService resources;
-
-        public DisplaySettingsFragmentView(Fragment fragment) {
-            super(fragment);
-        }
-
-        @Override
-        public void onCreate(){
-            super.onCreate();
-            getFragment().setHasOptionsMenu(true);
-            this.accountService = ServiceFactory.getInstance().getAccountService();
-            this.resources = ServiceFactory.getInstance().getResourceService();
-
-            configurePreference(findPreference(R.string.accounts_to_display_prop));
-            configurePreference(findPreference(R.string.sort_order_prop));
-            configurePreference(findPreference(R.string.phones_only_prop));
-        }
-
-        private Preference findPreference(int prefId){
-            return getPreferenceFragment().findPreference(getPreferenceFragment().getResources().getString(prefId));
-        }
-
-        //TODO move this to the superclass with a type check before returning something
-        private PreferenceFragment getPreferenceFragment(){
-            return (PreferenceFragment) getFragment();
-        }
 
         private void configurePreference(Preference pref){
             String key = pref.getKey();
-            if(key.equals(resources.getString(R.string.accounts_to_display_prop))){
+            if(key.equals(getString(R.string.accounts_to_display_prop))){
                 //TODO consider illegal argument exception
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
@@ -149,45 +122,30 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     mPref.setEntryValues(accountNames);
 
                     //Get the values to be selected and set them
-                    Set<String> accountsToDisplay = Locus.model.getValue(
-                            resources.getString(R.string.accounts_to_display_prop), Set.class);
+                    Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                            .getStringSet(getString(R.string.accounts_to_display_prop), accountService.getAllContactAccountNamesSet());
                     if(accountsToDisplay != null){
                         mPref.setValues(accountsToDisplay);
                     }
                 }
             }
-            else if(key.equals(resources.getString(R.string.sort_order_prop))){
-                String sortOrder = Locus.model.getValue(resources.getString(R.string.sort_order_prop), String.class);
+            else if(key.equals(getString(R.string.sort_order_prop))){
+                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(getString(R.string.sort_order_prop), resources.getStringArray(R.array.sort_order_values)[0]);
                 if(sortOrder != null){
                     pref.setDefaultValue(sortOrder);
                 }
             }
-            else if(key.equals(resources.getString(R.string.sort_by_prop))){
-                String sortBy = Locus.model.getValue(resources.getString(R.string.sort_by_prop), String.class);
+            else if(key.equals(getString(R.string.sort_by_prop))){
+                String sortBy = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(getString(R.string.sort_by_prop), resources.getStringArray(R.array.sort_by_values)[0]);
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);
                 }
             }
 
-            pref.setOnPreferenceChangeListener(
-                    Locus.controller.getController(DISPLAY_SETTINGS_CONTROLLER,
-                            Preference.OnPreferenceChangeListener.class,
-                            getFragment().getActivity()));
-        }
-
-        @Override
-        protected int getViewResourceId() {
-            return R.xml.display_settings;
-        }
-
-        @Override
-        public void onCreateOptionsMenu(Menu menu) {
-            //Do nothing
-        }
-
-        @Override
-        public void onPrepareOptionsMenu(Menu menu) {
-            //Do nothing
+            pref.setOnPreferenceChangeListener(ControllerFactory.getInstance()
+                    .getController(DISPLAY_SETTINGS_CONTROLLER, Preference.OnPreferenceChangeListener.class));
         }
     }
 }

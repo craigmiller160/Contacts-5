@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.craigmiller160.locus.annotations.LModel;
 
 /**
  * A property model for the display
@@ -13,7 +12,6 @@ import io.craigmiller160.locus.annotations.LModel;
  *
  * Created by craig on 5/4/16.
  */
-@LModel
 public class DisplayPrefsModel {
 
     private Set<String> accountsToDisplay;

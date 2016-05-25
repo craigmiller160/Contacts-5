@@ -1,21 +1,24 @@
 package io.craigmiller160.contacts5.controller;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
-import io.craigmiller160.locus.Locus;
-import io.craigmiller160.locus.annotations.LController;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/7/16.
  */
-@LController(name = DISPLAY_SETTINGS_CONTROLLER)
 public class DisplaySettingsController extends AbstractAndroidController implements Preference.OnPreferenceChangeListener {
 
     private static final String TAG = "DisplaySettingsContrllr";
@@ -30,26 +33,34 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        SharedPreferences.Editor settingsEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
         String key = preference.getKey();
         Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
-        if(key.equals(resources.getString(R.string.accounts_to_display_prop))){
-            Locus.model.setValue(resources.getString(R.string.accounts_to_display_prop), newValue);
+        if(key.equals(getContext().getString(R.string.accounts_to_display_prop))){
+            if(newValue instanceof Set){
+                settingsEditor.putStringSet(getContext().getString(R.string.accounts_to_display_prop), (Set<String>) newValue);
+                return true;
+            }
+            else if(newValue instanceof String[]){
+                settingsEditor.putStringSet(getContext().getString(R.string.accounts_to_display_prop), new HashSet<>(Arrays.asList((String[]) newValue)));
+                return true;
+            }
+            return false;
+        }
+        else if(key.equals(getContext().getString(R.string.sort_order_prop)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.sort_order_prop), newValue.toString());
             return true;
         }
-        else if(key.equals(resources.getString(R.string.sort_order_prop))){
-            Locus.model.setValue(resources.getString(R.string.sort_order_prop), newValue);
+        else if(key.equals(getContext().getString(R.string.sort_by_prop)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.sort_by_prop), newValue.toString());
             return true;
         }
-        else if(key.equals(resources.getString(R.string.sort_by_prop))){
-            Locus.model.setValue(resources.getString(R.string.sort_by_prop), newValue);
+        else if(key.equals(getContext().getString(R.string.name_format_prop)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.name_format_prop), newValue.toString());
             return true;
         }
-        else if(key.equals(resources.getString(R.string.name_format_prop))){
-            Locus.model.setValue(resources.getString(R.string.name_format_prop), newValue);
-            return true;
-        }
-        else if(key.equals(resources.getString(R.string.phones_only_prop))){
-            Locus.model.setValue(resources.getString(R.string.phones_only_prop), newValue);
+        else if(key.equals(getContext().getString(R.string.phones_only_prop)) && newValue != null){
+            settingsEditor.putBoolean(getContext().getString(R.string.phones_only_prop), (Boolean) newValue);
             return true;
         }
 

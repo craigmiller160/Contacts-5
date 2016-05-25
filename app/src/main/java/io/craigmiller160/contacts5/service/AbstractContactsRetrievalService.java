@@ -9,10 +9,12 @@ public abstract class AbstractContactsRetrievalService implements ContactsRetrie
 
     protected final Context context;
     protected final ResourceService resources;
+    protected final AccountService accountService;
 
-    protected AbstractContactsRetrievalService(Context context, ResourceService resources){
+    protected AbstractContactsRetrievalService(Context context, ResourceService resources, AccountService accountService){
         this.context = context;
         this.resources = resources;
+        this.accountService = accountService;
     }
 
 }
