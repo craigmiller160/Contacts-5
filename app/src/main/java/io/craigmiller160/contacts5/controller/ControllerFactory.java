@@ -23,6 +23,7 @@ public class ControllerFactory {
 
     private ControllerFactory(Context context){
         this.context = context;
+        init();
     }
 
     private void init(){
@@ -35,9 +36,13 @@ public class ControllerFactory {
     }
 
     public <T> T getController(String controllerName, Class<T> controllerType){
+        if(controllerType == null){
+            throw new IllegalArgumentException("ControllerType argument cannot be null");
+        }
+
         AbstractAndroidController controller = getController(controllerName);
         if(controller != null){
-            if(controller.getClass().equals(controllerType)){
+            if(controllerType.isAssignableFrom(controller.getClass())){
                 return (T) controller;
             }
             else{

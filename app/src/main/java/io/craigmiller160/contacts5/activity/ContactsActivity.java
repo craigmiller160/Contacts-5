@@ -48,6 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        setContentView(R.layout.activity_contacts);
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
         this.resources = ServiceFactory.getInstance().getResourceService();
         this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();

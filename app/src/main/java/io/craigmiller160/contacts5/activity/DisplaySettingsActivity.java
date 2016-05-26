@@ -3,6 +3,7 @@ package io.craigmiller160.contacts5.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -86,6 +87,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         public void onCreate(Bundle savedInstance){
             super.onCreate(savedInstance);
             Log.d(TAG, "Creating DisplaySettingsFragment"); //TODO delete this
+            addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
             this.accountService = ServiceFactory.getInstance().getAccountService();
             this.resources = ServiceFactory.getInstance().getResourceService();
@@ -93,8 +95,6 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             configurePreference(findPreference(getString(R.string.accounts_to_display_prop)));
             configurePreference(findPreference(getString(R.string.sort_order_prop)));
             configurePreference(findPreference(getString(R.string.phones_only_prop)));
-
-
         }
 
         @Override
@@ -133,7 +133,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .getString(getString(R.string.sort_order_prop), resources.getStringArray(R.array.sort_order_values)[0]);
                 if(sortOrder != null){
-                    pref.setDefaultValue(sortOrder);
+                    ((ListPreference) pref).setValue(sortOrder);
                 }
             }
             else if(key.equals(getString(R.string.sort_by_prop))){
@@ -142,6 +142,11 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);
                 }
+            }
+            else if(key.equals(getString(R.string.phones_only_prop))){
+                boolean phonesOnly = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getBoolean(getString(R.string.phones_only_prop), true);
+                pref.setDefaultValue(phonesOnly);
             }
 
             pref.setOnPreferenceChangeListener(ControllerFactory.getInstance()
