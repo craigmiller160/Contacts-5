@@ -47,4 +47,5 @@
 
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
+    <string name="contact_uri">ContactUri</string>
 </resources>

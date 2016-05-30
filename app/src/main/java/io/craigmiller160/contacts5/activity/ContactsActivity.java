@@ -102,17 +102,24 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        //TODO review and restore this code
-        if(requestCode == SETTINGS_ACTIVITY_ID){
-            //Using a handler here so that recreate will be called after main thread has finished current task
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(new Runnable() {
-                @Override
-                public void run() {
-                    tabsAdapter.loadContacts();
-                }
-            });
-        }
+
+//        if(requestCode == SETTINGS_ACTIVITY_ID){
+//
+//        }
+//        else if(requestCode == SELECT_CONTACT_ID){
+//
+//        }
+
+        //Using a handler here so that recreate will be called after main thread has finished current task
+        Handler h = new Handler(Looper.getMainLooper());
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+                tabsAdapter.loadContacts();
+            }
+        });
+
+
 //        else if(requestCode == CONTACT_ACTION_VIEW_ID){
 //            if(data != null){
 //                System.out.println("View Contact: Data Not Null");

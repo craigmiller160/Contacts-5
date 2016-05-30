@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by Craig on 1/22/2016.
@@ -56,10 +59,11 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             Contact contact = contacts.get(position);
             if(contact != null){
                 nameTextView.setText(contact.getDisplayName());
+                view.setTag(R.string.contact_uri, contact.getUri());
             }
         }
 
-//        view.setOnClickListener(new ContactSelectionController(contact, position));
+        view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         return view;
     }

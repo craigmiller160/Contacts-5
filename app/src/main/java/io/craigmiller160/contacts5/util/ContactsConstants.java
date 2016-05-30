@@ -16,13 +16,14 @@ public class ContactsConstants {
 
     public static final String ADD_CONTACT_CONTROLLER = "AddContactController";
     public static final String DISPLAY_SETTINGS_CONTROLLER = "DisplaySettingsController";
+    public static final String SELECT_CONTACT_CONTROLLER = "SelectContactController";
 
     /*
      * Result codes
      */
 
     public static final int SETTINGS_ACTIVITY_ID = 301;
-    public static final int CONTACT_ACTION_VIEW_ID = 302;
+    public static final int SELECT_CONTACT_ID = 302;
     public static final int NEW_CONTACT_VIEW_ID = 303;
 
 }

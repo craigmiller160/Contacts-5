@@ -172,7 +172,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                             long contactId = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
                             String displayName = cursor.getString(cursor.getColumnIndex(CONTACT_DISPLAY_NAME));
                             Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
-                            contactUri = Uri.withAppendedPath(contactUri, CONTACT_ENTITY_CONTENT_DIRECTORY);
 
                             Contact contact = new Contact();
                             contact.setDisplayName(displayName);
