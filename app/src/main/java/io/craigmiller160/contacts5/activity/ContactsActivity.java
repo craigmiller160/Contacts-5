@@ -38,7 +38,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AppCompatActivity implements ContactsDataCallback {
+public class ContactsActivity extends AppCompatActivity {
 
     //TODO ensure that the accounts to display preference is properly updated after permission is provided
 
@@ -48,11 +48,11 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
     private ResourceService resources;
     private ContactsRetrievalService contactsService;
     private ContactsPrefsService contactsPrefsService;
-    private ContactsTabsPagerAdapter tabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        Log.v(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
         this.resources = ServiceFactory.getInstance().getResourceService();
@@ -71,21 +71,16 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
                 ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         configureTabs();
-
-        if(permissionsService.hasReadContactsPermission()){
-            contactsService.loadAllContacts(this);
-        }
     }
 
-    private void configureTabs(){
+    private ContactsTabsPagerAdapter configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-        tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
-
-        tabsAdapter.setContactsPage(new AllContactsPage());
-        tabsAdapter.setGroupsPage(new AllGroupsPage());
+        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabsAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        return tabsAdapter;
     }
 
     @Override
@@ -177,6 +172,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
             Log.i(TAG, "Opening display settings");
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
             startActivityForResult(intent, SETTINGS_ACTIVITY_ID);
+            finish();
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
@@ -187,15 +183,5 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         }
 
         return false;
-    }
-
-    @Override
-    public void setContactsList(List<Contact> contacts) {
-        tabsAdapter.setContactsList(contacts);
-    }
-
-    @Override
-    public void setGroupsList(List<ContactGroup> groups) {
-        tabsAdapter.setGroupsList(groups);
     }
 }

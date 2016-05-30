@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -24,7 +25,6 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
-import io.craigmiller160.contacts5.model.ContactsHolder;
 
 /**
  * Created by craig on 5/29/16.
@@ -97,8 +97,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         @Override
         public void run() {
             long start = System.currentTimeMillis();
-
-            System.out.println("STARTING"); //TODO delete this
+            Log.d(TAG, "Starting load contacts process");
 
             Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, resources, accountService));
             Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, resources, accountService));
@@ -106,10 +105,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
             try{
                 Set<Long> exclusions = getExclusionsFuture.get();
-                List<ContactGroup> groups = getGroupsFuture.get();
-                List<Contact> contacts = getAllContactsFuture.get();
-
-                //TODO i think the phones only part isn't working here...
+                final List<ContactGroup> groups = getGroupsFuture.get();
+                final List<Contact> contacts = getAllContactsFuture.get();
 
                 Iterator<Contact> contactIterator = contacts.iterator();
                 while(contactIterator.hasNext()){
@@ -119,10 +116,18 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     }
                 }
 
-                System.out.println("SIZE: " + contacts.size()); //TODO delete this
+                Log.d(TAG, "Total contacts loaded: " + contacts.size());
+                Log.d(TAG, "Total groups loaded: " + groups.size());
 
-                callback.setContactsList(contacts);
-                callback.setGroupsList(groups);
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("CallbackFinal: " + callback.hashCode());
+                        callback.setContactsList(contacts);
+                        callback.setGroupsList(groups);
+                    }
+                });
             }
             catch(InterruptedException ex){
                 Log.e(TAG, "Error while retrieving contacts", ex);
@@ -132,7 +137,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             }
 
             long end = System.currentTimeMillis();
-            System.out.println("TIME: " + (end - start)); //TODO delete this
+            Log.d(TAG, "Finished loading all contacts. Total time: " + (end - start) + "ms");
         }
     }
 
@@ -148,6 +153,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
         @Override
         public List<Contact> call() throws Exception {
+            Log.v(TAG, "Starting get all contacts sub-task");
             List<Contact> contacts = new ArrayList<>();
             Cursor cursor = null;
             try{
@@ -187,9 +193,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 }
             }
 
-
-
-            return contacts; //TODO return something
+            return contacts;
         }
     }
 
@@ -207,6 +211,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
         @Override
         public List<ContactGroup> call() throws Exception {
+            Log.v(TAG, "Starting get groups subtask");
             List<ContactGroup> groups = new ArrayList<>();
             Set<String> accountsToDisplay = getAccountsToDisplay(context, accountService);
             Cursor cursor = null;
@@ -261,6 +266,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
         @Override
         public Set<Long> call() throws Exception {
+            Log.v(TAG, "Starting get exclusions subtask");
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(context)
@@ -275,8 +281,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 );
 
                 if(cursor != null){
-                    Log.v(TAG, "Total number of exclusion query rows: " + cursor.getCount());
-
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
                         String accountName = cursor.getString(cursor.getColumnIndex(RAW_CONTACT_ACCOUNT_NAME));

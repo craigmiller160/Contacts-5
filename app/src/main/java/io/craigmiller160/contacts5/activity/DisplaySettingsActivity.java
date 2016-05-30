@@ -66,6 +66,8 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         if(id == android.R.id.home){
             Log.d(TAG, "Leaving Display Settings");
+            Intent intent = new Intent(this, ContactsActivity.class);
+            startActivity(intent);
             finish();
             return true;
         }

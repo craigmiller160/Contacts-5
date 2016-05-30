@@ -46,6 +46,7 @@ public class AllContactsPage extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
     }
 
     @Override
@@ -55,7 +56,6 @@ public class AllContactsPage extends Fragment {
             view.setDivider(null);
             view.setFastScrollEnabled(true);
 
-            contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
             if(contacts != null){
                 contactsArrayAdapter.setContactsList(contacts);
             }

@@ -33,13 +33,14 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
 
     private List<Contact> contacts;
 
-    public ContactsArrayAdapter(Activity activity){
-        super(activity, R.layout.contacts_list_row);
+    public ContactsArrayAdapter(Context context){
+        super(context, R.layout.contacts_list_row);
         this.resources = ServiceFactory.getInstance().getResourceService();
     }
 
     public void setContactsList(List<Contact> contacts){
         this.contacts = contacts;
+        notifyDataSetChanged();
     }
 
     @Override

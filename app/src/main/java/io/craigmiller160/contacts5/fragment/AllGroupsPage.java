@@ -35,6 +35,7 @@ public class AllGroupsPage extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        groupsArrayAdapter = new GroupsArrayAdapter(getActivity());
     }
 
     public void setGroupsList(List<ContactGroup> groups){
@@ -51,7 +52,7 @@ public class AllGroupsPage extends Fragment{
             view.setDivider(null);
             view.setFastScrollEnabled(true);
 
-            groupsArrayAdapter = new GroupsArrayAdapter(getActivity());
+
             if(groups != null){
                 groupsArrayAdapter.setGroupsList(groups);
             }
