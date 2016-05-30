@@ -38,6 +38,10 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
         contactsPage = new AllContactsPage();
         groupsPage = new AllGroupsPage();
 
+        loadContacts();
+    }
+
+    public void loadContacts(){
         if(permissionsService.hasReadContactsPermission()){
             contactsService.loadAllContacts(this);
         }

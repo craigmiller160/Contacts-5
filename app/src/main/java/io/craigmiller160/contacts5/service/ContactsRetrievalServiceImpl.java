@@ -123,7 +123,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 h.post(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("CallbackFinal: " + callback.hashCode());
                         callback.setContactsList(contacts);
                         callback.setGroupsList(groups);
                     }

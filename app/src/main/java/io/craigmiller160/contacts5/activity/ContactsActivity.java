@@ -48,6 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
     private ResourceService resources;
     private ContactsRetrievalService contactsService;
     private ContactsPrefsService contactsPrefsService;
+    private ContactsTabsPagerAdapter tabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -75,7 +76,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private ContactsTabsPagerAdapter configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
+        tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabsAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -103,14 +104,12 @@ public class ContactsActivity extends AppCompatActivity {
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         //TODO review and restore this code
         if(requestCode == SETTINGS_ACTIVITY_ID){
-            //TODO review threading use here
             //Using a handler here so that recreate will be called after main thread has finished current task
             Handler h = new Handler(Looper.getMainLooper());
             h.post(new Runnable() {
                 @Override
                 public void run() {
-                    //TODO replace this with something Locus.model.setValue(resources.getString(R.string.contacts_storage_prop), new ContactsStorage());
-                    recreate();
+                    tabsAdapter.loadContacts();
                 }
             });
         }
@@ -172,7 +171,6 @@ public class ContactsActivity extends AppCompatActivity {
             Log.i(TAG, "Opening display settings");
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
             startActivityForResult(intent, SETTINGS_ACTIVITY_ID);
-            finish();
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
