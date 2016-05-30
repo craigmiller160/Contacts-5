@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
@@ -21,7 +22,7 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 /**
  * Created by Craig on 1/22/2016.
  */
-public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements SectionIndexer{
+public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements SectionIndexer*/{
 
     private ListView listView; //TODO if I don't end up using it, remove this as a requirement
 
@@ -30,15 +31,15 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
     private Map<String,Object> sectionMap;
     private final ResourceService resources;
 
-    public ContactsArrayAdapter(Activity activity, ListView listView){
+    private List<Contact> contacts;
+
+    public ContactsArrayAdapter(Activity activity){
         super(activity, R.layout.contacts_list_row);
-        this.listView = listView;
         this.resources = ServiceFactory.getInstance().getResourceService();
     }
 
-    public void setContactsStorage(ContactsStorage storage){
-        //TODO come up with better approach here
-        notifyDataSetChanged();
+    public void setContactsList(List<Contact> contacts){
+        this.contacts = contacts;
     }
 
     @Override
@@ -49,15 +50,12 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
             view = inflater.inflate(R.layout.contacts_list_row, parent, false);
         }
 
-        TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
-        try{
-            Contact contact = null; //TODO fix this
+        if(contacts != null){
+            TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
+            Contact contact = contacts.get(position);
             if(contact != null){
                 nameTextView.setText(contact.getDisplayName());
             }
-        }
-        catch(Throwable t){
-            t.printStackTrace();
         }
 
 //        view.setOnClickListener(new ContactSelectionController(contact, position));
@@ -68,7 +66,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
     @Override
     public int getCount(){
         //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
-        return 0; //TODO fix this
+        return contacts != null ? contacts.size() : 0;
     }
 
 //    private View createView(int position, ViewGroup parent){
@@ -114,18 +112,18 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Secti
 
     //TODO finish the section indexing stuff
 
-    @Override
-    public Object[] getSections() {
-        return new Object[0];
-    }
-
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        return 0;
-    }
-
-    @Override
-    public int getSectionForPosition(int position) {
-        return 0;
-    }
+//    @Override
+//    public Object[] getSections() {
+//        return new Object[0];
+//    }
+//
+//    @Override
+//    public int getPositionForSection(int sectionIndex) {
+//        return 0;
+//    }
+//
+//    @Override
+//    public int getSectionForPosition(int position) {
+//        return 0;
+//    }
 }

@@ -17,12 +17,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+import java.util.List;
+
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.adapter.TabsPagerAdapter;
+import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.fragment.AllContactsPage;
-import io.craigmiller160.contacts5.model.ContactsStorage;
-import io.craigmiller160.contacts5.service.AccountService;
+import io.craigmiller160.contacts5.fragment.AllGroupsPage;
+import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ContactGroup;
+import io.craigmiller160.contacts5.model.ContactsDataCallback;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
@@ -34,7 +38,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements ContactsDataCallback {
 
     //TODO ensure that the accounts to display preference is properly updated after permission is provided
 
@@ -44,6 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
     private ResourceService resources;
     private ContactsRetrievalService contactsService;
     private ContactsPrefsService contactsPrefsService;
+    private ContactsTabsPagerAdapter tabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -58,11 +63,6 @@ public class ContactsActivity extends AppCompatActivity {
         if(!permissionsService.hasReadContactsPermission()){
             permissionsService.requestReadContactsPermission(this);
         }
-        else{
-            //TODO need to qualify this by testing if contacts have already been loaded
-            contactsService.loadAllContacts();
-
-        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
         setSupportActionBar(toolbar);
@@ -71,18 +71,18 @@ public class ContactsActivity extends AppCompatActivity {
                 ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         configureTabs();
+
+        if(permissionsService.hasReadContactsPermission()){
+            contactsService.loadAllContacts(this);
+        }
     }
 
     private void configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-        //TODO review and restore this code
-        TabsPagerAdapter tabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-//
-        AllContactsPage allContactsPage = new AllContactsPage();
-//        contactGroupsPage = new ContactsGroupsPage();
-//
-        tabsAdapter.addFragmentPage(allContactsPage, AllContactsPage.TITLE);
-//        tabsAdapter.addFragmentPage(contactGroupsPage, ContactsGroupsPage.TITLE);
+        tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
+
+        tabsAdapter.setContactsPage(new AllContactsPage());
+        tabsAdapter.setGroupsPage(new AllGroupsPage());
         viewPager.setAdapter(tabsAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -189,4 +189,13 @@ public class ContactsActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public void setContactsList(List<Contact> contacts) {
+        tabsAdapter.setContactsList(contacts);
+    }
+
+    @Override
+    public void setGroupsList(List<ContactGroup> groups) {
+        tabsAdapter.setGroupsList(groups);
+    }
 }

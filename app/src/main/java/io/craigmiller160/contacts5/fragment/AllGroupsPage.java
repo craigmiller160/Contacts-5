@@ -6,46 +6,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
-import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.adapter.GroupsArrayAdapter;
+import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 /**
- * Created by craig on 5/8/16.
+ * Created by craig on 5/29/16.
  */
-public class AllContactsPage extends Fragment {
+public class AllGroupsPage extends Fragment{
 
-    private static final String TAG = "AllContactsPage";
+    private List<ContactGroup> groups;
+    private PermissionsService permissionsService;
+    private GroupsArrayAdapter groupsArrayAdapter;
 
-    public static final String TITLE = "All Contacts";
+    private static final String TAG = "AllGroupsPage";
 
-    private ContactsArrayAdapter contactsArrayAdapter;
-
-    private final PermissionsService permissionsService;
-
-    private List<Contact> contacts;
-
-    public AllContactsPage(){
+    public AllGroupsPage(){
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
-    }
 
-    public void setContactsList(List<Contact> contacts){
-        this.contacts = contacts;
-        if(contactsArrayAdapter != null){
-            contactsArrayAdapter.setContactsList(contacts);
-        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public void setGroupsList(List<ContactGroup> groups){
+        this.groups = groups;
+        if(groupsArrayAdapter != null){
+            groupsArrayAdapter.setGroupsList(groups);
+        }
     }
 
     @Override
@@ -55,16 +51,17 @@ public class AllContactsPage extends Fragment {
             view.setDivider(null);
             view.setFastScrollEnabled(true);
 
-            contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
-            if(contacts != null){
-                contactsArrayAdapter.setContactsList(contacts);
+            groupsArrayAdapter = new GroupsArrayAdapter(getActivity());
+            if(groups != null){
+                groupsArrayAdapter.setGroupsList(groups);
             }
-            view.setAdapter(contactsArrayAdapter);
+
+            view.setAdapter(groupsArrayAdapter);
 
             return view;
         }
         else{
-            Log.d(TAG, "Displaying no permissions page on All Contacts tab");
+            Log.d(TAG, "Displaying no permissions page on Groups tab");
             View view = inflater.inflate(R.layout.content_no_permissions, container, false);
             return view;
         }

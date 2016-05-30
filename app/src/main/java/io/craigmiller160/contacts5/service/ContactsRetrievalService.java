@@ -3,7 +3,11 @@ package io.craigmiller160.contacts5.service;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
+import java.lang.reflect.InvocationTargetException;
+
 import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ContactsDataCallback;
+import io.craigmiller160.contacts5.model.ContactsHolder;
 import io.craigmiller160.contacts5.model.ContactsStorage;
 
 /**
@@ -12,6 +16,10 @@ import io.craigmiller160.contacts5.model.ContactsStorage;
 public interface ContactsRetrievalService {
 
     String GROUP_MEMBERSHIP_MIMETYPE = ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE;
+    String EMAIL_MIMETYPE = ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
+    String PHONE_MIMETYPE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+    String PHOTO_MIMETYPE = ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE;
+    String STRUCTURED_NAME_MIMETYPE = ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 
     String CONTACTS_ENTITY_CONTENT_DIRECTORY = ContactsContract.Contacts.Entity.CONTENT_DIRECTORY;
 
@@ -32,6 +40,21 @@ public interface ContactsRetrievalService {
     String RAW_CONTACT_CONTACT_ID = ContactsContract.RawContacts.CONTACT_ID;
     String RAW_CONTACT_ACCOUNT_NAME = ContactsContract.RawContacts.ACCOUNT_NAME;
 
-    void loadAllContacts();
+    String GROUP_TITLE = ContactsContract.Groups.TITLE;
+    String GROUP_ID = ContactsContract.Groups._ID;
+    String GROUP_ACCOUNT_NAME = ContactsContract.Groups.ACCOUNT_NAME;
+    String GROUP_COUNT = ContactsContract.Groups.SUMMARY_COUNT;
+
+    String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+    String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
+    String CONTACT_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+    String CONTACT_ID = ContactsContract.Contacts._ID;
+    String CONTACT_ENTITY_CONTENT_DIRECTORY = ContactsContract.Contacts.Entity.CONTENT_DIRECTORY;
+
+
+    String LIMIT_CLAUSE = "limit";
+    String OFFSET_CLAUSE = "offset";
+
+    void loadAllContacts(ContactsDataCallback callback);
 
 }

@@ -11,8 +11,6 @@ public class ContactsThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable runnable) {
-        System.out.println("CREATING A THREAD"); //TODO delete this
-
         Thread thread = new Thread(runnable);
         thread.setUncaughtExceptionHandler(new ContactsUncaughtExceptionHandler());
 
@@ -25,10 +23,8 @@ public class ContactsThreadFactory implements ThreadFactory {
 
         @Override
         public void uncaughtException(Thread thread, Throwable throwable) {
-            System.out.println("UNCAUGHT EXCEPTION"); //TODO delete this
             Log.e(TAG, String.format("Uncaught exception in thread %d", thread.getId()), throwable);
-            throwable.printStackTrace();
-            System.exit(1);
+            System.exit(1); //TODO consider removing this
         }
     }
 

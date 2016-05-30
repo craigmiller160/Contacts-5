@@ -24,7 +24,7 @@ public class ServiceFactory {
         this.accountService = new AccountService(context);
         this.resourceService = new ResourceService(context);
         this.contactsPrefsService = new ContactsPrefsService(context, accountService, resourceService);
-        this.contactsRetrievalService = new DefaultContactsRetrievalService(context, resourceService, accountService);
+        this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, resourceService, accountService);
         this.permissionsService = new PermissionsService(context);
     }
 
