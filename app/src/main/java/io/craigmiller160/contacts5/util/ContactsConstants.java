@@ -24,6 +24,6 @@ public class ContactsConstants {
 
     public static final int SETTINGS_ACTIVITY_ID = 301;
     public static final int SELECT_CONTACT_ID = 302;
-    public static final int NEW_CONTACT_VIEW_ID = 303;
+    public static final int NEW_CONTACT_ID = 303;
 
 }
