@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     //TODO launder the execution exceptions
 
-    private static final ExecutorService executor = Executors.newFixedThreadPool(3);
+    private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static final String TAG = "ContactsRetrievService";
 
     private static final int CONTACT = 101;
@@ -79,6 +80,60 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         }
     }
 
+    @Override
+    public void loadAllGroups(ContactsDataCallback callback){
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            executor.submit(new ExecuteAllGroupsQueryTask(context, resources, accountService, callback));
+        }
+        else{
+            new ExecuteAllGroupsQueryTask(context, resources, accountService, callback);
+        }
+    }
+
+    private static class ExecuteAllGroupsQueryTask implements Runnable{
+
+        private final Context context;
+        private final ResourceService resources;
+        private final AccountService accountService;
+        private final ContactsDataCallback callback;
+
+        public ExecuteAllGroupsQueryTask(Context context, ResourceService resources,
+                                         AccountService accountService, ContactsDataCallback callback){
+            this.context = context;
+            this.resources = resources;
+            this.accountService = accountService;
+            this.callback = callback;
+        }
+
+        @Override
+        public void run() {
+            long start = System.currentTimeMillis();
+            Log.d(TAG, "Starting load groups process");
+            Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, resources, accountService));
+            try{
+                final List<ContactGroup> groups = getGroupsFuture.get();
+                Log.d(TAG, "Total groups loaded: " + groups.size());
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.setGroupsList(groups);
+                    }
+                });
+            }
+            catch(InterruptedException ex){
+                Log.e(TAG, "Error while retrieving groups", ex);
+            }
+            catch(ExecutionException ex){
+                Log.e(TAG, "Error while retrieving groups", ex.getCause());
+            }
+
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Finished loading all groups. Time: " + (end - start) + "ms");
+        }
+    }
+
     private static class ExecuteAllContactsQueriesTask implements Runnable{
 
         private final Context context;
@@ -100,12 +155,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Log.d(TAG, "Starting load contacts process");
 
             Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, resources, accountService));
-            Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, resources, accountService));
             Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context, resources));
 
             try{
                 Set<Long> exclusions = getExclusionsFuture.get();
-                final List<ContactGroup> groups = getGroupsFuture.get();
                 final List<Contact> contacts = getAllContactsFuture.get();
 
                 Iterator<Contact> contactIterator = contacts.iterator();
@@ -117,14 +170,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 }
 
                 Log.d(TAG, "Total contacts loaded: " + contacts.size());
-                Log.d(TAG, "Total groups loaded: " + groups.size());
+
 
                 Handler h = new Handler(Looper.getMainLooper());
                 h.post(new Runnable() {
                     @Override
                     public void run() {
                         callback.setContactsList(contacts);
-                        callback.setGroupsList(groups);
                     }
                 });
             }
@@ -216,7 +268,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             try{
                 cursor = context.getContentResolver().query(
                         GROUP_URI,
-                        new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT},
+                        new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT, GROUP_COUNT_PHONES},
                         null, null, GROUP_TITLE + " " + getSortOrder(GROUP, context)
                 );
 
@@ -231,7 +283,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                             group.setGroupId(cursor.getLong(cursor.getColumnIndex(GROUP_ID)));
                             group.setGroupName(cursor.getString(cursor.getColumnIndex(GROUP_TITLE)));
                             group.setAccountName(cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
-                            group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
+
+                            if(isPhonesOnly(context) == 1){
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT_PHONES)));
+                            }
+                            else{
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
+                            }
 
                             groups.add(group);
                         }

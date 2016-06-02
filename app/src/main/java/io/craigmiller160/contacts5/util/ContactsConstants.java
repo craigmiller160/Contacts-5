@@ -26,6 +26,12 @@ public class ContactsConstants {
     public static final int RECREATE_CHANGE = 302;
 
     /*
+     * Bundle keys
+     */
+    public static final String CONTACTS_LIST = "ContactsList";
+    public static final String GROUPS_LIST = "GroupsList";
+
+    /*
      * Result codes
      */
 

@@ -113,7 +113,27 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        contactsService.loadAllContacts(this);
+        if(savedInstance != null){
+            Object o = savedInstance.getSerializable(CONTACTS_LIST);
+            if(o != null && o instanceof List){
+                allContactsPage.setContactsList((List<Contact>) o);
+            }
+            else{
+                contactsService.loadAllContacts(this);
+            }
+
+            o = savedInstance.getSerializable(GROUPS_LIST);
+            if(o != null && o instanceof List){
+                allGroupsPage.setGroupsList((List<ContactGroup>) o);
+            }
+            else{
+                contactsService.loadAllGroups(this);
+            }
+        }
+        else{
+            contactsService.loadAllContacts(this);
+            contactsService.loadAllGroups(this);
+        }
     }
 
     @Override
@@ -134,16 +154,21 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        savedState.putInt(STATE_CHANGE, ORIENTATION_CHANGE);
+        if(allContactsPage != null){
+            List<Contact> contacts = allContactsPage.getContactsList();
+            if(contacts != null){
+                savedState.putSerializable(CONTACTS_LIST, (ArrayList<Contact>) contacts);
+            }
+        }
+
+        if(allGroupsPage != null){
+            List<ContactGroup> groups = allGroupsPage.getGroupsList();
+            if(groups != null){
+                savedState.putSerializable(GROUPS_LIST, (ArrayList<ContactGroup>) groups);
+            }
+        }
+
         super.onSaveInstanceState(savedState);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-
-
-
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -153,8 +178,8 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         h.post(new Runnable() {
             @Override
             public void run() {
-                //tabsAdapter.loadContacts();
                 contactsService.loadAllContacts(ContactsActivity.this);
+                contactsService.loadAllGroups(ContactsActivity.this);
             }
         });
     }

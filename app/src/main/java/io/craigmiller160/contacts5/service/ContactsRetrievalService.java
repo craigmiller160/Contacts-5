@@ -44,6 +44,7 @@ public interface ContactsRetrievalService {
     String GROUP_ID = ContactsContract.Groups._ID;
     String GROUP_ACCOUNT_NAME = ContactsContract.Groups.ACCOUNT_NAME;
     String GROUP_COUNT = ContactsContract.Groups.SUMMARY_COUNT;
+    String GROUP_COUNT_PHONES = ContactsContract.Groups.SUMMARY_WITH_PHONES;
 
     String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
     String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
@@ -56,5 +57,7 @@ public interface ContactsRetrievalService {
     String OFFSET_CLAUSE = "offset";
 
     void loadAllContacts(ContactsDataCallback callback);
+
+    void loadAllGroups(ContactsDataCallback callback);
 
 }

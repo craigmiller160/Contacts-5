@@ -3,6 +3,11 @@ package io.craigmiller160.contacts5.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import java.io.IOError;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,21 +22,14 @@ public class Contact implements Comparable<Contact>, Serializable{
     private String lastName;
     private String displayName;
     private Uri uri;
-    private List<ContactGroup> groups;
-    private List<Long> groupIds;
-    private Bitmap photo;
+    //private Bitmap photo;
     private String accountName;
 
-    public Contact(){
-        groups = new ArrayList<>();
-        groupIds = new ArrayList<>();
-    }
+    public Contact(){}
 
     public Contact(long id, String displayName){
         this.id = id;
         this.displayName = displayName;
-        groups = new ArrayList<>();
-        groupIds = new ArrayList<>();
     }
 
     public long getId(){
@@ -58,34 +56,13 @@ public class Contact implements Comparable<Contact>, Serializable{
         this.uri = uri;
     }
 
-    public List<ContactGroup> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<ContactGroup> groups) {
-        if(groups != null){
-            this.groups = groups;
-        }
-        else{
-            this.groups = new ArrayList<>();
-        }
-    }
-
-    public void addGroup(ContactGroup group){
-        this.groups.add(group);
-    }
-
-    public void removeGroup(ContactGroup group){
-        this.groups.remove(group);
-    }
-
-    public Bitmap getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
-    }
+//    public Bitmap getPhoto() {
+//        return photo;
+//    }
+//
+//    public void setPhoto(Bitmap photo) {
+//        this.photo = photo;
+//    }
 
     public void setAccountName(String accountName){
         this.accountName = accountName;
@@ -109,25 +86,6 @@ public class Contact implements Comparable<Contact>, Serializable{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public void setGroupIds(List<Long> groupIds){
-        if(groupIds != null){
-            this.groupIds = groupIds;
-        }
-        this.groupIds = new ArrayList<>();
-    }
-
-    public List<Long> getGroupIds(){
-        return groupIds;
-    }
-
-    public void addGroupId(Long groupId){
-        this.groupIds.add(groupId);
-    }
-
-    public void removeGroupId(Integer groupId){
-        this.groupIds.remove(groupId);
     }
 
     @Override
@@ -168,5 +126,23 @@ public class Contact implements Comparable<Contact>, Serializable{
     @Override
     public int compareTo(Contact another) {
         return displayName.compareToIgnoreCase(another.displayName);
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        out.writeLong(id);
+        out.writeUTF(displayName);
+        if(uri != null){
+            out.writeUTF(uri.toString());
+        }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+        id = in.readLong();
+        displayName = in.readUTF();
+        uri = Uri.parse(in.readUTF());
+    }
+
+    private void readObjectNoData() throws ObjectStreamException{
+        //Do nothing
     }
 }
