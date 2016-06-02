@@ -43,6 +43,10 @@ public class AllContactsPage extends Fragment {
         }
     }
 
+    public List<Contact> getContactsList(){
+        return contacts;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,9 @@ public class AllContactsPage extends Fragment {
             ListView view = (ListView) inflater.inflate(R.layout.content_contacts_list, container, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);
+            if(contactsArrayAdapter == null){
+                contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
+            }
 
             if(contacts != null){
                 contactsArrayAdapter.setContactsList(contacts);

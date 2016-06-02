@@ -19,6 +19,13 @@ public class ContactsConstants {
     public static final String SELECT_CONTACT_CONTROLLER = "SelectContactController";
 
     /*
+     * Orientation changes
+     */
+    public static final String STATE_CHANGE = "StateChange";
+    public static final int ORIENTATION_CHANGE = 301;
+    public static final int RECREATE_CHANGE = 302;
+
+    /*
      * Result codes
      */
 

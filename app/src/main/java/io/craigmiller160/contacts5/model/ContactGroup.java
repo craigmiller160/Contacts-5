@@ -2,10 +2,12 @@ package io.craigmiller160.contacts5.model;
 
 import android.net.Uri;
 
+import java.io.Serializable;
+
 /**
  * Created by Craig on 1/20/2016.
  */
-public class ContactGroup implements Comparable<ContactGroup>{
+public class ContactGroup implements Comparable<ContactGroup>, Serializable{
 
     private long groupId;
     private String groupName;

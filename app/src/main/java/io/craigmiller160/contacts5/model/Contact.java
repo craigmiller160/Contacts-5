@@ -3,13 +3,14 @@ package io.craigmiller160.contacts5.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Craig on 1/20/2016.
  */
-public class Contact implements Comparable<Contact>{
+public class Contact implements Comparable<Contact>, Serializable{
 
     private long id;
     private String firstName;

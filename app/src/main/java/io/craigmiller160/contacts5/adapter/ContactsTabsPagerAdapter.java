@@ -3,9 +3,13 @@ package io.craigmiller160.contacts5.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.craigmiller160.contacts5.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.fragment.AllGroupsPage;
@@ -19,7 +23,9 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 /**
  * Created by Craig on 1/24/2016.
  */
-public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements ContactsDataCallback {
+public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements ContactsDataCallback, Serializable {
+
+    public static final String FRAGMENT_TAG_PREFIX = "android:switcher:";
 
     private static final String CONTACTS_TAB_NAME = "All Contacts";
     private static final String GROUPS_TAB_NAME = "Groups";
@@ -30,15 +36,16 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
     private AllContactsPage contactsPage;
     private AllGroupsPage groupsPage;
 
+    private FragmentManager fragmentManager;
+    private FragmentTransaction currentTransaction;
+    private Fragment currentPrimaryItem;
 
-    public ContactsTabsPagerAdapter(FragmentManager fm) {
+
+    public ContactsTabsPagerAdapter(FragmentManager fm, AllContactsPage allContactsPage, AllGroupsPage allGroupsPage) {
         super(fm);
+        this.contactsPage = allContactsPage;
+        this.groupsPage = allGroupsPage;
         permissionsService = ServiceFactory.getInstance().getPermissionsService();
-        contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
-        contactsPage = new AllContactsPage();
-        groupsPage = new AllGroupsPage();
-
-        loadContacts();
     }
 
     public void loadContacts(){
@@ -65,6 +72,14 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
         groupsPage.setGroupsList(groups);
     }
 
+    public List<Contact> getContactsList(){
+        return contactsPage.getContactsList();
+    }
+
+    public List<ContactGroup> getGroupsList(){
+        return groupsPage.getGroupsList();
+    }
+
     @Override
     public Fragment getItem(int position) {
         return position == 0 ? contactsPage : groupsPage;
@@ -79,4 +94,5 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
     public CharSequence getPageTitle(int position){
         return position == 0 ? CONTACTS_TAB_NAME : GROUPS_TAB_NAME;
     }
+
 }

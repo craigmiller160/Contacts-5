@@ -45,6 +45,10 @@ public class AllGroupsPage extends Fragment{
         }
     }
 
+    public List<ContactGroup> getGroupsList(){
+        return groups;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         if(permissionsService.hasReadContactsPermission()){

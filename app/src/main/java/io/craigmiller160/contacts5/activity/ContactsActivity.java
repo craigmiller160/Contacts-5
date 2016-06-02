@@ -2,12 +2,14 @@ package io.craigmiller160.contacts5.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
@@ -38,7 +41,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements ContactsDataCallback {
 
     //TODO ensure that the accounts to display preference is properly updated after permission is provided
 
@@ -50,11 +53,26 @@ public class ContactsActivity extends AppCompatActivity {
     private ContactsPrefsService contactsPrefsService;
     private ContactsTabsPagerAdapter tabsAdapter;
 
+    private AllContactsPage allContactsPage;
+    private AllGroupsPage allGroupsPage;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         Log.v(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
+
+        int state = RECREATE_CHANGE;
+        if(savedInstance != null && savedInstance.getInt(STATE_CHANGE) > 0){
+            state = savedInstance.getInt(STATE_CHANGE);
+        }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
+        setSupportActionBar(toolbar);
+
+        findViewById(R.id.addContact).setOnClickListener(
+                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
+
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
         this.resources = ServiceFactory.getInstance().getResourceService();
         this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
@@ -65,23 +83,37 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
-        setSupportActionBar(toolbar);
+        //Get the existing instances of the fragments, if they exist
+        if(savedInstance != null){
+            Fragment oldContactsPage = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
+            if(oldContactsPage != null && oldContactsPage instanceof AllContactsPage){
+                allContactsPage = (AllContactsPage) oldContactsPage;
+            }
+            else{
+                allContactsPage = new AllContactsPage();
+            }
 
-        findViewById(R.id.addContact).setOnClickListener(
-                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
+            Fragment oldGroupsPage = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+            if(oldGroupsPage != null && oldGroupsPage instanceof AllGroupsPage){
+                allGroupsPage = (AllGroupsPage) oldGroupsPage;
+            }
+            else{
+                allGroupsPage = new AllGroupsPage();
+            }
+        }
+        else{
+            allContactsPage = new AllContactsPage();
+            allGroupsPage = new AllGroupsPage();
+        }
 
-        configureTabs();
-    }
-
-    private ContactsTabsPagerAdapter configureTabs(){
         ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-        tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager());
+
+        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsPage, allGroupsPage);
         viewPager.setAdapter(tabsAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        return tabsAdapter;
+        contactsService.loadAllContacts(this);
     }
 
     @Override
@@ -101,46 +133,30 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedState){
+        savedState.putInt(STATE_CHANGE, ORIENTATION_CHANGE);
+        super.onSaveInstanceState(savedState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+
+
+
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-
-//        if(requestCode == SETTINGS_ACTIVITY_ID){
-//
-//        }
-//        else if(requestCode == SELECT_CONTACT_ID){
-//
-//        }
-
         //Using a handler here so that recreate will be called after main thread has finished current task
         Handler h = new Handler(Looper.getMainLooper());
         h.post(new Runnable() {
             @Override
             public void run() {
-                tabsAdapter.loadContacts();
+                //tabsAdapter.loadContacts();
+                contactsService.loadAllContacts(ContactsActivity.this);
             }
         });
-
-
-//        else if(requestCode == CONTACT_ACTION_VIEW_ID){
-//            if(data != null){
-//                System.out.println("View Contact: Data Not Null");
-//            }
-//            else{
-//                System.out.println("View Contact: Data Null");
-//            }
-//
-//            contactModified();
-//        }
-//        else if(requestCode == NEW_CONTACT_VIEW_ID){
-//            if(data != null){
-//                System.out.println("New Contact: Data Not Null");
-//                System.out.println("URI: " + data.getData());
-//            }
-//            else{
-//                System.out.println("New Contact: Data Null");
-//            }
-//
-//            contactAdded();
-//        }
     }
 
     @Override
@@ -188,5 +204,15 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void setContactsList(List<Contact> contacts) {
+        allContactsPage.setContactsList(contacts);
+    }
+
+    @Override
+    public void setGroupsList(List<ContactGroup> groups) {
+        allGroupsPage.setGroupsList(groups);
     }
 }
