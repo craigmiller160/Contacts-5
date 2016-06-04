@@ -3,6 +3,7 @@ package io.craigmiller160.contacts5.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +75,27 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             nameTextView.setText(contact.getDisplayName());
             view.setTag(R.string.contact_uri, contact.getUri());
 
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            int contactColor = generator.getColor(contact.getDisplayName()); //TODO need to work on the color selection
-            TextDrawable defaultPic = TextDrawable.builder().buildRound(contact.getDisplayName().substring(0, 1), contactColor);
+            //ColorGenerator generator = ColorGenerator.MATERIAL;
+            //int contactColor = generator.getColor(contact.getDisplayName()); //TODO need to work on the color selection
+
+            TypedArray colors = null;
+            TextDrawable defaultPic = null;
+            try{
+                colors = getContext().getResources().obtainTypedArray(R.array.letter_tile_colors);
+                int colorIndex = Math.abs(contact.getDisplayName().hashCode()) % colors.length();
+                int contactColor = colors.getColor(colorIndex, Color.BLACK);
+                defaultPic = TextDrawable.builder()
+                        .beginConfig()
+                        .fontSize(100)
+                        .bold()
+                        .endConfig()
+                        .buildRound(contact.getDisplayName().substring(0, 1), contactColor);
+            }
+            finally{
+                if(colors != null){
+                    colors.recycle();
+                }
+            }
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .resetViewBeforeLoading(true)
