@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.List;
@@ -59,15 +60,20 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
             Log.d(TAG, "Displaying contacts from group: " + groupName);
             contactsRetrievalService.loadAllContactsInGroup(this, groupId);
         }
+    }
 
-//        if(groupId >= 0){
-//            Log.i(TAG, "Displaying contacts from group: " + groupName);
-//            List<Contact> contactsList = contactsService.getAllContactsInGroup(this, groupId);
-//            listView.setAdapter(new ContactsArrayAdapter(this, listView));
-//        }
-//        else{
-//            Log.e(TAG, "Group ID: " + -1);
-//        }
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
