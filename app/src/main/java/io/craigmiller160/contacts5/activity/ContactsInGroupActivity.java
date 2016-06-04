@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
@@ -16,6 +17,8 @@ import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/30/16.
@@ -56,9 +59,35 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
         listView.setDivider(null);
         listView.setAdapter(contactsArrayAdapter);
 
-        if(groupId >= 0){
+        if(bundle != null && bundle.getSerializable(CONTACTS_LIST) != null){
+            contactsArrayAdapter.setContactsList((List<Contact>) bundle.getSerializable(CONTACTS_LIST));
+        }
+        else if(groupId >= 0){
             Log.d(TAG, "Displaying contacts from group: " + groupName);
             contactsRetrievalService.loadAllContactsInGroup(this, groupId);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == SELECT_CONTACT_ID){
+            Intent intent = getIntent();
+            if(intent != null){
+                long groupId = intent.getLongExtra(getString(R.string.group_id), -1);
+                if(groupId != -1){
+                    contactsRetrievalService.loadAllContactsInGroup(this, groupId);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState){
+        if(contactsArrayAdapter != null){
+            List<Contact> contacts = contactsArrayAdapter.getContactsList();
+            if(contacts != null){
+                savedState.putSerializable(CONTACTS_LIST, (ArrayList) contacts);
+            }
         }
     }
 

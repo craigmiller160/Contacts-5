@@ -46,6 +46,10 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
         notifyDataSetChanged();
     }
 
+    public List<Contact> getContactsList(){
+        return contacts;
+    }
+
     @Override
     public View getView(int position, View view, ViewGroup parent){
         if(view == null){
