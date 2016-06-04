@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactsStorage;
+import io.craigmiller160.contacts5.service.ContactIconService;
 import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
@@ -44,12 +46,14 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
 
     private Map<String,Object> sectionMap;
     private final ResourceService resources;
+    private final ContactIconService contactIconService;
 
     private List<Contact> contacts;
 
     public ContactsArrayAdapter(Context context){
         super(context, R.layout.contacts_list_row);
         this.resources = ServiceFactory.getInstance().getResourceService();
+        this.contactIconService = ServiceFactory.getInstance().getContactIconService();
     }
 
     public void setContactsList(List<Contact> contacts){
@@ -75,27 +79,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             nameTextView.setText(contact.getDisplayName());
             view.setTag(R.string.contact_uri, contact.getUri());
 
-            //ColorGenerator generator = ColorGenerator.MATERIAL;
-            //int contactColor = generator.getColor(contact.getDisplayName()); //TODO need to work on the color selection
-
-            TypedArray colors = null;
-            TextDrawable defaultPic = null;
-            try{
-                colors = getContext().getResources().obtainTypedArray(R.array.letter_tile_colors);
-                int colorIndex = Math.abs(contact.getDisplayName().hashCode()) % colors.length();
-                int contactColor = colors.getColor(colorIndex, Color.BLACK);
-                defaultPic = TextDrawable.builder()
-                        .beginConfig()
-                        .fontSize(100)
-                        .bold()
-                        .endConfig()
-                        .buildRound(contact.getDisplayName().substring(0, 1), contactColor);
-            }
-            finally{
-                if(colors != null){
-                    colors.recycle();
-                }
-            }
+            Drawable defaultPic = contactIconService.createContactIcon(contact.getDisplayName(), contact.getDisplayName().charAt(0));
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .resetViewBeforeLoading(true)

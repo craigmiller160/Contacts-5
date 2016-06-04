@@ -15,6 +15,7 @@ public class ServiceFactory {
     private final ContactsRetrievalService contactsRetrievalService;
     private final PermissionsService permissionsService;
     private final ResourceService resourceService;
+    private final ContactIconService contactIconService;
 
     private static ServiceFactory instance;
     private static final Object instanceLock = new Object();
@@ -26,6 +27,7 @@ public class ServiceFactory {
         this.contactsPrefsService = new ContactsPrefsService(context, accountService, resourceService);
         this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, resourceService, accountService);
         this.permissionsService = new PermissionsService(context);
+        this.contactIconService = new ContactIconService(context);
     }
 
     public static void initialize(Context context){
@@ -79,6 +81,10 @@ public class ServiceFactory {
 
     public ContactsRetrievalService getContactsRetrievalService(){
         return contactsRetrievalService;
+    }
+
+    public ContactIconService getContactIconService(){
+        return contactIconService;
     }
 
 }
