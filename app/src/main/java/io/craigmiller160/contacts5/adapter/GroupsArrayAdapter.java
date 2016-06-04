@@ -11,7 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
@@ -63,7 +65,11 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> {
             ImageView groupIconView = (ImageView) view.findViewById(R.id.group_icon);
             groupIconView.setImageDrawable(groupIcon);
 
-            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class));
+            Map<String,Object> args = new HashMap<>();
+            args.put(getContext().getString(R.string.group_id), group.getGroupId());
+            args.put(getContext().getString(R.string.group_name), group.getGroupName());
+
+            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class, args));
         }
 
         return view;

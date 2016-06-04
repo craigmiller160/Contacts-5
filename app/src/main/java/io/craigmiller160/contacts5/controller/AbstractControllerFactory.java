@@ -67,7 +67,7 @@ public abstract class AbstractControllerFactory extends AbstractAndroidUtil {
                 return (T) controller;
             }
             else{
-                throw new IllegalArgumentException("Invalid type for controller: Expected: " + controller.getClass().getName() + " Actual: " + controllerType.getName());
+                throw new IllegalArgumentException(String.format("Invalid type for controller. %1$s is not assignable from %2$s", controllerType.getName(), controller.getClass().getName()));
             }
         }
         return null;

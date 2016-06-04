@@ -22,7 +22,7 @@ public class SelectContactController extends AbstractAndroidController implement
 
     @Override
     public void onClick(View view) {
-        Uri uri = (Uri) view.getTag(R.string.contact_uri);
+        Uri uri = getArg(getResources().getString(R.string.contact_uri), Uri.class);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
         ((Activity) view.getContext()).startActivityForResult(intent, SELECT_CONTACT_ID);

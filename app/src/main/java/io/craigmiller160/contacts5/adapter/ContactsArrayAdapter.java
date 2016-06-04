@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,6 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             Contact contact = contacts.get(position);
             TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
             nameTextView.setText(contact.getDisplayName());
-            view.setTag(R.string.contact_uri, contact.getUri());
 
             Drawable defaultPic = contactIconService.createContactIcon(contact.getDisplayName(), contact.getDisplayName().charAt(0));
 
@@ -81,7 +81,10 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             ImageView photoImageView = (ImageView) view.findViewById(R.id.contact_photo);
             ImageLoader.getInstance().displayImage(contact.getUri().toString(), new ImageViewAware(photoImageView), options);
 
-            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class));
+            Map<String,Object> args = new HashMap<>();
+            args.put(getContext().getString(R.string.contact_uri), contact.getUri());
+
+            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class, args));
         }
 
         return view;

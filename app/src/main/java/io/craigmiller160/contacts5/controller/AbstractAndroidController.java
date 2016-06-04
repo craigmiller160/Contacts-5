@@ -25,4 +25,20 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
     public Map<String,Object> getArgs(){
         return args;
     }
+
+    public Object getArg(String key){
+        return args.get(key);
+    }
+
+    public <T> T getArg(String key, Class<T> returnType){
+        Object value = getArg(key);
+        if(value == null){
+            return null;
+        }
+
+        if(!returnType.isAssignableFrom(value.getClass())){
+            throw new IllegalArgumentException(String.format("Invalid type for argument. %1$s is not assignable from %2$s", returnType.getName(), value.getClass().getName()));
+        }
+        return (T) value;
+    }
 }

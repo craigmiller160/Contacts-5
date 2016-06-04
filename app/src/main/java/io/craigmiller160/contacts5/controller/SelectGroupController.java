@@ -23,11 +23,11 @@ public class SelectGroupController extends AbstractAndroidController implements 
 
     @Override
     public void onClick(View view) {
-        long groupId = (Long) view.getTag(R.string.group_id);
-        String groupName = (String) view.getTag(R.string.group_name);
+        long groupId = getArg(getResources().getString(R.string.group_id), Long.class);
+        String groupName = getArg(getResources().getString(R.string.group_name), String.class);
         Intent intent = new Intent(getContext(), ContactsInGroupActivity.class);
-        intent.putExtra(getContext().getString(R.string.group_id), groupId);
-        intent.putExtra(getContext().getString(R.string.group_name), groupName);
+        intent.putExtra(getResources().getString(R.string.group_id), groupId);
+        intent.putExtra(getResources().getString(R.string.group_name), groupName);
         ((Activity) view.getContext()).startActivityForResult(intent, SELECT_GROUP_ID);
     }
 }
