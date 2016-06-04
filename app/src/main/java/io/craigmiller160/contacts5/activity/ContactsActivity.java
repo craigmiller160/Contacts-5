@@ -2,11 +2,8 @@ package io.craigmiller160.contacts5.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +27,8 @@ import io.craigmiller160.contacts5.fragment.AllGroupsPage;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
-import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
-import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
@@ -50,9 +43,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
     private static final String TAG = "ContactsActivity";
 
     private PermissionsService permissionsService;
-    private ResourceService resources;
     private ContactsRetrievalService contactsService;
-    private ContactsPrefsService contactsPrefsService;
     private ContactsTabsPagerAdapter tabsAdapter;
 
     private AllContactsPage allContactsPage;
@@ -76,9 +67,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
                 ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
-        this.resources = ServiceFactory.getInstance().getResourceService();
         this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
-        this.contactsPrefsService = ServiceFactory.getInstance().getContactsPrefsService();
 
         //Check permissions and load contacts
         if(!permissionsService.hasReadContactsPermission()){
@@ -193,7 +182,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
                 }
                 else{
                     Log.e(TAG, "Contacts permission denied");
-                    View view = findViewById(R.id.contactsActivityLayout);
+                    View view = findViewById(R.id.activity_contacts_layout);
                     //TODO move text to Strings
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
                             .setAction("GRANT", new View.OnClickListener(){

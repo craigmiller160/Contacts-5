@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
@@ -22,11 +21,9 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 public class DisplaySettingsController extends AbstractAndroidController implements Preference.OnPreferenceChangeListener {
 
     private static final String TAG = "DisplaySettingsContrllr";
-    private final ResourceService resources;
 
     public DisplaySettingsController(Context context) {
         super(context);
-        this.resources = ServiceFactory.getInstance().getResourceService();
     }
 
     //TODO put validation here for the values

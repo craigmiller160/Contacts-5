@@ -30,7 +30,6 @@ import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.service.ContactIconService;
-import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
@@ -45,14 +44,12 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
     //TODO need this to be able to differentiate between group use and all contacts use
 
     private Map<String,Object> sectionMap;
-    private final ResourceService resources;
     private final ContactIconService contactIconService;
 
     private List<Contact> contacts;
 
     public ContactsArrayAdapter(Context context){
         super(context, R.layout.contacts_list_row);
-        this.resources = ServiceFactory.getInstance().getResourceService();
         this.contactIconService = ServiceFactory.getInstance().getContactIconService();
     }
 

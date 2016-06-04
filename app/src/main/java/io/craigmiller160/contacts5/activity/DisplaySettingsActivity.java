@@ -17,8 +17,6 @@ import java.util.Set;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.AccountService;
-import io.craigmiller160.contacts5.service.ContactsPrefsService;
-import io.craigmiller160.contacts5.service.ResourceService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
@@ -30,12 +28,9 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static final String TAG = "DisplaySettingsActivity";
 
-    private ContactsPrefsService contactsPrefsService;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.contactsPrefsService = ServiceFactory.getInstance().getContactsPrefsService();
 
         setupActionBar();
 
@@ -81,7 +76,6 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     public static class DisplaySettingsFragment extends PreferenceFragment {
 
         private AccountService accountService;
-        private ResourceService resources;
 
         @Override
         public void onCreate(Bundle savedInstance){
@@ -90,7 +84,6 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
             this.accountService = ServiceFactory.getInstance().getAccountService();
-            this.resources = ServiceFactory.getInstance().getResourceService();
 
             configurePreference(findPreference(getString(R.string.accounts_to_display_prop)));
             configurePreference(findPreference(getString(R.string.sort_order_prop)));
@@ -131,14 +124,14 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             }
             else if(key.equals(getString(R.string.sort_order_prop))){
                 String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.sort_order_prop), resources.getStringArray(R.array.sort_order_values)[0]);
+                        .getString(getString(R.string.sort_order_prop), getResources().getStringArray(R.array.sort_order_values)[0]);
                 if(sortOrder != null){
                     ((ListPreference) pref).setValue(sortOrder);
                 }
             }
             else if(key.equals(getString(R.string.sort_by_prop))){
                 String sortBy = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.sort_by_prop), resources.getStringArray(R.array.sort_by_values)[0]);
+                        .getString(getString(R.string.sort_by_prop), getResources().getStringArray(R.array.sort_by_values)[0]);
                 if(sortBy != null){
                     pref.setDefaultValue(sortBy);
                 }

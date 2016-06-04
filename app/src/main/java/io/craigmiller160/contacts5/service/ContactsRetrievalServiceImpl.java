@@ -68,37 +68,37 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         return prefs.getBoolean(context.getString(R.string.phones_only_prop), true) ? 1 : 0;
     }
 
-    public ContactsRetrievalServiceImpl(Context context, ResourceService resources, AccountService accountService) {
-        super(context, resources, accountService);
+    public ContactsRetrievalServiceImpl(Context context, AccountService accountService) {
+        super(context, accountService);
     }
 
     @Override
     public void loadAllContacts(ContactsDataCallback callback){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteAllContactsQueriesTask(context, resources, accountService, callback));
+            executor.submit(new ExecuteAllContactsQueriesTask(getContext(), getAccountService(), callback));
         }
         else{
-            new ExecuteAllContactsQueriesTask(context, resources, accountService, callback).run();
+            new ExecuteAllContactsQueriesTask(getContext(), getAccountService(), callback).run();
         }
     }
 
     @Override
     public void loadAllGroups(ContactsDataCallback callback){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteAllGroupsQueryTask(context, resources, accountService, callback));
+            executor.submit(new ExecuteAllGroupsQueryTask(getContext(), getAccountService(), callback));
         }
         else{
-            new ExecuteAllGroupsQueryTask(context, resources, accountService, callback).run();
+            new ExecuteAllGroupsQueryTask(getContext(), getAccountService(), callback).run();
         }
     }
 
     @Override
     public void loadAllContactsInGroup(ContactsDataCallback callback, long groupId){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteContactsInGroupQueryTask(context, callback, groupId));
+            executor.submit(new ExecuteContactsInGroupQueryTask(getContext(), callback, groupId));
         }
         else{
-            new ExecuteContactsInGroupQueryTask(context, callback, groupId).run();
+            new ExecuteContactsInGroupQueryTask(getContext(), callback, groupId).run();
         }
     }
 
@@ -147,14 +147,12 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static class ExecuteAllGroupsQueryTask implements Runnable{
 
         private final Context context;
-        private final ResourceService resources;
         private final AccountService accountService;
         private final ContactsDataCallback callback;
 
-        public ExecuteAllGroupsQueryTask(Context context, ResourceService resources,
+        public ExecuteAllGroupsQueryTask(Context context,
                                          AccountService accountService, ContactsDataCallback callback){
             this.context = context;
-            this.resources = resources;
             this.accountService = accountService;
             this.callback = callback;
         }
@@ -163,7 +161,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         public void run() {
             long start = System.currentTimeMillis();
             Log.d(TAG, "Starting load groups process");
-            Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, resources, accountService));
+            Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, accountService));
             try{
                 final List<ContactGroup> groups = getGroupsFuture.get();
                 Log.d(TAG, "Total groups loaded: " + groups.size());
@@ -191,14 +189,11 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static class ExecuteAllContactsQueriesTask implements Runnable{
 
         private final Context context;
-        private final ResourceService resources;
         private final AccountService accountService;
         private final ContactsDataCallback callback;
 
-        public ExecuteAllContactsQueriesTask(Context context, ResourceService resources,
-                                             AccountService accountService, ContactsDataCallback callback){
+        public ExecuteAllContactsQueriesTask(Context context, AccountService accountService, ContactsDataCallback callback){
             this.context = context;
-            this.resources = resources;
             this.accountService = accountService;
             this.callback = callback;
         }
@@ -208,8 +203,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             long start = System.currentTimeMillis();
             Log.d(TAG, "Starting load contacts process");
 
-            Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, resources, accountService));
-            Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context, resources));
+            Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, accountService));
+            Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));
 
             try{
                 Set<Long> exclusions = getExclusionsFuture.get();
@@ -318,11 +313,9 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static class GetAllContactsTask implements Callable<List<Contact>>{
 
         private final Context context;
-        private final ResourceService resources;
 
-        public GetAllContactsTask(Context context, ResourceService resources){
+        public GetAllContactsTask(Context context){
             this.context = context;
-            this.resources = resources;
         }
 
         @Override
@@ -378,12 +371,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static class GetGroupsTask implements Callable<List<ContactGroup>> {
 
         private final Context context;
-        private final ResourceService resources;
         private final AccountService accountService;
 
-        public GetGroupsTask(Context context, ResourceService resources, AccountService accountService){
+        public GetGroupsTask(Context context, AccountService accountService){
             this.context = context;
-            this.resources = resources;
             this.accountService = accountService;
         }
 
@@ -439,12 +430,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static class GetExclusionsTask implements Callable<Set<Long>>{
 
         private final Context context;
-        private final ResourceService resources;
         private final AccountService accountService;
 
-        public GetExclusionsTask(Context context, ResourceService resources, AccountService accountService){
+        public GetExclusionsTask(Context context, AccountService accountService){
             this.context = context;
-            this.resources = resources;
             this.accountService = accountService;
         }
 

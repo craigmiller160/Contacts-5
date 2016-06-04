@@ -6,11 +6,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import io.craigmiller160.contacts5.controller.ControllerFactory;
-import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
-import io.craigmiller160.contacts5.util.ContactsConfigurationBuilder;
-import io.craigmiller160.contacts5.util.ContactsThreadFactory;
-import io.craigmiller160.utils.reflect.ObjectAndConstructor;
 
 /**
  * The application class for Contacts 5+.

@@ -11,10 +11,8 @@ public class ServiceFactory {
     private final Context context;
 
     private final AccountService accountService;
-    private final ContactsPrefsService contactsPrefsService;
     private final ContactsRetrievalService contactsRetrievalService;
     private final PermissionsService permissionsService;
-    private final ResourceService resourceService;
     private final ContactIconService contactIconService;
 
     private static ServiceFactory instance;
@@ -23,9 +21,7 @@ public class ServiceFactory {
     private ServiceFactory(Context context){
         this.context = context;
         this.accountService = new AccountService(context);
-        this.resourceService = new ResourceService(context);
-        this.contactsPrefsService = new ContactsPrefsService(context, accountService, resourceService);
-        this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, resourceService, accountService);
+        this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, accountService);
         this.permissionsService = new PermissionsService(context);
         this.contactIconService = new ContactIconService(context);
     }
@@ -69,14 +65,6 @@ public class ServiceFactory {
 
     public PermissionsService getPermissionsService(){
         return permissionsService;
-    }
-
-    public ResourceService getResourceService(){
-        return resourceService;
-    }
-
-    public ContactsPrefsService getContactsPrefsService(){
-        return contactsPrefsService;
     }
 
     public ContactsRetrievalService getContactsRetrievalService(){

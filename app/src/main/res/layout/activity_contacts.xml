@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".old.activity.ContactsActivity"
-    android:id="@+id/contactsActivityLayout">
+    tools:context=".activity.ContactsActivity"
+    android:id="@+id/activity_contacts_layout">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/contactsActivityAppbar"
@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
-        <!-- app:layout_scrollFlags="scroll|enterAlways" -->
 
         <android.support.design.widget.TabLayout
             android:id="@+id/contactsActivityTabs"
