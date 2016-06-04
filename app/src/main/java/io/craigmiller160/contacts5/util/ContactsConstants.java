@@ -27,15 +27,20 @@ public class ContactsConstants {
     public static final int RECREATE_CHANGE = 302;
 
     /*
-     * Bundle keys
+     * Property names
      */
     public static final String CONTACTS_LIST = "ContactsList";
     public static final String GROUPS_LIST = "GroupsList";
+    public static final String CONTACTS_IN_GROUP_LIST = "ContactsInGroupList";
+
+    /*
+     * Model names
+     */
+    public static final String CONTACTS_MODEL = "ContactsModel";
 
     /*
      * Result codes
      */
-
     public static final int SETTINGS_ACTIVITY_ID = 301;
     public static final int SELECT_CONTACT_ID = 302;
     public static final int NEW_CONTACT_ID = 303;

@@ -36,6 +36,10 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
             return null;
         }
 
+        if(returnType == null){
+            throw new IllegalArgumentException("Return type value cannot be null");
+        }
+
         if(!returnType.isAssignableFrom(value.getClass())){
             throw new IllegalArgumentException(String.format("Invalid type for argument. %1$s is not assignable from %2$s", returnType.getName(), value.getClass().getName()));
         }
