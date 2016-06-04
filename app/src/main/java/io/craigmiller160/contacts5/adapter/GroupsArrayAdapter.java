@@ -12,7 +12,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ContactGroup;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
 
 /**
  * Created by craig on 5/29/16.
@@ -45,7 +49,11 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> {
                 TextView accountTextView = (TextView) view.findViewById(R.id.accountName);
                 nameTextView.setText(group.getGroupName() + " (" + group.getGroupSize() + ")");
                 accountTextView.setText(group.getAccountName());
+                view.setTag(R.string.group_id, group.getGroupId());
+                view.setTag(R.string.group_name, group.getGroupName());
             }
+
+            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class));
         }
 
         return view;

@@ -33,16 +33,16 @@
             android:theme="@style/AppTheme.PreferencesTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".old.activity.ContactsActivity" />
+                android:value=".activity.ContactsActivity" />
         </activity>
-        <!--<activity-->
-            <!--android:name=".old.activity.ContactsInGroupActivity"-->
-            <!--android:label="@string/contacts_activity_name"-->
-            <!--android:theme="@style/AppTheme.PreferencesTheme">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".old.activity.ContactsActivity" />-->
-        <!--</activity>-->
+        <activity
+            android:name=".activity.ContactsInGroupActivity"
+            android:label="@string/contacts_activity_name"
+            android:theme="@style/AppTheme.PreferencesTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ContactsActivity" />
+        </activity>
     </application>
 
 </manifest>

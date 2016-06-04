@@ -61,9 +61,9 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
                 nameTextView.setText(contact.getDisplayName());
                 view.setTag(R.string.contact_uri, contact.getUri());
             }
-        }
 
-        view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class));
+            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class));
+        }
 
         return view;
     }

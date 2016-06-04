@@ -86,7 +86,59 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             executor.submit(new ExecuteAllGroupsQueryTask(context, resources, accountService, callback));
         }
         else{
-            new ExecuteAllGroupsQueryTask(context, resources, accountService, callback);
+            new ExecuteAllGroupsQueryTask(context, resources, accountService, callback).run();
+        }
+    }
+
+    @Override
+    public void loadAllContactsInGroup(ContactsDataCallback callback, long groupId){
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            executor.submit(new ExecuteContactsInGroupQueryTask(context, callback, groupId));
+        }
+        else{
+            new ExecuteContactsInGroupQueryTask(context, callback, groupId).run();
+        }
+    }
+
+    private static class ExecuteContactsInGroupQueryTask implements Runnable{
+
+        private final Context context;
+        private final ContactsDataCallback callback;
+        private final long groupId;
+
+        public ExecuteContactsInGroupQueryTask(Context context, ContactsDataCallback callback, long groupId){
+            this.context = context;
+            this.callback = callback;
+            this.groupId = groupId;
+        }
+
+        @Override
+        public void run() {
+            long start = System.currentTimeMillis();
+            Log.d(TAG, "Starting load contacts in group process");
+            Future<List<Contact>> getContactsInGroupFuture = ContactsRetrievalServiceImpl.executor.submit(new GetContactsInGroupTask(context, groupId));
+
+            try{
+                final List<Contact> contacts = getContactsInGroupFuture.get();
+                Log.d(TAG, "Total contacts in group loaded: " + contacts.size());
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.setContactsList(contacts);
+                    }
+                });
+            }
+            catch(InterruptedException ex){
+                Log.e(TAG, "Error while retrieving contacts in group", ex);
+            }
+            catch(ExecutionException ex){
+                Log.e(TAG, "Error while retrieving contacts in group", ex.getCause());
+            }
+
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Finished load contacts in group process. Time: " + (end - start) + "ms");
         }
     }
 
@@ -189,6 +241,69 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
             long end = System.currentTimeMillis();
             Log.d(TAG, "Finished loading all contacts. Total time: " + (end - start) + "ms");
+        }
+    }
+
+    private static class GetContactsInGroupTask implements Callable<List<Contact>>{
+
+        private final Context context;
+        private final long groupId;
+
+        public GetContactsInGroupTask(Context context, long groupId){
+            this.context = context;
+            this.groupId = groupId;
+        }
+
+        @Override
+        public List<Contact> call() throws Exception {
+            Log.v(TAG, "Starting get contacts in group sub-task.");
+            List<Contact> contacts = new ArrayList<>();
+            Cursor cursor = null;
+            try{
+                cursor = context.getContentResolver().query(
+                        DATA_URI,
+                        new String[]{
+                                DATA_GROUP_GROUP_ID,
+                                DATA_GROUP_CONTACT_ID,
+                                DATA_GROUP_CONTACT_NAME,
+                                DATA_MIMETYPE_COLUMN,
+                                CONTACT_HAS_PHONE
+                        },
+                        DATA_GROUP_GROUP_ID + " = ? and " + DATA_MIMETYPE_COLUMN + " = ?",
+                        new String[]{"" + groupId, GROUP_MEMBERSHIP_MIMETYPE},
+                        DATA_GROUP_CONTACT_NAME + " " + getSortOrder(CONTACT, context)
+                );
+
+                if(cursor != null){
+                    cursor.moveToFirst();
+
+                    while(!cursor.isAfterLast()){
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
+                        if(isPhonesOnly(context) == hasPhone){
+                            //TODO still need to get the thumbnail URI here
+                            long contactId = cursor.getLong(cursor.getColumnIndex(DATA_GROUP_CONTACT_ID));
+                            String displayName = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME));
+                            Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
+
+                            Contact contact = new Contact();
+                            contact.setDisplayName(displayName);
+                            contact.setUri(contactUri);
+                            contact.setId(contactId);
+
+                            contacts.add(contact);
+                        }
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            finally{
+                if(cursor != null){
+                    cursor.close();
+                }
+            }
+
+            return contacts;
         }
     }
 

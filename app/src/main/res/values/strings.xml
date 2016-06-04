@@ -48,4 +48,6 @@
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
     <string name="contact_uri">ContactUri</string>
+    <string name="group_id">GroupId</string>
+    <string name="group_name">GroupName</string>
 </resources>

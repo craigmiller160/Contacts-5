@@ -46,6 +46,10 @@ public interface ContactsRetrievalService {
     String GROUP_COUNT = ContactsContract.Groups.SUMMARY_COUNT;
     String GROUP_COUNT_PHONES = ContactsContract.Groups.SUMMARY_WITH_PHONES;
 
+    String DATA_GROUP_CONTACT_ID = ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID;
+    String DATA_GROUP_GROUP_ID = ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID;
+    String DATA_GROUP_CONTACT_NAME = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME;
+
     String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
     String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
     String CONTACT_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
@@ -59,5 +63,7 @@ public interface ContactsRetrievalService {
     void loadAllContacts(ContactsDataCallback callback);
 
     void loadAllGroups(ContactsDataCallback callback);
+
+    void loadAllContactsInGroup(ContactsDataCallback callback, long groupId);
 
 }

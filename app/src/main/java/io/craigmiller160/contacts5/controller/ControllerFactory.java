@@ -30,6 +30,7 @@ public class ControllerFactory {
         controllers.put(ADD_CONTACT_CONTROLLER, new AddContactController(context));
         controllers.put(DISPLAY_SETTINGS_CONTROLLER, new DisplaySettingsController(context));
         controllers.put(SELECT_CONTACT_CONTROLLER, new SelectContactController(context));
+        controllers.put(SELECT_GROUP_CONTROLLER, new SelectGroupController(context));
     }
 
     public AbstractAndroidController getController(String controllerName){
