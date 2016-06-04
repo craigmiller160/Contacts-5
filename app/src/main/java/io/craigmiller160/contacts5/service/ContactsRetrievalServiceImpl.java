@@ -33,6 +33,8 @@ import io.craigmiller160.contacts5.model.ContactsDataCallback;
 public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalService {
 
     //TODO launder the execution exceptions
+    //TODO clean it up, only the all contacts task needs threads called from within threads
+    //TODO unify all contacts and contacts in group tasks
 
     private static final ExecutorService executor = Executors.newFixedThreadPool(4);
     private static final String TAG = "ContactsRetrievService";
@@ -267,7 +269,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                                 DATA_GROUP_CONTACT_ID,
                                 DATA_GROUP_CONTACT_NAME,
                                 DATA_MIMETYPE_COLUMN,
-                                CONTACT_HAS_PHONE
+                                CONTACT_HAS_PHONE,
+                                DATA_GROUP_CONTACT_THUMB_PHOTO_URI
                         },
                         DATA_GROUP_GROUP_ID + " = ? and " + DATA_MIMETYPE_COLUMN + " = ?",
                         new String[]{"" + groupId, GROUP_MEMBERSHIP_MIMETYPE},
@@ -280,15 +283,20 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     while(!cursor.isAfterLast()){
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
-                            //TODO still need to get the thumbnail URI here
                             long contactId = cursor.getLong(cursor.getColumnIndex(DATA_GROUP_CONTACT_ID));
                             String displayName = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME));
                             Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
+                            String photoUriString = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_THUMB_PHOTO_URI));
+                            Uri photoUri = null;
+                            if(photoUriString != null && !photoUriString.isEmpty()){
+                                photoUri = Uri.parse(photoUriString);
+                            }
 
                             Contact contact = new Contact();
                             contact.setDisplayName(displayName);
                             contact.setUri(contactUri);
                             contact.setId(contactId);
+                            contact.setPhotoUri(photoUri);
 
                             contacts.add(contact);
                         }
@@ -335,15 +343,20 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     while(!cursor.isAfterLast()){
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
-                            //TODO get the phone thumbnail URI here
                             long contactId = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
                             String displayName = cursor.getString(cursor.getColumnIndex(CONTACT_DISPLAY_NAME));
                             Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
+                            String photoUriString = cursor.getString(cursor.getColumnIndex(CONTACT_PHOTO_THUMBNAIL_URI));
+                            Uri photoUri = null;
+                            if(photoUriString != null && !photoUriString.isEmpty()){
+                                photoUri = Uri.parse(photoUriString);
+                            }
 
                             Contact contact = new Contact();
                             contact.setDisplayName(displayName);
                             contact.setUri(contactUri);
                             contact.setId(contactId);
+                            contact.setPhotoUri(photoUri);
 
                             contacts.add(contact);
                         }

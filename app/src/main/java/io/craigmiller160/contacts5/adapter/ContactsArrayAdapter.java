@@ -2,13 +2,23 @@ package io.craigmiller160.contacts5.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.QuickContactBadge;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import java.util.List;
 import java.util.Map;
@@ -58,13 +68,26 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
             view = inflater.inflate(R.layout.contacts_list_row, parent, false);
         }
 
-        if(contacts != null){
-            TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
+        if(contacts != null && contacts.get(position) != null){
             Contact contact = contacts.get(position);
-            if(contact != null){
-                nameTextView.setText(contact.getDisplayName());
-                view.setTag(R.string.contact_uri, contact.getUri());
-            }
+            TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
+            nameTextView.setText(contact.getDisplayName());
+            view.setTag(R.string.contact_uri, contact.getUri());
+
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            int contactColor = generator.getColor(contact.getDisplayName()); //TODO need to work on the color selection
+            TextDrawable defaultPic = TextDrawable.builder().buildRound(contact.getDisplayName().substring(0, 1), contactColor);
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .resetViewBeforeLoading(true)
+                    .showImageOnFail(defaultPic)
+                    .showImageOnLoading(defaultPic)
+                    .cacheInMemory(true)
+                    .displayer(new RoundedBitmapDisplayer(80))
+                    .build();
+
+            ImageView photoImageView = (ImageView) view.findViewById(R.id.contact_photo);
+            ImageLoader.getInstance().displayImage(contact.getUri().toString(), new ImageViewAware(photoImageView), options);
 
             view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class));
         }
@@ -77,10 +100,6 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
         //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
         return contacts != null ? contacts.size() : 0;
     }
-
-//    private View createView(int position, ViewGroup parent){
-//
-//    }
 
 //    @Override
 //    public void add(Contact contact){

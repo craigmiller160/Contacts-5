@@ -18,6 +18,12 @@ android {
         }
     }
 
+    repositories{
+        maven{
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/maven/io.craigmiller160/locus-framework/pom.xml'
         exclude 'META-INF/maven/io.craigmiller160/locus-framework/pom.properties'
@@ -48,4 +54,5 @@ dependencies {
     compile files('lib/cm160-utils-1.3.3.jar')
     compile files('lib/universal-image-loader-1.9.5.jar')
     compile 'org.slf4j:slf4j-android:1.7.21'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }

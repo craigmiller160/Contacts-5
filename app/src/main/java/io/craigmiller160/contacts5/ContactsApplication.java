@@ -2,6 +2,9 @@ package io.craigmiller160.contacts5;
 
 import android.app.Application;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.ContactsPrefsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
@@ -33,6 +36,13 @@ public class ContactsApplication extends Application {
 
         if(!ControllerFactory.isInitialized()){
             ControllerFactory.initialize(this);
+        }
+
+        if(!ImageLoader.getInstance().isInited()){
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                    .threadPoolSize(5)
+                    .build();
+            ImageLoader.getInstance().init(config);
         }
 
         //TODO Thread.setDefaultUncaughtExceptionHandler(new ContactsThreadFactory.ContactsUncaughtExceptionHandler()); //TODO move this if it works

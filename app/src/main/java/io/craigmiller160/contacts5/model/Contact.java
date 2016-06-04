@@ -24,6 +24,7 @@ public class Contact implements Comparable<Contact>, Serializable{
     private Uri uri;
     //private Bitmap photo;
     private String accountName;
+    private Uri photoUri;
 
     public Contact(){}
 
@@ -56,14 +57,6 @@ public class Contact implements Comparable<Contact>, Serializable{
         this.uri = uri;
     }
 
-//    public Bitmap getPhoto() {
-//        return photo;
-//    }
-//
-//    public void setPhoto(Bitmap photo) {
-//        this.photo = photo;
-//    }
-
     public void setAccountName(String accountName){
         this.accountName = accountName;
     }
@@ -86,6 +79,14 @@ public class Contact implements Comparable<Contact>, Serializable{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setPhotoUri(Uri photoUri){
+        this.photoUri = photoUri;
+    }
+
+    public Uri getPhotoUri(){
+        return photoUri;
     }
 
     @Override
@@ -134,12 +135,16 @@ public class Contact implements Comparable<Contact>, Serializable{
         if(uri != null){
             out.writeUTF(uri.toString());
         }
+        if(photoUri != null){
+            out.writeUTF(photoUri.toString());
+        }
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
         id = in.readLong();
         displayName = in.readUTF();
         uri = Uri.parse(in.readUTF());
+        photoUri = Uri.parse(in.readUTF());
     }
 
     private void readObjectNoData() throws ObjectStreamException{
