@@ -6,52 +6,28 @@ import android.util.AndroidRuntimeException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.craigmiller160.utils.reflect.ObjectCreator;
+
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/25/16.
  */
-public class ControllerFactory {
+public class ControllerFactory extends AbstractControllerFactory{
 
     private static ControllerFactory instance;
     private static final Object instanceLock = new Object();
 
-    private final Context context;
-
-    private static final Map<String,Object> controllers = new HashMap<>();
-
-
-    private ControllerFactory(Context context){
-        this.context = context;
+    protected ControllerFactory(Context context){
+        super(context);
         init();
     }
 
     private void init(){
-        controllers.put(ADD_CONTACT_CONTROLLER, new AddContactController(context));
-        controllers.put(DISPLAY_SETTINGS_CONTROLLER, new DisplaySettingsController(context));
-        controllers.put(SELECT_CONTACT_CONTROLLER, new SelectContactController(context));
-        controllers.put(SELECT_GROUP_CONTROLLER, new SelectGroupController(context));
-    }
-
-    public Object getController(String controllerName){
-        return controllers.get(controllerName);
-    }
-
-    public <T> T getController(String controllerName, Class<T> controllerType){
-        if(controllerType == null){
-            throw new IllegalArgumentException("ControllerType argument cannot be null");
-        }
-
-        Object controller = getController(controllerName);
-        if(controller != null){
-            if(controllerType.isAssignableFrom(controller.getClass())){
-                return (T) controller;
-            }
-            else{
-                throw new IllegalArgumentException("Invalid type for controller: Expected: " + controller.getClass().getName() + " Actual: " + controllerType.getName());
-            }
-        }
-        return null;
+        registerControllerType(ADD_CONTACT_CONTROLLER, AddContactController.class);
+        registerControllerType(DISPLAY_SETTINGS_CONTROLLER, DisplaySettingsController.class);
+        registerControllerType(SELECT_CONTACT_CONTROLLER, SelectContactController.class);
+        registerControllerType(SELECT_GROUP_CONTROLLER, SelectGroupController.class);
     }
 
     public static void initialize(Context context){

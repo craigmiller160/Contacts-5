@@ -19,7 +19,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by craig on 5/7/16.
  */
-public class DisplaySettingsController extends AbstractAndroidUtil implements Preference.OnPreferenceChangeListener {
+public class DisplaySettingsController extends AbstractAndroidController implements Preference.OnPreferenceChangeListener {
 
     private static final String TAG = "DisplaySettingsContrllr";
 

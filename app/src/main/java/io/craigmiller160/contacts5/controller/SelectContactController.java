@@ -14,7 +14,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by craig on 5/30/16.
  */
-public class SelectContactController extends AbstractAndroidUtil implements View.OnClickListener{
+public class SelectContactController extends AbstractAndroidController implements View.OnClickListener{
 
     public SelectContactController(Context context) {
         super(context);
