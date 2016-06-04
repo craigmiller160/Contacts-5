@@ -42,7 +42,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
     private List<Contact> contacts;
 
     public ContactsArrayAdapter(Context context){
-        super(context, R.layout.contacts_list_row);
+        super(context, R.layout.contact_row);
         this.contactIconService = ServiceFactory.getInstance().getContactIconService();
     }
 
@@ -60,7 +60,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
         if(view == null){
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.contacts_list_row, parent, false);
+            view = inflater.inflate(R.layout.contact_row, parent, false);
         }
 
         if(contacts != null && contacts.get(position) != null){

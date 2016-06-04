@@ -32,7 +32,7 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> {
     private ContactIconService contactIconService;
 
     public GroupsArrayAdapter(Activity activity){
-        super(activity, R.layout.contact_group_row);
+        super(activity, R.layout.group_row);
         contactIconService = ServiceFactory.getInstance().getContactIconService();
     }
 
@@ -46,7 +46,7 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> {
         if(view == null){
             LayoutInflater inflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.contact_group_row, parent, false);
+            view = inflater.inflate(R.layout.group_row, parent, false);
         }
 
         if(groups != null && groups.get(position) != null){

@@ -52,7 +52,7 @@ public class AllGroupsPage extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         if(permissionsService.hasReadContactsPermission()){
-            ListView view = (ListView) inflater.inflate(R.layout.content_contacts_list, container, false);
+            ListView view = (ListView) inflater.inflate(R.layout.content_list, container, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);
 

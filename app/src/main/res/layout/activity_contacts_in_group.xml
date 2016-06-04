@@ -28,6 +28,6 @@
         android:background="@android:color/white"
         android:scrollbars="vertical"
         android:scrollbarStyle="outsideOverlay"
-        android:id="@+id/contactsList"/>
+        android:id="@+id/content_list"/>
 
 </android.support.design.widget.CoordinatorLayout>

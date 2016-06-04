@@ -55,7 +55,7 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
 
 
         contactsArrayAdapter = new ContactsArrayAdapter(this);
-        ListView listView = (ListView) findViewById(R.id.contactsList);
+        ListView listView = (ListView) findViewById(R.id.content_list);
         listView.setFastScrollEnabled(true);
         listView.setDivider(null);
         listView.setAdapter(contactsArrayAdapter);

@@ -1,5 +1,7 @@
 package io.craigmiller160.contacts5.model;
 
+import android.os.Bundle;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -26,4 +28,7 @@ public abstract class AbstractModel {
         support.fireIndexedPropertyChange(propertyName, index, oldValue, newValue);
     }
 
+    protected abstract void storeState(Bundle savedInstance);
+
+    protected abstract void restoreState(Bundle savedInstance);
 }
