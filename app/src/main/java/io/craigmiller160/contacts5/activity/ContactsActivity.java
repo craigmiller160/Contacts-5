@@ -173,15 +173,10 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        //Using a handler here so that recreate will be called after main thread has finished current task
-        Handler h = new Handler(Looper.getMainLooper());
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                contactsService.loadAllContacts(ContactsActivity.this);
-                contactsService.loadAllGroups(ContactsActivity.this);
-            }
-        });
+        if(!(requestCode == SELECT_GROUP_ID)){
+            contactsService.loadAllContacts(ContactsActivity.this);
+            contactsService.loadAllGroups(ContactsActivity.this);
+        }
     }
 
     @Override
