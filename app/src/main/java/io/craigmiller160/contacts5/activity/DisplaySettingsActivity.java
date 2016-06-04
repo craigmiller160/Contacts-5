@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.activity;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -19,7 +18,7 @@ import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;
 
 /**
  * Created by craig on 5/7/16.

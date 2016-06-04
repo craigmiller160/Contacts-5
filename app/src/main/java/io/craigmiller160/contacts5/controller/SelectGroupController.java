@@ -3,12 +3,10 @@ package io.craigmiller160.contacts5.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
-import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
 

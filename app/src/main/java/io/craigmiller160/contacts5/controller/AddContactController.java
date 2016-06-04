@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.NEW_CONTACT_ID;
 
 /**
  * Created by craig on 5/4/16.

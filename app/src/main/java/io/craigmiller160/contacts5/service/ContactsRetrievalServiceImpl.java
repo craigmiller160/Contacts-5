@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;

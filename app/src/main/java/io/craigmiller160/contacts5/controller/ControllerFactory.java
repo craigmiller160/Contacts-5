@@ -3,12 +3,10 @@ package io.craigmiller160.contacts5.controller;
 import android.content.Context;
 import android.util.AndroidRuntimeException;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import io.craigmiller160.utils.reflect.ObjectCreator;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
+import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
 
 /**
  * Created by craig on 5/25/16.

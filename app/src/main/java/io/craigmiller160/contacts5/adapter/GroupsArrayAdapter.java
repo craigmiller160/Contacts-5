@@ -3,7 +3,6 @@ package io.craigmiller160.contacts5.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.service.ContactIconService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
 
 /**

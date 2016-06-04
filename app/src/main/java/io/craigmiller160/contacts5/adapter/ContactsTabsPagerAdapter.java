@@ -4,12 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.view.ViewGroup;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.craigmiller160.contacts5.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.fragment.AllGroupsPage;

@@ -11,10 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.service.ServiceFactory;
-import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/7/16.

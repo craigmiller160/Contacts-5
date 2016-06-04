@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,13 @@ import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.RECREATE_CHANGE;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.STATE_CHANGE;
 
 /**
  * Created by craig on 5/4/16.

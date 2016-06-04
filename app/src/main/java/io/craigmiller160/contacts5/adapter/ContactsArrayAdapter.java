@@ -25,7 +25,7 @@ import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactIconService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
 
 /**
  * Created by Craig on 1/22/2016.

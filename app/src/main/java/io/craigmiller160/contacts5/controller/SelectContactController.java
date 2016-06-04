@@ -7,9 +7,8 @@ import android.net.Uri;
 import android.view.View;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_ID;
 
 /**
  * Created by craig on 5/30/16.

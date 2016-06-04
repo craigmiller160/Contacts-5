@@ -1,16 +1,12 @@
 package io.craigmiller160.contacts5.model;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Craig on 1/20/2016.
