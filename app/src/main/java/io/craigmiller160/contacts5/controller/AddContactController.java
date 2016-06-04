@@ -7,12 +7,14 @@ import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
+
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/4/16.
  */
-public class AddContactController extends AbstractAndroidController implements View.OnClickListener {
+public class AddContactController extends AbstractAndroidUtil implements View.OnClickListener {
 
     public AddContactController(Context context) {
         super(context);

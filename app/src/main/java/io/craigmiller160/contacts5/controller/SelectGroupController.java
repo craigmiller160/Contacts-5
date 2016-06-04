@@ -8,13 +8,14 @@ import android.view.View;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
 
 /**
  * Created by craig on 6/3/16.
  */
-public class SelectGroupController extends AbstractAndroidController implements View.OnClickListener {
+public class SelectGroupController extends AbstractAndroidUtil implements View.OnClickListener {
 
     public SelectGroupController(Context context) {
         super(context);

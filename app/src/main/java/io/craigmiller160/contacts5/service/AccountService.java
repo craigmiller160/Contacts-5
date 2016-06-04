@@ -9,30 +9,28 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
+
 /**
  * Created by Craig on 1/30/2016.
  */
-public class AccountService {
+public class AccountService extends AbstractAndroidUtil {
 
     private static final String TAG = "AccountService";
 
     private static final String GOOGLE_ACCOUNT = "com.google";
 
-    private final Context context;
-
     AccountService(Context context){
-        this.context = context;
+        super(context);
     }
 
-    //TODO currently only retrieves Google accounts
     public Account[] getAllContactAccounts(){
-        AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+        AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         return accountManager.getAccountsByType(GOOGLE_ACCOUNT);
     }
 
-    //TODO currently only retrieves Google accounts
     public String[] getAllContactAccountNames(){
-        AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+        AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_ACCOUNT);
         String[] accountNames = new String[accounts.length];
         Log.d(TAG, "All account names retrieved. Size: " + accountNames.length);
@@ -47,7 +45,7 @@ public class AccountService {
     }
 
     public int getAccountCount(){
-        AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+        AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccountsByType(GOOGLE_ACCOUNT);
 
         return accounts.length;

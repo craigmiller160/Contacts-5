@@ -1,9 +1,6 @@
 package io.craigmiller160.contacts5.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.QuickContactBadge;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -28,7 +21,6 @@ import java.util.Map;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
-import io.craigmiller160.contacts5.model.ContactsStorage;
 import io.craigmiller160.contacts5.service.ContactIconService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 

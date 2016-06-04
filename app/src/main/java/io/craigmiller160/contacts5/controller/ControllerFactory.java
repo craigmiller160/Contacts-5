@@ -18,7 +18,7 @@ public class ControllerFactory {
 
     private final Context context;
 
-    private static final Map<String,AbstractAndroidController> controllers = new HashMap<>();
+    private static final Map<String,Object> controllers = new HashMap<>();
 
 
     private ControllerFactory(Context context){
@@ -33,7 +33,7 @@ public class ControllerFactory {
         controllers.put(SELECT_GROUP_CONTROLLER, new SelectGroupController(context));
     }
 
-    public AbstractAndroidController getController(String controllerName){
+    public Object getController(String controllerName){
         return controllers.get(controllerName);
     }
 
@@ -42,7 +42,7 @@ public class ControllerFactory {
             throw new IllegalArgumentException("ControllerType argument cannot be null");
         }
 
-        AbstractAndroidController controller = getController(controllerName);
+        Object controller = getController(controllerName);
         if(controller != null){
             if(controllerType.isAssignableFrom(controller.getClass())){
                 return (T) controller;

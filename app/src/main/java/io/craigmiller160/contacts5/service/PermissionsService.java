@@ -10,24 +10,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
+
 /**
  * Created by Craig on 1/30/2016.
  */
-public class PermissionsService {
+public class PermissionsService extends AbstractAndroidUtil {
 
     public static final int CONTACTS_PERMISSION_REQUEST = 101;
 
     private static final String TAG = "PermissionsService";
 
-    private final Context context;
-
     PermissionsService(Context context){
-        this.context = context;
+        super(context);
     }
 
     public boolean hasReadContactsPermission(){
         return ContextCompat.checkSelfPermission(
-                context, Manifest.permission.READ_CONTACTS) ==
+                getContext(), Manifest.permission.READ_CONTACTS) ==
                 PackageManager.PERMISSION_GRANTED;
     }
 

@@ -3,12 +3,7 @@ package io.craigmiller160.contacts5.service;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import java.lang.reflect.InvocationTargetException;
-
-import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
-import io.craigmiller160.contacts5.model.ContactsHolder;
-import io.craigmiller160.contacts5.model.ContactsStorage;
 
 /**
  * Created by craig on 5/8/16.

@@ -8,23 +8,22 @@ import android.graphics.drawable.Drawable;
 import com.amulyakhare.textdrawable.TextDrawable;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
  * Created by craig on 6/4/16.
  */
-public class ContactIconService {
-
-    private final Context context;
+public class ContactIconService extends AbstractAndroidUtil {
 
     public ContactIconService(Context context){
-        this.context = context;
+        super(context);
     }
 
     public Drawable createContactIcon(String key, char letter){
         TypedArray colors = null;
         TextDrawable defaultPic = null;
         try{
-            colors = context.getResources().obtainTypedArray(R.array.letter_tile_colors);
+            colors = getResources().obtainTypedArray(R.array.letter_tile_colors);
             int colorIndex = Math.abs(key.hashCode()) % colors.length();
             int contactColor = colors.getColor(colorIndex, Color.BLACK);
             defaultPic = TextDrawable.builder()
