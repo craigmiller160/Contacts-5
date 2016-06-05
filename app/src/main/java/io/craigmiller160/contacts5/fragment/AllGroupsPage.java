@@ -38,12 +38,12 @@ public class AllGroupsPage extends Fragment{
         groupsArrayAdapter = new GroupsArrayAdapter(getActivity());
     }
 
-    public void setGroupsList(List<ContactGroup> groups){
-        this.groups = groups;
-        if(groupsArrayAdapter != null){
-            groupsArrayAdapter.setGroupsList(groups);
-        }
-    }
+//    public void setGroupsList(List<ContactGroup> groups){
+//        this.groups = groups;
+//        if(groupsArrayAdapter != null){
+//            groupsArrayAdapter.setGroupsList(groups);
+//        }
+//    }
 
     public List<ContactGroup> getGroupsList(){
         return groups;
@@ -57,9 +57,9 @@ public class AllGroupsPage extends Fragment{
             view.setFastScrollEnabled(true);
 
 
-            if(groups != null){
-                groupsArrayAdapter.setGroupsList(groups);
-            }
+//            if(groups != null){
+//                groupsArrayAdapter.setGroupsList(groups);
+//            }
 
             view.setAdapter(groupsArrayAdapter);
 

@@ -26,12 +26,14 @@ import io.craigmiller160.contacts5.fragment.AllGroupsPage;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
+import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.RECREATE_CHANGE;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
@@ -110,21 +112,22 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         tabLayout.setupWithViewPager(viewPager);
 
         if(savedInstance != null){
-            Object o = savedInstance.getSerializable(CONTACTS_LIST);
-            if(o != null && o instanceof List){
-                allContactsPage.setContactsList((List<Contact>) o);
-            }
-            else{
-                contactsService.loadAllContacts(this);
-            }
-
-            o = savedInstance.getSerializable(GROUPS_LIST);
-            if(o != null && o instanceof List){
-                allGroupsPage.setGroupsList((List<ContactGroup>) o);
-            }
-            else{
-                contactsService.loadAllGroups(this);
-            }
+//            Object o = savedInstance.getSerializable(CONTACTS_LIST);
+//            if(o != null && o instanceof List){
+////                allContactsPage.setContactsList((List<Contact>) o);
+//            }
+//            else{
+//                contactsService.loadAllContacts(this);
+//            }
+//
+//            o = savedInstance.getSerializable(GROUPS_LIST);
+//            if(o != null && o instanceof List){
+//                allGroupsPage.setGroupsList((List<ContactGroup>) o);
+//            }
+//            else{
+//                contactsService.loadAllGroups(this);
+//            }
+            ModelFactory.getInstance().getModel(CONTACTS_MODEL).restoreState(savedInstance);
         }
         else{
             contactsService.loadAllContacts(this);
@@ -150,20 +153,20 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        if(allContactsPage != null){
-            List<Contact> contacts = allContactsPage.getContactsList();
-            if(contacts != null){
-                savedState.putSerializable(CONTACTS_LIST, (ArrayList<Contact>) contacts);
-            }
-        }
-
-        if(allGroupsPage != null){
-            List<ContactGroup> groups = allGroupsPage.getGroupsList();
-            if(groups != null){
-                savedState.putSerializable(GROUPS_LIST, (ArrayList<ContactGroup>) groups);
-            }
-        }
-
+//        if(allContactsPage != null){
+//            List<Contact> contacts = allContactsPage.getContactsList();
+//            if(contacts != null){
+//                savedState.putSerializable(CONTACTS_LIST, (ArrayList<Contact>) contacts);
+//            }
+//        }
+//
+//        if(allGroupsPage != null){
+//            List<ContactGroup> groups = allGroupsPage.getGroupsList();
+//            if(groups != null){
+//                savedState.putSerializable(GROUPS_LIST, (ArrayList<ContactGroup>) groups);
+//            }
+//        }
+        ModelFactory.getInstance().getModel(CONTACTS_MODEL).storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
@@ -224,11 +227,11 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void setContactsList(List<Contact> contacts) {
-        allContactsPage.setContactsList(contacts);
+//        allContactsPage.setContactsList(contacts);
     }
 
     @Override
     public void setGroupsList(List<ContactGroup> groups) {
-        allGroupsPage.setGroupsList(groups);
+//        allGroupsPage.setGroupsList(groups);
     }
 }

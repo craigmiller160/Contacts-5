@@ -52,7 +52,7 @@ public class ServiceFactory {
         if(instance == null){
             synchronized (instanceLock){
                 if(instance == null){
-                    throw new AndroidRuntimeException("ServiceFacotry is not initialized");
+                    throw new AndroidRuntimeException("ServiceFactory is not initialized");
                 }
             }
         }

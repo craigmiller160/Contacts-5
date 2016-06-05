@@ -54,7 +54,7 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        contactsArrayAdapter = new ContactsArrayAdapter(this);
+        contactsArrayAdapter = new ContactsArrayAdapter(this, ContactsArrayAdapter.CONTACTS_IN_GROUP);
         ListView listView = (ListView) findViewById(R.id.content_list);
         listView.setFastScrollEnabled(true);
         listView.setDivider(null);

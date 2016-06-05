@@ -35,21 +35,21 @@ public class AllContactsPage extends Fragment {
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
     }
 
-    public void setContactsList(List<Contact> contacts){
-        this.contacts = contacts;
-        if(contactsArrayAdapter != null){
-            contactsArrayAdapter.setContactsList(contacts);
-        }
-    }
-
-    public List<Contact> getContactsList(){
-        return contacts;
-    }
+//    public void setContactsList(List<Contact> contacts){
+//        this.contacts = contacts;
+//        if(contactsArrayAdapter != null){
+//            contactsArrayAdapter.setContactsList(contacts);
+//        }
+//    }
+//
+//    public List<Contact> getContactsList(){
+//        return contacts;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
+        contactsArrayAdapter = new ContactsArrayAdapter(getActivity(), ContactsArrayAdapter.CONTACTS);
     }
 
     @Override
@@ -58,13 +58,13 @@ public class AllContactsPage extends Fragment {
             ListView view = (ListView) inflater.inflate(R.layout.content_list, container, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);
-            if(contactsArrayAdapter == null){
-                contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
-            }
-
-            if(contacts != null){
-                contactsArrayAdapter.setContactsList(contacts);
-            }
+//            if(contactsArrayAdapter == null){
+//                contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
+//            }
+//
+//            if(contacts != null){
+//                contactsArrayAdapter.setContactsList(contacts);
+//            }
             view.setAdapter(contactsArrayAdapter);
 
             return view;

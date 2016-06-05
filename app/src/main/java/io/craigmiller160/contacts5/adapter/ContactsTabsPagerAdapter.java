@@ -53,29 +53,29 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
 
     @Override
     public void setContactsList(final List<Contact> contacts){
-        if(contactsPage == null){
-            throw new IllegalArgumentException("Cannot set the contacts list before setting the contacts page to display it");
-        }
-
-        contactsPage.setContactsList(contacts);
+//        if(contactsPage == null){
+//            throw new IllegalArgumentException("Cannot set the contacts list before setting the contacts page to display it");
+//        }
+//
+//        contactsPage.setContactsList(contacts);
     }
 
     @Override
     public void setGroupsList(List<ContactGroup> groups){
-        if(contactsPage == null){
-            throw new IllegalArgumentException("Cannot set the groups list before setting the groups page to display it");
-        }
-
-        groupsPage.setGroupsList(groups);
+//        if(contactsPage == null){
+//            throw new IllegalArgumentException("Cannot set the groups list before setting the groups page to display it");
+//        }
+//
+//        groupsPage.setGroupsList(groups);
     }
 
-    public List<Contact> getContactsList(){
-        return contactsPage.getContactsList();
-    }
-
-    public List<ContactGroup> getGroupsList(){
-        return groupsPage.getGroupsList();
-    }
+//    public List<Contact> getContactsList(){
+////        return contactsPage.getContactsList();
+//    }
+//
+//    public List<ContactGroup> getGroupsList(){
+//        return groupsPage.getGroupsList();
+//    }
 
     @Override
     public Fragment getItem(int position) {
