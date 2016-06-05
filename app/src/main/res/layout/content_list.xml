@@ -4,18 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/list_layout">
-    <!--<ListView-->
-        <!--android:id="@+id/content_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:scrollbars="vertical"-->
-        <!--android:background="@android:color/white"-->
-        <!--android:scrollbarStyle="outsideOverlay"/>-->
-    <android.support.v7.widget.RecyclerView
+    <ListView
+        android:id="@+id/content_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/content_list"
         android:scrollbars="vertical"
         android:background="@android:color/white"
         android:scrollbarStyle="outsideOverlay"/>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/content_list"-->
+        <!--android:scrollbars="vertical"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:scrollbarStyle="outsideOverlay"/>-->
 </LinearLayout>

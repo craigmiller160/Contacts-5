@@ -61,13 +61,15 @@ public class AllContactsPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         if(permissionsService.hasReadContactsPermission()){
             LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.content_list, container, false);
-//            listView= (ListView) layout.findViewById(R.id.content_list);
-//            listView.setDivider(null);
-//            listView.setFastScrollEnabled(true);
+            listView= (ListView) layout.findViewById(R.id.content_list);
+            listView.setDivider(null);
+            listView.setFastScrollEnabled(true);
+            listView.setNestedScrollingEnabled(true); //TODO need to test SDK version here
 
-            RecyclerView view = (RecyclerView) layout.findViewById(R.id.content_list);
-            view.setLayoutManager(new LinearLayoutManager(getContext()));
-            view.setAdapter(new ContactsViewAdapter());
+            listView.setAdapter(contactsArrayAdapter);
+//            RecyclerView view = (RecyclerView) layout.findViewById(R.id.content_list);
+//            view.setLayoutManager(new LinearLayoutManager(getContext()));
+//            view.setAdapter(new ContactsViewAdapter());
             return layout;
         }
         else{
@@ -77,10 +79,10 @@ public class AllContactsPage extends Fragment {
         }
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstance){
-//        super.onActivityCreated(savedInstance);
-////        listView.setAdapter(contactsArrayAdapter);
-//    }
+    @Override
+    public void onActivityCreated(Bundle savedInstance){
+        super.onActivityCreated(savedInstance);
+//        listView.setAdapter(contactsArrayAdapter);
+    }
 
 }

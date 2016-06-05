@@ -60,7 +60,9 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
     }
 
     public void setContactsList(final List<Contact> contacts){
+        System.out.println("INSIDE SET CONTACTS");
         if(Looper.myLooper() == Looper.getMainLooper()){
+            System.out.println("INSIDE SET CONTACTS - ON MAIN LOOPER");
             this.contacts = contacts;
             notifyDataSetChanged();
         }
@@ -69,6 +71,7 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
             h.post(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("INSIDE SET CONTACTS - INSIDE HANDLER");
                     ContactsArrayAdapter.this.contacts = contacts;
                     notifyDataSetChanged();
                 }
@@ -122,7 +125,9 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
+        System.out.println("PROPERTY CHANGE: " + event.getPropertyName() + " " + type); //TODO delete this
         if(type == CONTACTS && CONTACTS_LIST.equals(event.getPropertyName())){
+            System.out.println("INSIDE METHOD: " + ((List) event.getNewValue()).size()); //TODO delete this
             setContactsList((List<Contact>) event.getNewValue());
         }
         else if(type == CONTACTS_IN_GROUP && CONTACTS_IN_GROUP_LIST.equals(event.getPropertyName())){

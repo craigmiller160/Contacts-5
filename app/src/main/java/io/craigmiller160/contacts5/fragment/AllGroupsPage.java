@@ -56,12 +56,13 @@ public class AllGroupsPage extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         if(permissionsService.hasReadContactsPermission()){
             LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.content_list, container, false);
-//            ListView view = (ListView) layout.findViewById(R.id.content_list);
-//            view.setDivider(null);
-//            view.setFastScrollEnabled(true);
+            ListView view = (ListView) layout.findViewById(R.id.content_list);
+            view.setDivider(null);
+            view.setFastScrollEnabled(true);
+            view.setNestedScrollingEnabled(true); //TODO need to test SDK version here
 
-            RecyclerView view = (RecyclerView) layout.findViewById(R.id.content_list);
-            view.setLayoutManager(new LinearLayoutManager(getContext()));
+//            RecyclerView view = (RecyclerView) layout.findViewById(R.id.content_list);
+//            view.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
 //            if(groups != null){
