@@ -22,9 +22,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
+import io.craigmiller160.contacts5.model.ModelFactory;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/29/16.
@@ -123,13 +127,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 final List<Contact> contacts = getContactsInGroupFuture.get();
                 Log.d(TAG, "Total contacts in group loaded: " + contacts.size());
 
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.setContactsList(contacts);
-                    }
-                });
+                ModelFactory.getInstance().getModel(CONTACTS_MODEL).setProperty(CONTACTS_IN_GROUP_LIST, contacts);
             }
             catch(InterruptedException ex){
                 Log.e(TAG, "Error while retrieving contacts in group", ex);
@@ -165,13 +163,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 final List<ContactGroup> groups = getGroupsFuture.get();
                 Log.d(TAG, "Total groups loaded: " + groups.size());
 
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.setGroupsList(groups);
-                    }
-                });
+                ModelFactory.getInstance().getModel(CONTACTS_MODEL).setProperty(GROUPS_LIST, groups);
             }
             catch(InterruptedException ex){
                 Log.e(TAG, "Error while retrieving groups", ex);
@@ -220,13 +212,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 Log.d(TAG, "Total contacts loaded: " + contacts.size());
 
 
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.setContactsList(contacts);
-                    }
-                });
+                ModelFactory.getInstance().getModel(CONTACTS_MODEL).setProperty(CONTACTS_LIST, contacts);
             }
             catch(InterruptedException ex){
                 Log.e(TAG, "Error while retrieving contacts", ex);

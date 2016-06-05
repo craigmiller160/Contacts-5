@@ -20,7 +20,7 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 /**
  * Created by Craig on 1/24/2016.
  */
-public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements ContactsDataCallback, Serializable {
+public class ContactsTabsPagerAdapter extends FragmentPagerAdapter {
 
     public static final String FRAGMENT_TAG_PREFIX = "android:switcher:";
 
@@ -45,37 +45,37 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Co
         permissionsService = ServiceFactory.getInstance().getPermissionsService();
     }
 
-    public void loadContacts(){
-        if(permissionsService.hasReadContactsPermission()){
-            contactsService.loadAllContacts(this);
-        }
-    }
+//    public void loadContacts(){
+//        if(permissionsService.hasReadContactsPermission()){
+//            contactsService.loadAllContacts(this);
+//        }
+//    }
 
-    @Override
-    public void setContactsList(final List<Contact> contacts){
-        if(contactsPage == null){
-            throw new IllegalArgumentException("Cannot set the contacts list before setting the contacts page to display it");
-        }
+//    @Override
+//    public void setContactsList(final List<Contact> contacts){
+//        if(contactsPage == null){
+//            throw new IllegalArgumentException("Cannot set the contacts list before setting the contacts page to display it");
+//        }
+//
+//        contactsPage.setContactsList(contacts);
+//    }
+//
+//    @Override
+//    public void setGroupsList(List<ContactGroup> groups){
+//        if(contactsPage == null){
+//            throw new IllegalArgumentException("Cannot set the groups list before setting the groups page to display it");
+//        }
+//
+//        groupsPage.setGroupsList(groups);
+//    }
 
-        contactsPage.setContactsList(contacts);
-    }
-
-    @Override
-    public void setGroupsList(List<ContactGroup> groups){
-        if(contactsPage == null){
-            throw new IllegalArgumentException("Cannot set the groups list before setting the groups page to display it");
-        }
-
-        groupsPage.setGroupsList(groups);
-    }
-
-    public List<Contact> getContactsList(){
-        return contactsPage.getContactsList();
-    }
-
-    public List<ContactGroup> getGroupsList(){
-        return groupsPage.getGroupsList();
-    }
+//    public List<Contact> getContactsList(){
+//        return contactsPage.getContactsList();
+//    }
+//
+//    public List<ContactGroup> getGroupsList(){
+//        return groupsPage.getGroupsList();
+//    }
 
     @Override
     public Fragment getItem(int position) {

@@ -2,6 +2,8 @@ package io.craigmiller160.contacts5.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,33 +26,54 @@ import java.util.Map;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ContactIconService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
 
 /**
  * Created by Craig on 1/22/2016.
  */
-public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements SectionIndexer*/{
-
-    private ListView listView; //TODO if I don't end up using it, remove this as a requirement
+public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements PropertyChangeListener /*implements SectionIndexer*/{
 
     //TODO need this to be able to differentiate between group use and all contacts use
 
-    private Map<String,Object> sectionMap;
     private final ContactIconService contactIconService;
+    public static final int CONTACTS = 321;
+    public static final int CONTACTS_IN_GROUP = 322;
 
     private List<Contact> contacts;
+    private final int type;
 
-    public ContactsArrayAdapter(Context context){
+    public ContactsArrayAdapter(Context context, int type){
         super(context, R.layout.contact_row);
+        if(type != CONTACTS && type != CONTACTS_IN_GROUP){
+            throw new IllegalArgumentException("Invalid type: " + type);
+        }
+        this.type = type;
         this.contactIconService = ServiceFactory.getInstance().getContactIconService();
+        ModelFactory.getInstance().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
     }
 
-    public void setContactsList(List<Contact> contacts){
-        this.contacts = contacts;
-        notifyDataSetChanged();
+    public void setContactsList(final List<Contact> contacts){
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            this.contacts = contacts;
+            notifyDataSetChanged();
+        }
+        else{
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    ContactsArrayAdapter.this.contacts = contacts;
+                    notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     public List<Contact> getContactsList(){
@@ -92,61 +117,16 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> /*implements Sec
 
     @Override
     public int getCount(){
-        //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
         return contacts != null ? contacts.size() : 0;
     }
 
-//    @Override
-//    public void add(Contact contact){
-//        contactsList.add(contact);
-//        notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void insert(Contact contact, int position){
-//        contactsList.add(position, contact);
-//        notifyDataSetChanged();
-//    }
-//
-//    public void replace(Contact contact, int position){
-//        contactsList.set(position, contact);
-//        notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void remove(Contact contact){
-//        contactsList.remove(contact);
-//        notifyDataSetChanged();
-//    }
-//
-//    public void remove(int position){
-//        contactsList.remove(position);
-//        notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void sort(Comparator<? super Contact> comparator){
-//        //TODO custom implementation needed here
-//        super.sort(comparator);
-//    }
-
-    //TODO none of this model/prop change stuff is really necessary. just use the array adapter api methods
-    //TODO use the adapter api methods way way more
-
-    //TODO finish the section indexing stuff
-
-//    @Override
-//    public Object[] getSections() {
-//        return new Object[0];
-//    }
-//
-//    @Override
-//    public int getPositionForSection(int sectionIndex) {
-//        return 0;
-//    }
-//
-//    @Override
-//    public int getSectionForPosition(int position) {
-//        return 0;
-//    }
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if(type == CONTACTS && CONTACTS_LIST.equals(event.getPropertyName())){
+            setContactsList((List<Contact>) event.getNewValue());
+        }
+        else if(type == CONTACTS_IN_GROUP && CONTACTS_IN_GROUP_LIST.equals(event.getPropertyName())){
+            setContactsList((List<Contact>) event.getNewValue());
+        }
+    }
 }

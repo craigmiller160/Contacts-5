@@ -2,10 +2,13 @@ package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.List;
@@ -52,18 +55,22 @@ public class AllGroupsPage extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         if(permissionsService.hasReadContactsPermission()){
-            ListView view = (ListView) inflater.inflate(R.layout.content_list, container, false);
-            view.setDivider(null);
-            view.setFastScrollEnabled(true);
+            LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.content_list, container, false);
+//            ListView view = (ListView) layout.findViewById(R.id.content_list);
+//            view.setDivider(null);
+//            view.setFastScrollEnabled(true);
+
+            RecyclerView view = (RecyclerView) layout.findViewById(R.id.content_list);
+            view.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-            if(groups != null){
-                groupsArrayAdapter.setGroupsList(groups);
-            }
+//            if(groups != null){
+//                groupsArrayAdapter.setGroupsList(groups);
+//            }
 
-            view.setAdapter(groupsArrayAdapter);
+//            view.setAdapter(groupsArrayAdapter);
 
-            return view;
+            return layout;
         }
         else{
             Log.d(TAG, "Displaying no permissions page on Groups tab");
