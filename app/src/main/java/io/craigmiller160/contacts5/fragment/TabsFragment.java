@@ -32,11 +32,11 @@ public class TabsFragment extends Fragment {
         }
 
         if(contactsFragment == null){
-            contactsFragment = ContactsFragmentFactory.getInstance().createAllContactsFragment();
+            contactsFragment = new AllContactsFragment();
         }
 
         if(groupsFragment == null){
-            groupsFragment = ContactsFragmentFactory.getInstance().createAllGroupsFragment();
+            groupsFragment = new AllGroupsFragment();
         }
 
         contactsService.loadAllContacts(null);
