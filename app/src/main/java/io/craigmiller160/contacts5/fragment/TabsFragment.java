@@ -52,6 +52,7 @@ public class TabsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstance){
         super.onActivityCreated(savedInstance);
+        getActivity().setTitle(getString(R.string.contacts_activity_name));
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.contactsActivityTabs);
         tabLayout.setVisibility(View.VISIBLE);
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);

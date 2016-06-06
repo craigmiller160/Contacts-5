@@ -9,9 +9,11 @@ import java.io.NotSerializableException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,11 +73,11 @@ public class AndroidModel {
         }
 
         Object value = getProperty(propertyName);
-        if(value != null){
+        if(value == null){
             return null;
         }
 
-        if(!returnType.getClass().isAssignableFrom(value.getClass())){
+        if(!returnType.isAssignableFrom(value.getClass())){
             throw new IllegalArgumentException(String.format("Invalid type for property value. %1$s is not assignable from %2$s",
                     returnType.getName(), value.getClass().getName()));
         }
