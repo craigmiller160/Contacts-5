@@ -24,6 +24,7 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
+import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -36,7 +37,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     //TODO clean it up, only the all contacts task needs threads called from within threads
     //TODO unify all contacts and contacts in group tasks
 
-    private static final ExecutorService executor = Executors.newFixedThreadPool(4);
+    private static final ExecutorService executor = Executors.newFixedThreadPool(4, new ContactsThreadFactory());
     private static final String TAG = "ContactsRetrievService";
 
     private static final int CONTACT = 101;
@@ -70,6 +71,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     public ContactsRetrievalServiceImpl(Context context, AccountService accountService) {
         super(context, accountService);
+
     }
 
     @Override
@@ -116,118 +118,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         public void run() {
             long start = System.currentTimeMillis();
             Log.d(TAG, "Starting load contacts in group process");
-            Future<List<Contact>> getContactsInGroupFuture = ContactsRetrievalServiceImpl.executor.submit(new GetContactsInGroupTask(context, groupId));
 
-            try{
-                final List<Contact> contacts = getContactsInGroupFuture.get();
-                Log.d(TAG, "Total contacts in group loaded: " + contacts.size());
-
-                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_IN_GROUP_LIST, contacts);
-            }
-            catch(InterruptedException ex){
-                Log.e(TAG, "Error while retrieving contacts in group", ex);
-            }
-            catch(ExecutionException ex){
-                Log.e(TAG, "Error while retrieving contacts in group", ex.getCause());
-            }
-
-            long end = System.currentTimeMillis();
-            Log.d(TAG, "Finished load contacts in group process. Time: " + (end - start) + "ms");
-        }
-    }
-
-    private static class ExecuteAllGroupsQueryTask implements Runnable{
-
-        private final Context context;
-        private final AccountService accountService;
-
-        public ExecuteAllGroupsQueryTask(Context context, AccountService accountService){
-            this.context = context;
-            this.accountService = accountService;
-        }
-
-        @Override
-        public void run() {
-            long start = System.currentTimeMillis();
-            Log.d(TAG, "Starting load groups process");
-            Future<List<ContactGroup>> getGroupsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetGroupsTask(context, accountService));
-            try{
-                final List<ContactGroup> groups = getGroupsFuture.get();
-                Log.d(TAG, "Total groups loaded: " + groups.size());
-
-                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(GROUPS_LIST, groups);
-            }
-            catch(InterruptedException ex){
-                Log.e(TAG, "Error while retrieving groups", ex);
-            }
-            catch(ExecutionException ex){
-                Log.e(TAG, "Error while retrieving groups", ex.getCause());
-            }
-
-            long end = System.currentTimeMillis();
-            Log.d(TAG, "Finished loading all groups. Time: " + (end - start) + "ms");
-        }
-    }
-
-    private static class ExecuteAllContactsQueriesTask implements Runnable{
-
-        private final Context context;
-        private final AccountService accountService;
-
-        public ExecuteAllContactsQueriesTask(Context context, AccountService accountService){
-            this.context = context;
-            this.accountService = accountService;
-        }
-
-        @Override
-        public void run() {
-            long start = System.currentTimeMillis();
-            Log.d(TAG, "Starting load contacts process");
-
-            Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, accountService));
-            Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));
-
-            try{
-                Set<Long> exclusions = getExclusionsFuture.get();
-                final List<Contact> contacts = getAllContactsFuture.get();
-
-                Iterator<Contact> contactIterator = contacts.iterator();
-                while(contactIterator.hasNext()){
-                    Contact contact = contactIterator.next();
-                    if(exclusions.contains(contact.getId())){
-                        contactIterator.remove();
-                    }
-                }
-
-                Log.d(TAG, "Total contacts loaded: " + contacts.size());
-
-                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_LIST, contacts);
-            }
-            catch(InterruptedException ex){
-                Log.e(TAG, "Error while retrieving contacts", ex);
-            }
-            catch(ExecutionException ex){
-                Log.e(TAG, "Error while retrieving contacts", ex.getCause());
-            }
-
-            long end = System.currentTimeMillis();
-            Log.d(TAG, "Finished loading all contacts. Total time: " + (end - start) + "ms");
-        }
-    }
-
-    private static class GetContactsInGroupTask implements Callable<List<Contact>>{
-
-        private final Context context;
-        private final long groupId;
-
-        public GetContactsInGroupTask(Context context, long groupId){
-            this.context = context;
-            this.groupId = groupId;
-        }
-
-        @Override
-        public List<Contact> call() throws Exception {
-            Log.v(TAG, "Starting get contacts in group sub-task.");
             List<Contact> contacts = new ArrayList<>();
             Cursor cursor = null;
             try{
@@ -280,7 +171,123 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 }
             }
 
-            return contacts;
+            Log.d(TAG, "Total contacts in group loaded: " + contacts.size());
+
+            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_IN_GROUP_LIST, contacts);
+
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Finished load contacts in group process. Time: " + (end - start) + "ms");
+        }
+    }
+
+    private static class ExecuteAllGroupsQueryTask implements Runnable{
+
+        private final Context context;
+        private final AccountService accountService;
+
+        public ExecuteAllGroupsQueryTask(Context context, AccountService accountService){
+            this.context = context;
+            this.accountService = accountService;
+        }
+
+        @Override
+        public void run() {
+            long start = System.currentTimeMillis();
+            Log.d(TAG, "Starting load groups process");
+
+            List<ContactGroup> groups = new ArrayList<>();
+            Set<String> accountsToDisplay = getAccountsToDisplay(context, accountService);
+            Cursor cursor = null;
+            try{
+                cursor = context.getContentResolver().query(
+                        GROUP_URI,
+                        new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT, GROUP_COUNT_PHONES},
+                        null, null, GROUP_TITLE + " " + getSortOrder(GROUP, context)
+                );
+
+                if(cursor != null){
+                    Log.v(TAG, "Total number of group query rows: " + cursor.getCount());
+
+                    cursor.moveToFirst();
+                    while(!cursor.isAfterLast()){
+                        String accountName = cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME));
+                        if(accountsToDisplay.contains(accountName)){
+                            ContactGroup group = new ContactGroup();
+                            group.setGroupId(cursor.getLong(cursor.getColumnIndex(GROUP_ID)));
+                            group.setGroupName(cursor.getString(cursor.getColumnIndex(GROUP_TITLE)));
+                            group.setAccountName(cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
+
+                            if(isPhonesOnly(context) == 1){
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT_PHONES)));
+                            }
+                            else{
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
+                            }
+
+                            groups.add(group);
+                        }
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            finally {
+                if(cursor != null){
+                    cursor.close();
+                }
+            }
+
+            Log.d(TAG, "Total groups loaded: " + groups.size());
+            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(GROUPS_LIST, groups);
+
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Finished loading all groups. Time: " + (end - start) + "ms");
+        }
+    }
+
+    private static class ExecuteAllContactsQueriesTask implements Runnable{
+
+        private final Context context;
+        private final AccountService accountService;
+
+        public ExecuteAllContactsQueriesTask(Context context, AccountService accountService){
+            this.context = context;
+            this.accountService = accountService;
+        }
+
+        @Override
+        public void run() {
+            long start = System.currentTimeMillis();
+            Log.d(TAG, "Starting load contacts process");
+
+            Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, accountService));
+            Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));
+
+            try{
+                Set<Long> exclusions = getExclusionsFuture.get();
+                final List<Contact> contacts = getAllContactsFuture.get();
+
+                Iterator<Contact> contactIterator = contacts.iterator();
+                while(contactIterator.hasNext()){
+                    Contact contact = contactIterator.next();
+                    if(exclusions.contains(contact.getId())){
+                        contactIterator.remove();
+                    }
+                }
+
+                Log.d(TAG, "Total contacts loaded: " + contacts.size());
+
+                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_LIST, contacts);
+            }
+            catch(InterruptedException ex){
+                Log.e(TAG, "Error while retrieving contacts", ex);
+            }
+            catch(ExecutionException ex){
+                Log.e(TAG, "Error while retrieving contacts", ex.getCause());
+            }
+
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Finished loading all contacts. Total time: " + (end - start) + "ms");
         }
     }
 
@@ -339,65 +346,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             }
 
             return contacts;
-        }
-    }
-
-    private static class GetGroupsTask implements Callable<List<ContactGroup>> {
-
-        private final Context context;
-        private final AccountService accountService;
-
-        public GetGroupsTask(Context context, AccountService accountService){
-            this.context = context;
-            this.accountService = accountService;
-        }
-
-        @Override
-        public List<ContactGroup> call() throws Exception {
-            Log.v(TAG, "Starting get groups subtask");
-            List<ContactGroup> groups = new ArrayList<>();
-            Set<String> accountsToDisplay = getAccountsToDisplay(context, accountService);
-            Cursor cursor = null;
-            try{
-                cursor = context.getContentResolver().query(
-                        GROUP_URI,
-                        new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT, GROUP_COUNT_PHONES},
-                        null, null, GROUP_TITLE + " " + getSortOrder(GROUP, context)
-                );
-
-                if(cursor != null){
-                    Log.v(TAG, "Total number of group query rows: " + cursor.getCount());
-
-                    cursor.moveToFirst();
-                    while(!cursor.isAfterLast()){
-                        String accountName = cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME));
-                        if(accountsToDisplay.contains(accountName)){
-                            ContactGroup group = new ContactGroup();
-                            group.setGroupId(cursor.getLong(cursor.getColumnIndex(GROUP_ID)));
-                            group.setGroupName(cursor.getString(cursor.getColumnIndex(GROUP_TITLE)));
-                            group.setAccountName(cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
-
-                            if(isPhonesOnly(context) == 1){
-                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT_PHONES)));
-                            }
-                            else{
-                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
-                            }
-
-                            groups.add(group);
-                        }
-
-                        cursor.moveToNext();
-                    }
-                }
-            }
-            finally {
-                if(cursor != null){
-                    cursor.close();
-                }
-            }
-
-            return groups;
         }
     }
 
