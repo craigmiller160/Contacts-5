@@ -16,20 +16,15 @@ import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.model.ContactsDataCallback;
-import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
-import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.FRAGMENT_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
@@ -38,7 +33,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_T
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AppCompatActivity implements ContactsDataCallback {
+public class ContactsActivity extends AppCompatActivity {
 
     //TODO ensure that the accounts to display preference is properly updated after permission is provided
 
@@ -107,8 +102,8 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         //TODO revamp the activity result behavior
         if(!(requestCode == SELECT_GROUP_REQUEST)){
-            contactsService.loadAllContacts(ContactsActivity.this);
-            contactsService.loadAllGroups(ContactsActivity.this);
+            contactsService.loadAllContacts();
+            contactsService.loadAllGroups();
         }
     }
 
@@ -157,15 +152,5 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         }
 
         return false;
-    }
-
-    @Override
-    public void setContactsList(List<Contact> contacts) {
-//        allContactsPage.setContactsList(contacts);
-    }
-
-    @Override
-    public void setGroupsList(List<ContactGroup> groups) {
-//        allGroupsPage.setGroupsList(groups);
     }
 }

@@ -40,8 +40,8 @@ public class TabsFragment extends Fragment {
             groupsFragment = new AllGroupsFragment();
         }
 
-        contactsService.loadAllContacts(null);
-        contactsService.loadAllGroups(null);
+        contactsService.loadAllContacts();
+        contactsService.loadAllGroups();
     }
 
     @Override

@@ -3,8 +3,6 @@ package io.craigmiller160.contacts5.service;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import io.craigmiller160.contacts5.model.ContactsDataCallback;
-
 /**
  * Created by craig on 5/8/16.
  */
@@ -56,10 +54,10 @@ public interface ContactsRetrievalService {
     String LIMIT_CLAUSE = "limit";
     String OFFSET_CLAUSE = "offset";
 
-    void loadAllContacts(ContactsDataCallback callback);
+    void loadAllContacts();
 
-    void loadAllGroups(ContactsDataCallback callback);
+    void loadAllGroups();
 
-    void loadAllContactsInGroup(ContactsDataCallback callback, long groupId);
+    void loadAllContactsInGroup(long groupId);
 
 }

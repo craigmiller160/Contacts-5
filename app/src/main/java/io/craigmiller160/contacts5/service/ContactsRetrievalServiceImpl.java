@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -25,8 +24,6 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.model.ContactsDataCallback;
-import io.craigmiller160.contacts5.model.ModelFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -76,44 +73,42 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     }
 
     @Override
-    public void loadAllContacts(ContactsDataCallback callback){
+    public void loadAllContacts(){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteAllContactsQueriesTask(getContext(), getAccountService(), callback));
+            executor.submit(new ExecuteAllContactsQueriesTask(getContext(), getAccountService()));
         }
         else{
-            new ExecuteAllContactsQueriesTask(getContext(), getAccountService(), callback).run();
+            new ExecuteAllContactsQueriesTask(getContext(), getAccountService()).run();
         }
     }
 
     @Override
-    public void loadAllGroups(ContactsDataCallback callback){
+    public void loadAllGroups(){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteAllGroupsQueryTask(getContext(), getAccountService(), callback));
+            executor.submit(new ExecuteAllGroupsQueryTask(getContext(), getAccountService()));
         }
         else{
-            new ExecuteAllGroupsQueryTask(getContext(), getAccountService(), callback).run();
+            new ExecuteAllGroupsQueryTask(getContext(), getAccountService()).run();
         }
     }
 
     @Override
-    public void loadAllContactsInGroup(ContactsDataCallback callback, long groupId){
+    public void loadAllContactsInGroup(long groupId){
         if(Looper.myLooper() == Looper.getMainLooper()){
-            executor.submit(new ExecuteContactsInGroupQueryTask(getContext(), callback, groupId));
+            executor.submit(new ExecuteContactsInGroupQueryTask(getContext(), groupId));
         }
         else{
-            new ExecuteContactsInGroupQueryTask(getContext(), callback, groupId).run();
+            new ExecuteContactsInGroupQueryTask(getContext(), groupId).run();
         }
     }
 
     private static class ExecuteContactsInGroupQueryTask implements Runnable{
 
         private final Context context;
-        private final ContactsDataCallback callback;
         private final long groupId;
 
-        public ExecuteContactsInGroupQueryTask(Context context, ContactsDataCallback callback, long groupId){
+        public ExecuteContactsInGroupQueryTask(Context context, long groupId){
             this.context = context;
-            this.callback = callback;
             this.groupId = groupId;
         }
 
@@ -145,13 +140,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
         private final Context context;
         private final AccountService accountService;
-        private final ContactsDataCallback callback;
 
-        public ExecuteAllGroupsQueryTask(Context context,
-                                         AccountService accountService, ContactsDataCallback callback){
+        public ExecuteAllGroupsQueryTask(Context context, AccountService accountService){
             this.context = context;
             this.accountService = accountService;
-            this.callback = callback;
         }
 
         @Override
@@ -181,12 +173,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
         private final Context context;
         private final AccountService accountService;
-        private final ContactsDataCallback callback;
 
-        public ExecuteAllContactsQueriesTask(Context context, AccountService accountService, ContactsDataCallback callback){
+        public ExecuteAllContactsQueriesTask(Context context, AccountService accountService){
             this.context = context;
             this.accountService = accountService;
-            this.callback = callback;
         }
 
         @Override
