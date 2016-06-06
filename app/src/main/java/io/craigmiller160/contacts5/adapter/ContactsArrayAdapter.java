@@ -57,12 +57,11 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
         this.contactIconService = ServiceFactory.getInstance().getContactIconService();
         this.type = type;
         ModelFactory.getInstance().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
+        contacts = ModelFactory.getInstance().getModel(CONTACTS_MODEL).getProperty(CONTACTS_LIST, List.class);
     }
 
     public void setContactsList(final List<Contact> contacts){
-        System.out.println("INSIDE SET CONTACTS");
         if(Looper.myLooper() == Looper.getMainLooper()){
-            System.out.println("INSIDE SET CONTACTS - ON MAIN LOOPER");
             this.contacts = contacts;
             notifyDataSetChanged();
         }
@@ -71,16 +70,11 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
             h.post(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("INSIDE SET CONTACTS - INSIDE HANDLER");
                     ContactsArrayAdapter.this.contacts = contacts;
                     notifyDataSetChanged();
                 }
             });
         }
-    }
-
-    public List<Contact> getContactsList(){
-        return contacts;
     }
 
     @Override

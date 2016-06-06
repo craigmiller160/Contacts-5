@@ -84,12 +84,12 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        if(contactsArrayAdapter != null){
-            List<Contact> contacts = contactsArrayAdapter.getContactsList();
-            if(contacts != null){
-                savedState.putSerializable(CONTACTS_LIST, (ArrayList) contacts);
-            }
-        }
+//        if(contactsArrayAdapter != null){
+//            List<Contact> contacts = contactsArrayAdapter.getContactsList();
+//            if(contacts != null){
+//                savedState.putSerializable(CONTACTS_LIST, (ArrayList) contacts);
+//            }
+//        }
     }
 
     @Override

@@ -5,9 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
@@ -23,6 +20,7 @@ import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.fragment.AllContactsPage;
 import io.craigmiller160.contacts5.fragment.AllGroupsPage;
+import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.model.ContactsDataCallback;
@@ -32,13 +30,10 @@ import io.craigmiller160.contacts5.service.PermissionsService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.RECREATE_CHANGE;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.STATE_CHANGE;
+import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 5/4/16.
@@ -51,10 +46,6 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     private PermissionsService permissionsService;
     private ContactsRetrievalService contactsService;
-    private ContactsTabsPagerAdapter tabsAdapter;
-
-    private AllContactsPage allContactsPage;
-    private AllGroupsPage allGroupsPage;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -62,76 +53,26 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         Log.v(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
 
-        int state = RECREATE_CHANGE;
-        if(savedInstance != null && savedInstance.getInt(STATE_CHANGE) > 0){
-            state = savedInstance.getInt(STATE_CHANGE);
-        }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.contactsActivityToolbar);
-        setSupportActionBar(toolbar);
-
-        findViewById(R.id.addContact).setOnClickListener(
-                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
-
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
         this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
+        setSupportActionBar(toolbar);
+
+        //noinspection ConstantConditions
+        findViewById(R.id.add_contact_fab).setOnClickListener(
+                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         //Check permissions and load contacts
         if(!permissionsService.hasReadContactsPermission()){
             permissionsService.requestReadContactsPermission(this);
         }
 
-        //Get the existing instances of the fragments, if they exist
         if(savedInstance != null){
-            Fragment oldContactsPage = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-            if(oldContactsPage != null && oldContactsPage instanceof AllContactsPage){
-                allContactsPage = (AllContactsPage) oldContactsPage;
-            }
-            else{
-                allContactsPage = new AllContactsPage();
-            }
-
-            Fragment oldGroupsPage = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
-            if(oldGroupsPage != null && oldGroupsPage instanceof AllGroupsPage){
-                allGroupsPage = (AllGroupsPage) oldGroupsPage;
-            }
-            else{
-                allGroupsPage = new AllGroupsPage();
-            }
-        }
-        else{
-            allContactsPage = new AllContactsPage();
-            allGroupsPage = new AllGroupsPage();
-        }
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-
-        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsPage, allGroupsPage);
-        viewPager.setAdapter(tabsAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        if(savedInstance != null){
-//            Object o = savedInstance.getSerializable(CONTACTS_LIST);
-//            if(o != null && o instanceof List){
-////                allContactsPage.setContactsList((List<Contact>) o);
-//            }
-//            else{
-//                contactsService.loadAllContacts(this);
-//            }
-//
-//            o = savedInstance.getSerializable(GROUPS_LIST);
-//            if(o != null && o instanceof List){
-//                allGroupsPage.setGroupsList((List<ContactGroup>) o);
-//            }
-//            else{
-//                contactsService.loadAllGroups(this);
-//            }
             ModelFactory.getInstance().getModel(CONTACTS_MODEL).restoreState(savedInstance);
         }
         else{
-            contactsService.loadAllContacts(this);
-            contactsService.loadAllGroups(this);
+            getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
         }
     }
 
@@ -153,25 +94,13 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-//        if(allContactsPage != null){
-//            List<Contact> contacts = allContactsPage.getContactsList();
-//            if(contacts != null){
-//                savedState.putSerializable(CONTACTS_LIST, (ArrayList<Contact>) contacts);
-//            }
-//        }
-//
-//        if(allGroupsPage != null){
-//            List<ContactGroup> groups = allGroupsPage.getGroupsList();
-//            if(groups != null){
-//                savedState.putSerializable(GROUPS_LIST, (ArrayList<ContactGroup>) groups);
-//            }
-//        }
         ModelFactory.getInstance().getModel(CONTACTS_MODEL).storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
+        //TODO revamp the activity result behavior
         if(!(requestCode == SELECT_GROUP_ID)){
             contactsService.loadAllContacts(ContactsActivity.this);
             contactsService.loadAllGroups(ContactsActivity.this);

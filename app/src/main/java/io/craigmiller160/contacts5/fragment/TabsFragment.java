@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
+import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ServiceFactory;
 
 /**
  * Created by craig on 6/5/16.
@@ -19,10 +18,13 @@ public class TabsFragment extends Fragment {
 
     private AllContactsPage allContactsPage;
     private AllGroupsPage allGroupsPage;
+    private ContactsRetrievalService contactsService;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
+
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
             Fragment oldContactsPage = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
@@ -42,19 +44,21 @@ public class TabsFragment extends Fragment {
             allContactsPage = new AllContactsPage();
             allGroupsPage = new AllGroupsPage();
         }
+
+        contactsService.loadAllContacts(null);
+        contactsService.loadAllGroups(null);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.tabs_layout, container, false);
-        TabLayout tabLayout = (TabLayout) layout.findViewById(R.id.contacts_tabs);
-        ViewPager viewPager = (ViewPager) layout.findViewById(R.id.contactsTabsViewPager);
+    public void onActivityCreated(Bundle savedInstance){
+        super.onActivityCreated(savedInstance);
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.contactsActivityTabs);
+        tabLayout.setVisibility(View.VISIBLE);
+        ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
 
         ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), allContactsPage, allGroupsPage);
         viewPager.setAdapter(tabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        return layout;
     }
 
 }

@@ -32,11 +32,13 @@ public class ContactsConstants {
     public static final String CONTACTS_LIST = "ContactsList";
     public static final String GROUPS_LIST = "GroupsList";
     public static final String CONTACTS_IN_GROUP_LIST = "ContactsInGroupList";
+    public static final String DISPLAYED_FRAGMENT = "DisplayedFragment";
 
     /*
      * Model names
      */
     public static final String CONTACTS_MODEL = "ContactsModel";
+    public static final String FRAGMENT_MODEL = "FragmentModel";
 
     /*
      * Result codes
@@ -45,5 +47,11 @@ public class ContactsConstants {
     public static final int SELECT_CONTACT_ID = 302;
     public static final int NEW_CONTACT_ID = 303;
     public static final int SELECT_GROUP_ID = 304;
+
+    /*
+     * Fragment Tags
+     */
+    public static final String TABS_FRAGMENT_TAG = "TabsFragment";
+    public static final String LIST_FRAGMENT_TAG = "ListFragment";
 
 }
