@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -72,7 +73,9 @@ public class ContactsActivity extends AppCompatActivity {
             //TODO list fragment goes here
         }
         else{
-            getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
+            if(getSupportFragmentManager().findFragmentByTag(TABS_FRAGMENT_TAG) == null){
+                getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
+            }
         }
     }
 
