@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
@@ -23,7 +24,7 @@ public class TabsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
+        contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {

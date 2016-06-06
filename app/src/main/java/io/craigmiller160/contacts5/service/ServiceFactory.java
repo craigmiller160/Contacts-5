@@ -18,7 +18,7 @@ public class ServiceFactory {
     private static ServiceFactory instance;
     private static final Object instanceLock = new Object();
 
-    private ServiceFactory(Context context){
+    public ServiceFactory(Context context){
         this.context = context;
         this.accountService = new AccountService(context);
         this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, accountService);
@@ -26,38 +26,38 @@ public class ServiceFactory {
         this.contactIconService = new ContactIconService(context);
     }
 
-    public static void initialize(Context context){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    instance = new ServiceFactory(context);
-                }
-                else{
-                    throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-                }
-            }
-        }
-        else{
-            throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-        }
-    }
-
-    public static boolean isInitialized(){
-        synchronized (instanceLock){
-            return instance != null;
-        }
-    }
-
-    public static ServiceFactory getInstance(){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    throw new AndroidRuntimeException("ServiceFactory is not initialized");
-                }
-            }
-        }
-        return instance;
-    }
+//    public static void initialize(Context context){
+//        if(instance == null){
+//            synchronized (instanceLock){
+//                if(instance == null){
+//                    instance = new ServiceFactory(context);
+//                }
+//                else{
+//                    throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
+//                }
+//            }
+//        }
+//        else{
+//            throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
+//        }
+//    }
+//
+//    public static boolean isInitialized(){
+//        synchronized (instanceLock){
+//            return instance != null;
+//        }
+//    }
+//
+//    public static ServiceFactory getInstance(){
+//        if(instance == null){
+//            synchronized (instanceLock){
+//                if(instance == null){
+//                    throw new AndroidRuntimeException("ServiceFactory is not initialized");
+//                }
+//            }
+//        }
+//        return instance;
+//    }
 
     public AccountService getAccountService(){
         return accountService;

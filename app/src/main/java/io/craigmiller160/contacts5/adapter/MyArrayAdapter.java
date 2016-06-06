@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ModelFactory;
 
@@ -26,8 +27,8 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     protected MyArrayAdapter(Context context, int resource, String propertyName) {
         super(context, resource);
         this.propertyName = propertyName;
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
-        contents = ModelFactory.getInstance().getModel(CONTACTS_MODEL).getProperty(propertyName, List.class);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
+        contents = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(propertyName, List.class);
     }
 
     public void setContents(final List<T> contents){

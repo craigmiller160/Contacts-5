@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.Contact;
@@ -34,7 +35,7 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_contacts_in_group);
-        contactsRetrievalService = ServiceFactory.getInstance().getContactsRetrievalService();
+        contactsRetrievalService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
 
         Intent intent = getIntent();
         long groupId = -1;

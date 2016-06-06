@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.Contact;
@@ -45,7 +46,7 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
 
     public ContactsArrayAdapter(Context context, String propertyName){
         super(context, R.layout.contact_row, propertyName);
-        this.contactIconService = ServiceFactory.getInstance().getContactIconService();
+        this.contactIconService = ContactsApp.getApp().serviceFactory().getContactIconService();
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
             Map<String,Object> args = new HashMap<>();
             args.put(getContext().getString(R.string.contact_uri), contact.getUri());
 
-            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class, args));
+            view.setOnClickListener(ContactsApp.getApp().controllerFactory().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class, args));
         }
 
         return view;

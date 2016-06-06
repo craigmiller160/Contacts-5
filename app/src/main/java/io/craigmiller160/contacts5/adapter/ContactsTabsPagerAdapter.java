@@ -27,7 +27,6 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Se
 
     @Override
     public Fragment getItem(int position) {
-        System.out.println("POSITION: " + position); //TODO delete this
         return position == 0 ? contactsPage : groupsPage;
     }
 

@@ -19,7 +19,7 @@ public class ModelFactory extends AbstractAndroidUtil{
 
     private final Map<String,AndroidModel> models = Collections.synchronizedMap(new HashMap<String, AndroidModel>());
 
-    protected ModelFactory(Context context) {
+    public ModelFactory(Context context) {
         super(context);
     }
 
@@ -62,38 +62,5 @@ public class ModelFactory extends AbstractAndroidUtil{
             throw new IllegalArgumentException(String.format("Invalid type for model. %1$s is not assignable from %2$s", modelType.getName(), model.getClass().getName()));
         }
         return (T) model;
-    }
-
-    public static void initialize(Context context){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    instance = new ModelFactory(context);
-                }
-                else{
-                    throw new AndroidRuntimeException("ModelFactory can only be initialized once");
-                }
-            }
-        }
-        else{
-            throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-        }
-    }
-
-    public static boolean isInitialized(){
-        synchronized (instanceLock){
-            return instance != null;
-        }
-    }
-
-    public static ModelFactory getInstance(){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    throw new AndroidRuntimeException("ModelFactory is not initialized");
-                }
-            }
-        }
-        return instance;
     }
 }

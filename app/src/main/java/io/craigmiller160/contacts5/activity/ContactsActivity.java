@@ -14,6 +14,7 @@ import android.view.View;
 
 import java.util.List;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
@@ -52,15 +53,15 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         Log.v(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
 
-        this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
-        this.contactsService = ServiceFactory.getInstance().getContactsRetrievalService();
+        this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
+        this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
 
         //noinspection ConstantConditions
         findViewById(R.id.add_contact_fab).setOnClickListener(
-                ControllerFactory.getInstance().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
+                ContactsApp.getApp().controllerFactory().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
         //Check permissions and load contacts
         if(!permissionsService.hasReadContactsPermission()){
@@ -68,10 +69,10 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         }
 
         if(savedInstance != null){
-            ModelFactory.getInstance().getModel(CONTACTS_MODEL).restoreState(savedInstance);
+            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
         }
 
-        String displayedTab = ModelFactory.getInstance().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class);
+        String displayedTab = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class);
         if(displayedTab != null && displayedTab.equals(LIST_FRAGMENT_TAG)){
             //TODO list fragment goes here
         }
@@ -98,7 +99,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).storeState(savedState);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 

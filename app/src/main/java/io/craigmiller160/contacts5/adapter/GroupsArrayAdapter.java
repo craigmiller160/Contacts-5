@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ContactGroup;
@@ -38,7 +39,7 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
 
     public GroupsArrayAdapter(Context context){
         super(context, R.layout.group_row, GROUPS_LIST);
-        contactIconService = ServiceFactory.getInstance().getContactIconService();
+        contactIconService = ContactsApp.getApp().serviceFactory().getContactIconService();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             args.put(getContext().getString(R.string.group_id), group.getGroupId());
             args.put(getContext().getString(R.string.group_name), group.getGroupName());
 
-            view.setOnClickListener(ControllerFactory.getInstance().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class, args));
+            view.setOnClickListener(ContactsApp.getApp().controllerFactory().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class, args));
         }
 
         return view;

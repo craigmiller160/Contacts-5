@@ -16,7 +16,7 @@ public class ControllerFactory extends AbstractControllerFactory{
     private static ControllerFactory instance;
     private static final Object instanceLock = new Object();
 
-    protected ControllerFactory(Context context){
+    public ControllerFactory(Context context){
         super(context);
         init();
     }
@@ -26,39 +26,6 @@ public class ControllerFactory extends AbstractControllerFactory{
         registerControllerType(DISPLAY_SETTINGS_CONTROLLER, DisplaySettingsController.class);
         registerControllerType(SELECT_CONTACT_CONTROLLER, SelectContactController.class);
         registerControllerType(SELECT_GROUP_CONTROLLER, SelectGroupController.class);
-    }
-
-    public static void initialize(Context context){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    instance = new ControllerFactory(context);
-                }
-                else{
-                    throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-                }
-            }
-        }
-        else{
-            throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-        }
-    }
-
-    public static boolean isInitialized(){
-        synchronized (instanceLock){
-            return instance != null;
-        }
-    }
-
-    public static ControllerFactory getInstance(){
-        if(instance == null){
-            synchronized (instanceLock){
-                if(instance == null){
-                    throw new AndroidRuntimeException("ServiceFacotry is not initialized");
-                }
-            }
-        }
-        return instance;
     }
 
 }

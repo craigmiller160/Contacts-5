@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import java.util.Set;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.AccountService;
@@ -82,7 +83,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             Log.d(TAG, "Creating DisplaySettingsFragment"); //TODO delete this
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
-            this.accountService = ServiceFactory.getInstance().getAccountService();
+            this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
 
             configurePreference(findPreference(getString(R.string.accounts_to_display_prop)));
             configurePreference(findPreference(getString(R.string.sort_order_prop)));
@@ -141,7 +142,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 pref.setDefaultValue(phonesOnly);
             }
 
-            pref.setOnPreferenceChangeListener(ControllerFactory.getInstance()
+            pref.setOnPreferenceChangeListener(ContactsApp.getApp().controllerFactory()
                     .getController(DISPLAY_SETTINGS_CONTROLLER, Preference.OnPreferenceChangeListener.class));
         }
     }

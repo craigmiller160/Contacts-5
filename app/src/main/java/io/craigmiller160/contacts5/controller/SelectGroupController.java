@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.Display;
 import android.view.View;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
 import io.craigmiller160.contacts5.model.ModelFactory;
@@ -29,8 +30,8 @@ public class SelectGroupController extends AbstractAndroidController implements 
         long groupId = getArg(getResources().getString(R.string.group_id), Long.class);
         String groupName = getArg(getResources().getString(R.string.group_name), String.class);
 
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_ID, groupId);
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_NAME, groupName);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_ID, groupId);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_NAME, groupName);
 
         Intent intent = new Intent(getContext(), ContactsInGroupActivity.class);
         intent.putExtra(getResources().getString(R.string.group_id), groupId);

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.service.PermissionsService;
@@ -25,7 +26,7 @@ public abstract class AbstractContactsFragment<T> extends Fragment {
     private ArrayAdapter<T> arrayAdapter;
 
     protected AbstractContactsFragment(){
-        this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
+        this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
     }
 
     @Override
