@@ -111,15 +111,8 @@ public class AndroidModel {
             Set<String> keys = (Set<String>) savedInstance.get(RESTORE_KEYS);
             if(keys != null){
                 for(String key : keys){
-                    try{
-                        System.out.println("KEY: " + key + " VALUE: " + savedInstance.get(key).getClass().getName());
-                        props.put(key, savedInstance.get(key));
-                        firePropertyChangeEvent(key, null, savedInstance.get(key));
-                    }
-                    catch(Exception ex){
-                        //TODO do something... maybe
-                        ex.printStackTrace();
-                    }
+                    props.put(key, savedInstance.get(key));
+                    firePropertyChangeEvent(key, null, savedInstance.get(key));
                 }
             }
 
