@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
@@ -19,7 +18,7 @@ import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
 
 /**
  * Created by craig on 5/30/16.
@@ -71,7 +70,7 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == SELECT_CONTACT_ID){
+        if(requestCode == SELECT_CONTACT_REQUEST){
             Intent intent = getIntent();
             if(intent != null){
                 long groupId = intent.getLongExtra(getString(R.string.group_id), -1);

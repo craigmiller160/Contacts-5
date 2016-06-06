@@ -8,7 +8,7 @@ import android.view.View;
 
 import io.craigmiller160.contacts5.R;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
 
 /**
  * Created by craig on 5/30/16.
@@ -24,6 +24,6 @@ public class SelectContactController extends AbstractAndroidController implement
         Uri uri = getArg(getResources().getString(R.string.contact_uri), Uri.class);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
-        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_CONTACT_ID);
+        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_CONTACT_REQUEST);
     }
 }

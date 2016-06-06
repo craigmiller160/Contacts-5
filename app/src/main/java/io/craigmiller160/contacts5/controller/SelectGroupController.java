@@ -8,7 +8,7 @@ import android.view.View;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 
 /**
  * Created by craig on 6/3/16.
@@ -23,9 +23,10 @@ public class SelectGroupController extends AbstractAndroidController implements 
     public void onClick(View view) {
         long groupId = getArg(getResources().getString(R.string.group_id), Long.class);
         String groupName = getArg(getResources().getString(R.string.group_name), String.class);
+
         Intent intent = new Intent(getContext(), ContactsInGroupActivity.class);
         intent.putExtra(getResources().getString(R.string.group_id), groupId);
         intent.putExtra(getResources().getString(R.string.group_name), groupName);
-        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_GROUP_ID);
+        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_GROUP_REQUEST);
     }
 }

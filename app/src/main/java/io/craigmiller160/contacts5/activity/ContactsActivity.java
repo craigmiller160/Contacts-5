@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,10 +15,7 @@ import android.view.View;
 import java.util.List;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.controller.ControllerFactory;
-import io.craigmiller160.contacts5.fragment.AllContactsPage;
-import io.craigmiller160.contacts5.fragment.AllGroupsPage;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
@@ -31,8 +27,9 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.FRAGMENT_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
@@ -70,6 +67,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
         if(savedInstance != null){
             ModelFactory.getInstance().getModel(CONTACTS_MODEL).restoreState(savedInstance);
+            ModelFactory.getInstance().getModel(FRAGMENT_MODEL).restoreState(savedInstance);
         }
         else{
             getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
@@ -95,13 +93,14 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
     @Override
     public void onSaveInstanceState(Bundle savedState){
         ModelFactory.getInstance().getModel(CONTACTS_MODEL).storeState(savedState);
+        ModelFactory.getInstance().getModel(FRAGMENT_MODEL).storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         //TODO revamp the activity result behavior
-        if(!(requestCode == SELECT_GROUP_ID)){
+        if(!(requestCode == SELECT_GROUP_REQUEST)){
             contactsService.loadAllContacts(ContactsActivity.this);
             contactsService.loadAllGroups(ContactsActivity.this);
         }
@@ -141,7 +140,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
         if (item.getItemId() == R.id.displaySettings) {
             Log.i(TAG, "Opening display settings");
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
-            startActivityForResult(intent, SETTINGS_ACTIVITY_ID);
+            startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){

@@ -33,6 +33,8 @@ public class ContactsConstants {
     public static final String GROUPS_LIST = "GroupsList";
     public static final String CONTACTS_IN_GROUP_LIST = "ContactsInGroupList";
     public static final String DISPLAYED_FRAGMENT = "DisplayedFragment";
+    public static final String SELECTED_GROUP_ID = "SelectedGroupId";
+    public static final String SELECTED_GROUP_NAME = "SelectedGroupName";
 
     /*
      * Model names
@@ -43,10 +45,10 @@ public class ContactsConstants {
     /*
      * Result codes
      */
-    public static final int SETTINGS_ACTIVITY_ID = 301;
-    public static final int SELECT_CONTACT_ID = 302;
-    public static final int NEW_CONTACT_ID = 303;
-    public static final int SELECT_GROUP_ID = 304;
+    public static final int SETTINGS_ACTIVITY_REQUEST = 301;
+    public static final int SELECT_CONTACT_REQUEST = 302;
+    public static final int NEW_CONTACT_REQUEST = 303;
+    public static final int SELECT_GROUP_REQUEST = 304;
 
     /*
      * Fragment Tags
