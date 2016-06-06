@@ -6,6 +6,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import io.craigmiller160.contacts5.controller.ControllerFactory;
+import io.craigmiller160.contacts5.fragment.ContactsFragmentFactory;
 import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 
@@ -44,6 +45,10 @@ public class ContactsApplication extends Application {
 
         if(!ModelFactory.isInitialized()){
             ModelFactory.initialize(this);
+        }
+
+        if(!ContactsFragmentFactory.isInitialized()){
+            ContactsFragmentFactory.initialize(this);
         }
 
         //TODO Thread.setDefaultUncaughtExceptionHandler(new ContactsThreadFactory.ContactsUncaughtExceptionHandler()); //TODO move this if it works

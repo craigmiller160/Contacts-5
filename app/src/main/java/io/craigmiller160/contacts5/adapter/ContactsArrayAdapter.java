@@ -36,45 +36,16 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 /**
  * Created by Craig on 1/22/2016.
  */
-public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements PropertyChangeListener /*implements SectionIndexer*/{
-
-    private ListView listView; //TODO if I don't end up using it, remove this as a requirement
+public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements SectionIndexer*/{
 
     //TODO need this to be able to differentiate between group use and all contacts use
 
     private Map<String,Object> sectionMap;
     private final ContactIconService contactIconService;
 
-    public static final int CONTACTS = 321;
-    public static final int CONTACTS_IN_GROUP = 322;
-
-    private int type;
-
-    private List<Contact> contacts;
-
-    public ContactsArrayAdapter(Context context, int type){
-        super(context, R.layout.contact_row);
+    public ContactsArrayAdapter(Context context, String propertyName){
+        super(context, R.layout.contact_row, propertyName);
         this.contactIconService = ServiceFactory.getInstance().getContactIconService();
-        this.type = type;
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
-        contacts = ModelFactory.getInstance().getModel(CONTACTS_MODEL).getProperty(CONTACTS_LIST, List.class);
-    }
-
-    public void setContactsList(final List<Contact> contacts){
-        if(Looper.myLooper() == Looper.getMainLooper()){
-            this.contacts = contacts;
-            notifyDataSetChanged();
-        }
-        else{
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(new Runnable() {
-                @Override
-                public void run() {
-                    ContactsArrayAdapter.this.contacts = contacts;
-                    notifyDataSetChanged();
-                }
-            });
-        }
     }
 
     @Override
@@ -85,8 +56,8 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
             view = inflater.inflate(R.layout.contact_row, parent, false);
         }
 
-        if(contacts != null && contacts.get(position) != null){
-            Contact contact = contacts.get(position);
+        if(getContents() != null && getContents().get(position) != null){
+            Contact contact = getContents().get(position);
             TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
             nameTextView.setText(contact.getDisplayName());
 
@@ -110,22 +81,5 @@ public class ContactsArrayAdapter extends ArrayAdapter<Contact> implements Prope
         }
 
         return view;
-    }
-
-    @Override
-    public int getCount(){
-        //return (Integer) ContactsApplication.getInstance().getModelProperty(CONTACT_COUNT_PROPERTY);
-        return contacts != null ? contacts.size() : 0;
-    }
-
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        if(type == CONTACTS && CONTACTS_LIST.equals(event.getPropertyName())){
-            setContactsList((List<Contact>) event.getNewValue());
-        }
-        else if(type == CONTACTS_IN_GROUP && CONTACTS_IN_GROUP_LIST.equals(event.getPropertyName())){
-            setContactsList((List<Contact>) event.getNewValue());
-        }
     }
 }

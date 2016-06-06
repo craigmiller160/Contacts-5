@@ -24,6 +24,8 @@ import io.craigmiller160.utils.reflect.ReflectiveException;
  */
 public class AndroidModel {
 
+    //TODO test to make sure that the weak references to the listeners are working. the ArrayAdapters are good candidates for this
+
     private String modelName;
     private static final String TAG = "AndroidModel";
 

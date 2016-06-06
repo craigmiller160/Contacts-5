@@ -32,33 +32,13 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CO
 /**
  * Created by craig on 5/29/16.
  */
-public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> implements PropertyChangeListener {
-
-    private List<ContactGroup> groups;
+public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
 
     private ContactIconService contactIconService;
 
-    public GroupsArrayAdapter(Activity activity){
-        super(activity, R.layout.group_row);
+    public GroupsArrayAdapter(Context context){
+        super(context, R.layout.group_row, GROUPS_LIST);
         contactIconService = ServiceFactory.getInstance().getContactIconService();
-        ModelFactory.getInstance().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
-    }
-
-    public void setGroupsList(final List<ContactGroup> groups){
-        if(Looper.myLooper() == Looper.getMainLooper()){
-            this.groups = groups;
-            notifyDataSetChanged();
-        }
-        else{
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(new Runnable() {
-                @Override
-                public void run() {
-                    GroupsArrayAdapter.this.groups = groups;
-                    notifyDataSetChanged();
-                }
-            });
-        }
     }
 
     @Override
@@ -69,8 +49,8 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> implements Pr
             view = inflater.inflate(R.layout.group_row, parent, false);
         }
 
-        if(groups != null && groups.get(position) != null){
-            ContactGroup group = groups.get(position);
+        if(getContents() != null && getContents().get(position) != null){
+            ContactGroup group = getContents().get(position);
             TextView nameTextView = (TextView) view.findViewById(R.id.groupName);
             TextView accountTextView = (TextView) view.findViewById(R.id.accountName);
             nameTextView.setText(group.getGroupName() + " (" + group.getGroupSize() + ")");
@@ -91,17 +71,5 @@ public class GroupsArrayAdapter extends ArrayAdapter<ContactGroup> implements Pr
         }
 
         return view;
-    }
-
-    @Override
-    public int getCount(){
-        return groups != null ? groups.size() : 0;
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        if(event.getPropertyName().equals(GROUPS_LIST)){
-            setGroupsList((List<ContactGroup>) event.getNewValue());
-        }
     }
 }

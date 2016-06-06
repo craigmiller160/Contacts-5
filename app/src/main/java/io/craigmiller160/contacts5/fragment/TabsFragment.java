@@ -16,8 +16,8 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
  */
 public class TabsFragment extends Fragment {
 
-    private AllContactsPage allContactsPage;
-    private AllGroupsPage allGroupsPage;
+    private Fragment contactsFragment;
+    private Fragment groupsFragment;
     private ContactsRetrievalService contactsService;
 
     @Override
@@ -27,22 +27,16 @@ public class TabsFragment extends Fragment {
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
-            Fragment oldContactsPage = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-            if (oldContactsPage != null && oldContactsPage instanceof AllContactsPage) {
-                allContactsPage = (AllContactsPage) oldContactsPage;
-            } else {
-                allContactsPage = new AllContactsPage();
-            }
+            contactsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
+            groupsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+        }
 
-            Fragment oldGroupsPage = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
-            if (oldGroupsPage != null && oldGroupsPage instanceof AllGroupsPage) {
-                allGroupsPage = (AllGroupsPage) oldGroupsPage;
-            } else {
-                allGroupsPage = new AllGroupsPage();
-            }
-        } else {
-            allContactsPage = new AllContactsPage();
-            allGroupsPage = new AllGroupsPage();
+        if(contactsFragment == null){
+            contactsFragment = ContactsFragmentFactory.getInstance().createAllContactsFragment();
+        }
+
+        if(groupsFragment == null){
+            groupsFragment = ContactsFragmentFactory.getInstance().createAllGroupsFragment();
         }
 
         contactsService.loadAllContacts(null);
@@ -57,7 +51,7 @@ public class TabsFragment extends Fragment {
         tabLayout.setVisibility(View.VISIBLE);
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
 
-        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), allContactsPage, allGroupsPage);
+        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
         viewPager.setAdapter(tabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

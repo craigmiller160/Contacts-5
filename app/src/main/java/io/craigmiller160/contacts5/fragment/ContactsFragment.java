@@ -6,9 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.util.List;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
@@ -19,37 +18,43 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 /**
  * Created by craig on 5/8/16.
  */
-public class AllContactsPage extends Fragment {
+public class ContactsFragment extends Fragment {
 
-    private static final String TAG = "AllContactsPage";
-
+    private static final String TAG = "ContactsFragment";
+    private static final String PROPERTY_NAME = "PropertyName";
     public static final String TITLE = "All Contacts";
 
-    private ContactsArrayAdapter contactsArrayAdapter;
-
+    private ArrayAdapter<Contact> contactsArrayAdapter;
     private final PermissionsService permissionsService;
 
-    private List<Contact> contacts;
+    private String propertyName;
 
-    public AllContactsPage(){
+
+    public ContactsFragment(){
         this.permissionsService = ServiceFactory.getInstance().getPermissionsService();
     }
 
-//    public void setContactsList(List<Contact> contacts){
-//        this.contacts = contacts;
-//        if(contactsArrayAdapter != null){
-//            contactsArrayAdapter.setContactsList(contacts);
-//        }
-//    }
-//
-//    public List<Contact> getContactsList(){
-//        return contacts;
-//    }
+    public void setPropertyName(String propertyName){
+        this.propertyName = propertyName;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contactsArrayAdapter = new ContactsArrayAdapter(getActivity(), ContactsArrayAdapter.CONTACTS);
+        if(savedInstanceState != null){
+            propertyName = savedInstanceState.getString(PROPERTY_NAME);
+        }
+
+        if(propertyName == null){
+            throw new IllegalStateException("ContactsFragment cannot be created until its property name value is set");
+        }
+        contactsArrayAdapter = new ContactsArrayAdapter(getContext(), propertyName);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstance){
+        savedInstance.putString(PROPERTY_NAME, propertyName);
+        super.onSaveInstanceState(savedInstance);
     }
 
     @Override
@@ -58,13 +63,6 @@ public class AllContactsPage extends Fragment {
             ListView view = (ListView) inflater.inflate(R.layout.content_list, container, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);
-//            if(contactsArrayAdapter == null){
-//                contactsArrayAdapter = new ContactsArrayAdapter(getActivity());
-//            }
-//
-//            if(contacts != null){
-//                contactsArrayAdapter.setContactsList(contacts);
-//            }
             view.setAdapter(contactsArrayAdapter);
 
             return view;

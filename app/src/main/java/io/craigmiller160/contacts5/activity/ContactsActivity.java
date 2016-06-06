@@ -27,7 +27,9 @@ import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
 import static io.craigmiller160.contacts5.util.ContactsConstants.FRAGMENT_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
@@ -67,7 +69,11 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
 
         if(savedInstance != null){
             ModelFactory.getInstance().getModel(CONTACTS_MODEL).restoreState(savedInstance);
-            ModelFactory.getInstance().getModel(FRAGMENT_MODEL).restoreState(savedInstance);
+        }
+
+        String displayedTab = ModelFactory.getInstance().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class);
+        if(displayedTab != null && displayedTab.equals(LIST_FRAGMENT_TAG)){
+            //TODO list fragment goes here
         }
         else{
             getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
@@ -93,7 +99,6 @@ public class ContactsActivity extends AppCompatActivity implements ContactsDataC
     @Override
     public void onSaveInstanceState(Bundle savedState){
         ModelFactory.getInstance().getModel(CONTACTS_MODEL).storeState(savedState);
-        ModelFactory.getInstance().getModel(FRAGMENT_MODEL).storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 

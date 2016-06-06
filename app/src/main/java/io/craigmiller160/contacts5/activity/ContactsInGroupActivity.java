@@ -53,14 +53,14 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        contactsArrayAdapter = new ContactsArrayAdapter(this, ContactsArrayAdapter.CONTACTS_IN_GROUP);
+//        contactsArrayAdapter = new ContactsArrayAdapter(this, ContactsArrayAdapter.CONTACTS_IN_GROUP);
         ListView listView = (ListView) findViewById(R.id.content_list);
         listView.setFastScrollEnabled(true);
         listView.setDivider(null);
         listView.setAdapter(contactsArrayAdapter);
 
         if(bundle != null && bundle.getSerializable(CONTACTS_LIST) != null){
-            contactsArrayAdapter.setContactsList((List<Contact>) bundle.getSerializable(CONTACTS_LIST));
+//            contactsArrayAdapter.setContactsList((List<Contact>) bundle.getSerializable(CONTACTS_LIST));
         }
         else if(groupId >= 0){
             Log.d(TAG, "Displaying contacts from group: " + groupName);
@@ -107,7 +107,7 @@ public class ContactsInGroupActivity extends AppCompatActivity implements Contac
 
     @Override
     public void setContactsList(List<Contact> contacts) {
-        contactsArrayAdapter.setContactsList(contacts);
+//        contactsArrayAdapter.setContactsList(contacts);
     }
 
     @Override

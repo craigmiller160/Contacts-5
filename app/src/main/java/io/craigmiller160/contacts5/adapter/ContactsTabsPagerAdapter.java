@@ -5,10 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.io.Serializable;
-
-import io.craigmiller160.contacts5.fragment.AllContactsPage;
-import io.craigmiller160.contacts5.fragment.AllGroupsPage;
-
 /**
  * Created by Craig on 1/24/2016.
  */
@@ -19,14 +15,14 @@ public class ContactsTabsPagerAdapter extends FragmentPagerAdapter implements Se
     private static final String CONTACTS_TAB_NAME = "All Contacts";
     private static final String GROUPS_TAB_NAME = "Groups";
 
-    private AllContactsPage contactsPage;
-    private AllGroupsPage groupsPage;
+    private Fragment contactsPage;
+    private Fragment groupsPage;
 
 
-    public ContactsTabsPagerAdapter(FragmentManager fm, AllContactsPage allContactsPage, AllGroupsPage allGroupsPage) {
+    public ContactsTabsPagerAdapter(FragmentManager fm, Fragment contactsFragment, Fragment groupsFragment) {
         super(fm);
-        this.contactsPage = allContactsPage;
-        this.groupsPage = allGroupsPage;
+        this.contactsPage = contactsFragment;
+        this.groupsPage = groupsFragment;
     }
 
     @Override
