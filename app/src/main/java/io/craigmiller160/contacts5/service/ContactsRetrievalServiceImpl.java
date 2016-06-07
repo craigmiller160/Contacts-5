@@ -76,6 +76,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     @Override
     public void loadAllContacts(){
+        System.out.println("MAIN LOOPER: " + (Looper.myLooper() == Looper.getMainLooper())); //TODO delete this
         if(Looper.myLooper() == Looper.getMainLooper()){
             executor.submit(new ExecuteAllContactsQueriesTask(getContext(), getAccountService()));
         }
@@ -258,7 +259,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         @Override
         public void run() {
             long start = System.currentTimeMillis();
-            Log.d(TAG, "Starting load contacts process");
+            Log.d(TAG, "Starting load all contacts process");
 
             Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, accountService));
             Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));

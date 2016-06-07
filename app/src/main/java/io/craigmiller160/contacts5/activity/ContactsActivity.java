@@ -21,7 +21,7 @@ import io.craigmiller160.contacts5.service.PermissionsService;
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SINGLE_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
@@ -64,12 +64,13 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         String displayedTab = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class);
-        if(displayedTab != null && displayedTab.equals(LIST_FRAGMENT_TAG)){
+        if(displayedTab != null && displayedTab.equals(SINGLE_FRAGMENT_TAG)){
             //TODO list fragment goes here
         }
         else{
             if(getSupportFragmentManager().findFragmentByTag(TABS_FRAGMENT_TAG) == null){
                 getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
+                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
             }
         }
     }
@@ -147,8 +148,37 @@ public class ContactsActivity extends AppCompatActivity {
                 Log.i(TAG, "Requesting Permissions from menu item");
                 permissionsService.requestReadContactsPermission(this);
             }
+            return true;
+        }
+        else if(item.getItemId() == android.R.id.home){
+            if(SINGLE_FRAGMENT_TAG.equals(ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class))){
+                restoreTabsFragment();
+            }
+            return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(SINGLE_FRAGMENT_TAG.equals(ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class))){
+            System.out.println("RESTORE"); //TODO delete this
+            restoreTabsFragment();
+        }
+        else{
+            System.out.println("DEFAULT"); //TODO delete this
+            super.onBackPressed();
+        }
+    }
+
+    private void restoreTabsFragment(){
+        System.out.println("RESTORE"); //TODO delete this
+        getSupportFragmentManager().beginTransaction()
+                .remove(getSupportFragmentManager().findFragmentByTag(SINGLE_FRAGMENT_TAG))
+                .commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(new TabsFragment(), TABS_FRAGMENT_TAG)
+                .commit();
     }
 }
