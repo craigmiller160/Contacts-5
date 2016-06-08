@@ -13,7 +13,8 @@ import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
 
 /**
  * Created by craig on 5/30/16.

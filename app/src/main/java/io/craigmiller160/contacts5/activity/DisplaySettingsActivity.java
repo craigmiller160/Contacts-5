@@ -15,9 +15,7 @@ import java.util.Set;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.service.AccountService;
-import io.craigmiller160.contacts5.service.ServiceFactory;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;
 

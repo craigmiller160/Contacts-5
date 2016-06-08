@@ -10,10 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
-import io.craigmiller160.contacts5.model.Contact;
-import io.craigmiller160.contacts5.model.ModelFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 
 /**

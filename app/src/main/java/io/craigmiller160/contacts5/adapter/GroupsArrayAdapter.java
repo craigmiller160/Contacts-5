@@ -1,32 +1,21 @@
 package io.craigmiller160.contacts5.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ContactIconService;
-import io.craigmiller160.contacts5.service.ServiceFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
 

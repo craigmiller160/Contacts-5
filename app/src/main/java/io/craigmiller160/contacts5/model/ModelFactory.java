@@ -1,7 +1,6 @@
 package io.craigmiller160.contacts5.model;
 
 import android.content.Context;
-import android.util.AndroidRuntimeException;
 
 import java.util.Collections;
 import java.util.HashMap;

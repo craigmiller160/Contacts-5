@@ -26,7 +26,10 @@ import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 
 /**
  * Created by craig on 5/29/16.

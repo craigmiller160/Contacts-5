@@ -1,7 +1,6 @@
 package io.craigmiller160.contacts5.controller;
 
 import android.content.Context;
-import android.util.AndroidRuntimeException;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;

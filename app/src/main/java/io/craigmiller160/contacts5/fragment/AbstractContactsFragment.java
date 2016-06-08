@@ -2,7 +2,6 @@ package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import android.widget.ListView;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.service.PermissionsService;
-import io.craigmiller160.contacts5.service.ServiceFactory;
 
 /**
  * Created by craig on 6/5/16.

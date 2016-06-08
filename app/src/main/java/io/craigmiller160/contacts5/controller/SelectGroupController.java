@@ -3,23 +3,12 @@ package io.craigmiller160.contacts5.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsInGroupActivity;
-import io.craigmiller160.contacts5.fragment.ContactsInGroupFragment;
-import io.craigmiller160.contacts5.fragment.TabsFragment;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SINGLE_FRAGMENT_TAG;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 
 /**
  * Created by craig on 6/3/16.

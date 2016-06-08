@@ -1,7 +1,6 @@
 package io.craigmiller160.contacts5.service;
 
 import android.content.Context;
-import android.util.AndroidRuntimeException;
 
 /**
  * Created by craig on 5/8/16.
