@@ -5,6 +5,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +17,9 @@ import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
+import io.craigmiller160.contacts5.fragment.AllContactsFragment;
+import io.craigmiller160.contacts5.fragment.AllGroupsFragment;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
@@ -59,19 +65,37 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
+        Fragment allContactsFragment = null;
+        Fragment allGroupsFragment = null;
+
+        //Get the existing instances of the fragments, if they exist
         if(savedInstance != null){
             ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
-        }
+            allContactsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
+            if(allContactsFragment == null){
+                allContactsFragment = new AllContactsFragment();
+            }
 
-        String displayedTab = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class);
-        if(displayedTab != null && displayedTab.equals(SINGLE_FRAGMENT_TAG)){
-            //TODO list fragment goes here
+            allGroupsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+            if(allGroupsFragment == null){
+                allGroupsFragment = new AllGroupsFragment();
+            }
         }
         else{
-            if(getSupportFragmentManager().findFragmentByTag(TABS_FRAGMENT_TAG) == null){
-                getSupportFragmentManager().beginTransaction().add(new TabsFragment(), TABS_FRAGMENT_TAG).commit();
-                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
-            }
+            allContactsFragment = new AllContactsFragment();
+            allGroupsFragment = new AllGroupsFragment();
+        }
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
+
+        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
+        viewPager.setAdapter(tabsAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.contactsActivityTabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        if(savedInstance == null){
+            contactsService.loadAllContacts();
+            contactsService.loadAllGroups();
         }
     }
 
@@ -150,35 +174,7 @@ public class ContactsActivity extends AppCompatActivity {
             }
             return true;
         }
-        else if(item.getItemId() == android.R.id.home){
-            if(SINGLE_FRAGMENT_TAG.equals(ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class))){
-                restoreTabsFragment();
-            }
-            return true;
-        }
 
         return false;
-    }
-
-    @Override
-    public void onBackPressed(){
-        if(SINGLE_FRAGMENT_TAG.equals(ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(DISPLAYED_FRAGMENT, String.class))){
-            System.out.println("RESTORE"); //TODO delete this
-            restoreTabsFragment();
-        }
-        else{
-            System.out.println("DEFAULT"); //TODO delete this
-            super.onBackPressed();
-        }
-    }
-
-    private void restoreTabsFragment(){
-        System.out.println("RESTORE"); //TODO delete this
-        getSupportFragmentManager().beginTransaction()
-                .remove(getSupportFragmentManager().findFragmentByTag(SINGLE_FRAGMENT_TAG))
-                .commit();
-        getSupportFragmentManager().beginTransaction()
-                .add(new TabsFragment(), TABS_FRAGMENT_TAG)
-                .commit();
     }
 }

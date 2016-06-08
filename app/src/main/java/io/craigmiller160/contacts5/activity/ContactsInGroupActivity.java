@@ -7,17 +7,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import java.util.List;
-
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
-import io.craigmiller160.contacts5.model.Contact;
-import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/30/16.
@@ -30,8 +26,8 @@ public class ContactsInGroupActivity extends AppCompatActivity {
     private ContactsArrayAdapter contactsArrayAdapter;
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    public void onCreate(Bundle savedInstance) {
+        super.onCreate(savedInstance);
         setContentView(R.layout.activity_contacts_in_group);
         contactsRetrievalService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
 
@@ -51,18 +47,19 @@ public class ContactsInGroupActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if(savedInstance != null){
+            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
+        }
 
-//        contactsArrayAdapter = new ContactsArrayAdapter(this, ContactsArrayAdapter.CONTACTS_IN_GROUP);
+
+        contactsArrayAdapter = new ContactsArrayAdapter(this, CONTACTS_LIST);
         ListView listView = (ListView) findViewById(R.id.content_list);
         listView.setFastScrollEnabled(true);
         listView.setDivider(null);
         listView.setAdapter(contactsArrayAdapter);
 
-        if(bundle != null && bundle.getSerializable(CONTACTS_LIST) != null){
-//            contactsArrayAdapter.setContactsList((List<Contact>) bundle.getSerializable(CONTACTS_LIST));
-        }
-        else if(groupId >= 0){
-            Log.d(TAG, "Displaying contacts from group: " + groupName);
+        if(savedInstance == null){
+            contactsRetrievalService.loadAllContactsInGroup(groupId);
         }
     }
 
@@ -73,7 +70,7 @@ public class ContactsInGroupActivity extends AppCompatActivity {
             if(intent != null){
                 long groupId = intent.getLongExtra(getString(R.string.group_id), -1);
                 if(groupId != -1){
-//                    contactsRetrievalService.loadAllContactsInGroup(this, groupId);
+                    contactsRetrievalService.loadAllContactsInGroup(groupId);
                 }
             }
         }
@@ -81,12 +78,8 @@ public class ContactsInGroupActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-//        if(contactsArrayAdapter != null){
-//            List<Contact> contacts = contactsArrayAdapter.getContactsList();
-//            if(contacts != null){
-//                savedState.putSerializable(CONTACTS_LIST, (ArrayList) contacts);
-//            }
-//        }
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).storeState(savedState);
+        super.onSaveInstanceState(savedState);
     }
 
     @Override
