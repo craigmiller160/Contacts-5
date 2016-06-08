@@ -23,6 +23,7 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.fragment.AllContactsFragment;
 import io.craigmiller160.contacts5.fragment.AllGroupsFragment;
+import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 
@@ -64,37 +65,39 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.contacts_activity_appbar);
-        inflater.inflate(R.layout.tab_layout, appBarLayout);
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.contacts_activity_appbar);
+//        inflater.inflate(R.layout.tab_layout, appBarLayout);
 
-        Fragment allContactsFragment = null;
-        Fragment allGroupsFragment = null;
+//        Fragment allContactsFragment = null;
+//        Fragment allGroupsFragment = null;
+//
+//        //Get the existing instances of the fragments, if they exist
+//        if(savedInstance != null){
+//            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
+//            allContactsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
+//            if(allContactsFragment == null){
+//                allContactsFragment = new AllContactsFragment();
+//            }
+//
+//            allGroupsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+//            if(allGroupsFragment == null){
+//                allGroupsFragment = new AllGroupsFragment();
+//            }
+//        }
+//        else{
+//            allContactsFragment = new AllContactsFragment();
+//            allGroupsFragment = new AllGroupsFragment();
+//        }
+//
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
+//
+//        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
+//        viewPager.setAdapter(tabsAdapter);
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
+//        tabLayout.setupWithViewPager(viewPager);
 
-        //Get the existing instances of the fragments, if they exist
-        if(savedInstance != null){
-            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
-            allContactsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-            if(allContactsFragment == null){
-                allContactsFragment = new AllContactsFragment();
-            }
-
-            allGroupsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
-            if(allGroupsFragment == null){
-                allGroupsFragment = new AllGroupsFragment();
-            }
-        }
-        else{
-            allContactsFragment = new AllContactsFragment();
-            allGroupsFragment = new AllGroupsFragment();
-        }
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-
-        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
-        viewPager.setAdapter(tabsAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TabsFragment()).commit();
 
         if(savedInstance == null){
             contactsService.loadAllContacts();

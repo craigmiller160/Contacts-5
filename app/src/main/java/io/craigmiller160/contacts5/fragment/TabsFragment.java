@@ -1,11 +1,15 @@
 package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
@@ -44,35 +48,49 @@ public class TabsFragment extends Fragment {
         contactsService.loadAllGroups();
     }
 
+    @Nullable
     @Override
-    public void onActivityCreated(Bundle savedInstance){
-        super.onActivityCreated(savedInstance);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle(getString(R.string.contacts_activity_name));
-        activity.getSupportActionBar().setHomeButtonEnabled(false);
-        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.contactsActivityTabs);
-        tabLayout.setVisibility(View.VISIBLE);
-        ViewPager viewPager = (ViewPager) activity.findViewById(R.id.contactsTabsViewPager);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.tab_layout, container, false);
+        TabLayout tabLayout = (TabLayout) layout.findViewById(R.id.contacts_tabs);
+        ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
 
-        if(viewPager.getAdapter() != null && (viewPager.getAdapter() instanceof ContactsTabsPagerAdapter)){
-            ContactsTabsPagerAdapter tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
-            tabsAdapter.setContactsFragment(contactsFragment);
-            tabsAdapter.setGroupsFragment(groupsFragment);
-        }
-        else{
-            ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(activity.getSupportFragmentManager(), contactsFragment, groupsFragment);
-            viewPager.setAdapter(tabsAdapter);
-            tabLayout.setupWithViewPager(viewPager);
-        }
+        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
+        viewPager.setAdapter(tabsAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
-
+        return layout;
     }
 
-    public void removeFragments(){
-        getFragmentManager().beginTransaction()
-                .remove(contactsFragment)
-                .remove(groupsFragment)
-                .commit();
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstance){
+//        super.onActivityCreated(savedInstance);
+//        AppCompatActivity activity = (AppCompatActivity) getActivity();
+//        activity.setTitle(getString(R.string.contacts_activity_name));
+//        activity.getSupportActionBar().setHomeButtonEnabled(false);
+//        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.contactsActivityTabs);
+//        tabLayout.setVisibility(View.VISIBLE);
+//        ViewPager viewPager = (ViewPager) activity.findViewById(R.id.contactsTabsViewPager);
+//
+//        if(viewPager.getAdapter() != null && (viewPager.getAdapter() instanceof ContactsTabsPagerAdapter)){
+//            ContactsTabsPagerAdapter tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
+//            tabsAdapter.setContactsFragment(contactsFragment);
+//            tabsAdapter.setGroupsFragment(groupsFragment);
+//        }
+//        else{
+//            ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(activity.getSupportFragmentManager(), contactsFragment, groupsFragment);
+//            viewPager.setAdapter(tabsAdapter);
+//            tabLayout.setupWithViewPager(viewPager);
+//        }
+//
+//
+//    }
+
+//    public void removeFragments(){
+//        getFragmentManager().beginTransaction()
+//                .remove(contactsFragment)
+//                .remove(groupsFragment)
+//                .commit();
+//    }
 
 }
