@@ -9,7 +9,7 @@
     android:id="@+id/activity_contacts_layout">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/contactsActivityAppbar"
+        android:id="@+id/contacts_activity_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -19,15 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/contactsActivityTabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="@android:color/white"
-            android:scrollbarStyle="insideOverlay"
-            android:paddingBottom="1dp"
-            android:background="@color/colorPrimary"/>
 
     </android.support.design.widget.AppBarLayout>
 
