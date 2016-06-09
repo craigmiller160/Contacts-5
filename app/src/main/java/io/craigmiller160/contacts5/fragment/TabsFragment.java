@@ -2,6 +2,7 @@ package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -51,15 +52,28 @@ public class TabsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.tab_layout, container, false);
-        TabLayout tabLayout = (TabLayout) layout.findViewById(R.id.contacts_tabs);
+        TabLayout tabLayout = (TabLayout) inflater.inflate(R.layout.tab_layout, container, false);
+
+//        CoordinatorLayout rootView = (CoordinatorLayout) ((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0);
+//        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.view_pager_layout, rootView, true);
+
+//        ViewPager viewPager = (ViewPager) viewGroup.findViewById(R.id.contactsTabsViewPager);
+
+
+//        rootView.removeView(viewPager);
+//        rootView.addView(viewPager, rootView.getChildCount() - 1);
+
+
+
+
+
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
 
         ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
         viewPager.setAdapter(tabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        return layout;
+        return tabLayout;
     }
 
 //    @Override

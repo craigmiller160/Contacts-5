@@ -12,6 +12,7 @@ public class ContactsUncaughtExceptionHandler implements Thread.UncaughtExceptio
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         Log.e(TAG, String.format("Uncaught exception in thread %d", thread.getId()), throwable);
+        System.exit(1);
     }
 
 }

@@ -1,28 +1,19 @@
 package io.craigmiller160.contacts5.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
-import io.craigmiller160.contacts5.fragment.AllContactsFragment;
-import io.craigmiller160.contacts5.fragment.AllGroupsFragment;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
@@ -97,7 +88,17 @@ public class ContactsActivity extends AppCompatActivity {
 //        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
 //        tabLayout.setupWithViewPager(viewPager);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TabsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.tabs_fragment_container, new TabsFragment(), "TabsFragment").commit();
+//        FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        inflater.inflate(R.layout.tab_layout, fl);
+//
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
+////
+//        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
+//        viewPager.setAdapter(tabsAdapter);
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
+//        tabLayout.setupWithViewPager(viewPager);
 
         if(savedInstance == null){
             contactsService.loadAllContacts();
