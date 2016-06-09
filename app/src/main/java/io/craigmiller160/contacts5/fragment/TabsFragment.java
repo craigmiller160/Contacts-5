@@ -53,24 +53,20 @@ public class TabsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         TabLayout tabLayout = (TabLayout) inflater.inflate(R.layout.tab_layout, container, false);
-
-//        CoordinatorLayout rootView = (CoordinatorLayout) ((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0);
-//        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.view_pager_layout, rootView, true);
-
-//        ViewPager viewPager = (ViewPager) viewGroup.findViewById(R.id.contactsTabsViewPager);
-
-
-//        rootView.removeView(viewPager);
-//        rootView.addView(viewPager, rootView.getChildCount() - 1);
-
-
-
-
-
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
+        viewPager.setVisibility(View.VISIBLE);
 
-        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
-        viewPager.setAdapter(tabsAdapter);
+        ContactsTabsPagerAdapter tabsAdapter = null;
+        if(viewPager.getAdapter() != null){
+            tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
+            tabsAdapter.setContactsFragment(contactsFragment);
+            tabsAdapter.setGroupsFragment(groupsFragment);
+        }
+        else{
+            tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
+            viewPager.setAdapter(tabsAdapter);
+        }
+
         tabLayout.setupWithViewPager(viewPager);
 
         return tabLayout;

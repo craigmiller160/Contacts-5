@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,13 +17,17 @@ import android.view.View;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
+import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
+import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 5/4/16.
@@ -34,6 +40,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private PermissionsService permissionsService;
     private ContactsRetrievalService contactsService;
+    private AndroidModel contactsModel;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -43,6 +50,7 @@ public class ContactsActivity extends AppCompatActivity {
 
         this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
         this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
@@ -56,49 +64,16 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
-//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.contacts_activity_appbar);
-//        inflater.inflate(R.layout.tab_layout, appBarLayout);
+        if(savedInstance != null){
+            contactsModel.restoreState(savedInstance);
+        }
 
-//        Fragment allContactsFragment = null;
-//        Fragment allGroupsFragment = null;
-//
-//        //Get the existing instances of the fragments, if they exist
-//        if(savedInstance != null){
-//            ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).restoreState(savedInstance);
-//            allContactsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-//            if(allContactsFragment == null){
-//                allContactsFragment = new AllContactsFragment();
-//            }
-//
-//            allGroupsFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
-//            if(allGroupsFragment == null){
-//                allGroupsFragment = new AllGroupsFragment();
-//            }
-//        }
-//        else{
-//            allContactsFragment = new AllContactsFragment();
-//            allGroupsFragment = new AllGroupsFragment();
-//        }
-//
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-//
-//        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
-//        viewPager.setAdapter(tabsAdapter);
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
-//        tabLayout.setupWithViewPager(viewPager);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
+                .commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.tabs_fragment_container, new TabsFragment(), "TabsFragment").commit();
-//        FrameLayout fl = (FrameLayout) findViewById(R.id.fragment_container);
-//        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        inflater.inflate(R.layout.tab_layout, fl);
-//
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.contactsTabsViewPager);
-////
-//        ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(getSupportFragmentManager(), allContactsFragment, allGroupsFragment);
-//        viewPager.setAdapter(tabsAdapter);
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.contacts_tabs);
-//        tabLayout.setupWithViewPager(viewPager);
+        contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
 
         if(savedInstance == null){
             contactsService.loadAllContacts();
@@ -124,7 +99,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).storeState(savedState);
+        contactsModel.storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
@@ -135,6 +110,31 @@ public class ContactsActivity extends AppCompatActivity {
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
+        if(displayedFragment != null && displayedFragment.equals(TABS_FRAGMENT_TAG)){
+            backAction();
+        }
+        else{
+            finish();
+        }
+    }
+
+    private void backAction(){
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment listFragment = fm.findFragmentByTag(LIST_FRAGMENT_TAG);
+        fm.beginTransaction()
+                .remove(listFragment)
+                .commit();
+
+        fm.beginTransaction()
+                .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
+                .commit();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        setTitle(getString(R.string.contacts_activity_name));
     }
 
     @Override
@@ -179,6 +179,10 @@ public class ContactsActivity extends AppCompatActivity {
                 Log.i(TAG, "Requesting Permissions from menu item");
                 permissionsService.requestReadContactsPermission(this);
             }
+            return true;
+        }
+        else if(item.getItemId() == android.R.id.home){
+            backAction();
             return true;
         }
 

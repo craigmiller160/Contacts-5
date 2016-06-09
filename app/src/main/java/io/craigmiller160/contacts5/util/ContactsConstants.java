@@ -50,4 +50,10 @@ public class ContactsConstants {
     public static final int NEW_CONTACT_REQUEST = 303;
     public static final int SELECT_GROUP_REQUEST = 304;
 
+    /*
+     * Fragment Tags
+     */
+    public static final String TABS_FRAGMENT_TAG = "TabsFragment";
+    public static final String LIST_FRAGMENT_TAG = "ListFragment";
+
 }

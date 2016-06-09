@@ -18,6 +18,9 @@ public class ContactsTabsPagerAdapter extends FragmentStatePagerAdapter implemen
     private Fragment contactsFragment;
     private Fragment groupsFragment;
 
+    public ContactsTabsPagerAdapter(FragmentManager fm){
+        this(fm, null, null);
+    }
 
     public ContactsTabsPagerAdapter(FragmentManager fm, Fragment contactsFragment, Fragment groupsFragment) {
         super(fm);

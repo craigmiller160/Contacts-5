@@ -16,18 +16,20 @@ import io.craigmiller160.contacts5.fragment.ContactsInGroupFragment;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 6/3/16.
  */
 public class SelectGroupController extends AbstractAndroidController implements View.OnClickListener {
 
-    private final ContactsRetrievalService contactsService;
-
     public SelectGroupController(Context context) {
         super(context);
-        this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
     }
 
     @Override
@@ -39,18 +41,25 @@ public class SelectGroupController extends AbstractAndroidController implements 
 //        intent.putExtra(getResources().getString(R.string.group_name), groupName);
 //        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_GROUP_REQUEST);
 
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_ID, groupId);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_NAME, groupName);
+
+
         AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
+
         FragmentManager fm = activity.getSupportFragmentManager();
-        Fragment tabsFragment = fm.findFragmentByTag("TabsFragment");
+        Fragment tabsFragment = fm.findFragmentByTag(TABS_FRAGMENT_TAG);
         fm.beginTransaction().remove(tabsFragment).commit();
 
         View viewPager = activity.findViewById(R.id.contactsTabsViewPager);
         viewPager.setVisibility(View.GONE);
 
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.list_fragment_container, new ContactsInGroupFragment()).commit();
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.list_fragment_container, new ContactsInGroupFragment(), LIST_FRAGMENT_TAG)
+                .commit();
 
-        contactsService.loadAllContactsInGroup(groupId);
+
 
     }
 }
