@@ -25,6 +25,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CON
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
 import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
@@ -105,10 +106,12 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        //TODO revamp the activity result behavior
-        if(!(requestCode == SELECT_GROUP_REQUEST)){
-            contactsService.loadAllContacts();
-            contactsService.loadAllGroups();
+        contactsService.loadAllContacts();
+        contactsService.loadAllGroups();
+        String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
+        Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
+        if(displayedFragment != null && displayedFragment.equals(LIST_FRAGMENT_TAG) && groupId != null && groupId >= 0){
+            contactsService.loadAllContactsInGroup(groupId);
         }
     }
 

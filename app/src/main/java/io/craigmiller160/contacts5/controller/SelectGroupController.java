@@ -17,6 +17,7 @@ import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
 import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
@@ -43,6 +44,7 @@ public class SelectGroupController extends AbstractAndroidController implements 
 
         ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_ID, groupId);
         ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_NAME, groupName);
+        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(DISPLAYED_FRAGMENT, LIST_FRAGMENT_TAG);
 
 
         AppCompatActivity activity = (AppCompatActivity) view.getContext();
