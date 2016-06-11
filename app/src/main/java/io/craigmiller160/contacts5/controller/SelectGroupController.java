@@ -21,7 +21,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGM
 import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
@@ -37,10 +36,6 @@ public class SelectGroupController extends AbstractAndroidController implements 
     public void onClick(View view) {
         long groupId = getArg(getResources().getString(R.string.group_id), Long.class);
         String groupName = getArg(getResources().getString(R.string.group_name), String.class);
-//        Intent intent = new Intent(getContext(), ContactsInGroupActivity.class);
-//        intent.putExtra(getResources().getString(R.string.group_id), groupId);
-//        intent.putExtra(getResources().getString(R.string.group_name), groupName);
-//        ((Activity) view.getContext()).startActivityForResult(intent, SELECT_GROUP_REQUEST);
 
         ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_ID, groupId);
         ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(SELECTED_GROUP_NAME, groupName);
@@ -49,19 +44,15 @@ public class SelectGroupController extends AbstractAndroidController implements 
 
         AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-
-        FragmentManager fm = activity.getSupportFragmentManager();
-        Fragment tabsFragment = fm.findFragmentByTag(TABS_FRAGMENT_TAG);
-        fm.beginTransaction().remove(tabsFragment).commit();
-
         View viewPager = activity.findViewById(R.id.contactsTabsViewPager);
         viewPager.setVisibility(View.GONE);
 
-        activity.getSupportFragmentManager().beginTransaction()
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+        Fragment tabsFragment = fm.findFragmentByTag(TABS_FRAGMENT_TAG);
+        fm.beginTransaction()
+                .remove(tabsFragment)
                 .replace(R.id.list_fragment_container, new ContactsInGroupFragment(), LIST_FRAGMENT_TAG)
                 .commit();
-
-
-
     }
 }

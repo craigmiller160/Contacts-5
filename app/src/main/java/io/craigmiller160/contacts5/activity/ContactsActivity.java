@@ -130,9 +130,6 @@ public class ContactsActivity extends AppCompatActivity {
         Fragment listFragment = fm.findFragmentByTag(LIST_FRAGMENT_TAG);
         fm.beginTransaction()
                 .remove(listFragment)
-                .commit();
-
-        fm.beginTransaction()
                 .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
                 .commit();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
