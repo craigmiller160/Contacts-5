@@ -68,15 +68,14 @@ public class ContactsActivity extends AppCompatActivity {
         if(savedInstance != null){
             contactsModel.restoreState(savedInstance);
         }
+        else{
+            //Only build the fragment and load contacts on a fresh instance creation
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
+                    .commit();
+            contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
-                .commit();
-
-        contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
-
-        if(savedInstance == null){
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
         }
