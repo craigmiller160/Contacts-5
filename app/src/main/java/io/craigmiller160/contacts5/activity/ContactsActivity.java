@@ -118,10 +118,10 @@ public class ContactsActivity extends AppCompatActivity {
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
         if(displayedFragment != null && displayedFragment.equals(TABS_FRAGMENT_TAG)){
-            backAction();
+            finish();
         }
         else{
-            finish();
+            backAction();
         }
     }
 
