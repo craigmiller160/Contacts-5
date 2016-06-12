@@ -59,13 +59,15 @@ public class TabsFragment extends Fragment {
         ContactsTabsPagerAdapter tabsAdapter = null;
         if(viewPager.getAdapter() != null){
             tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
-            tabsAdapter.setContactsFragment(contactsFragment);
-            tabsAdapter.setGroupsFragment(groupsFragment);
+            tabsAdapter.removeAllPages();
         }
         else{
-            tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), contactsFragment, groupsFragment);
+            tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager());
             viewPager.setAdapter(tabsAdapter);
         }
+
+        tabsAdapter.addPage((AbstractContactsPageFragment<?>) contactsFragment);
+        tabsAdapter.addPage((AbstractContactsPageFragment<?>) groupsFragment);
 
         tabLayout.setupWithViewPager(viewPager);
 
