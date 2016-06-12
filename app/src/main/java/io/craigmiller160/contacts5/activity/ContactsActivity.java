@@ -134,6 +134,7 @@ public class ContactsActivity extends AppCompatActivity {
                 .commit();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setTitle(getString(R.string.contacts_activity_name));
+        contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
     }
 
     @Override
