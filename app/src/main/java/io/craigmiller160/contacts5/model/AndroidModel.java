@@ -57,6 +57,11 @@ public class AndroidModel {
         firePropertyChangeEvent(propertyName, null, value);
     }
 
+    public void clearProperty(String propertyName){
+        props.remove(propertyName);
+        firePropertyChangeEvent(propertyName, null, null);
+    }
+
     public Object getProperty(String propertyName){
         return props.get(propertyName);
     }

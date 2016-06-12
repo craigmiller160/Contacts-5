@@ -55,6 +55,9 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        View viewPager = activity.findViewById(R.id.contactsTabsViewPager);
+        viewPager.setVisibility(View.GONE);
+
         String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
         if(groupName != null){
             activity.setTitle(groupName);

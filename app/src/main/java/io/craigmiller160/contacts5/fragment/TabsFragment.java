@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
+import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
@@ -50,6 +52,10 @@ public class TabsFragment extends Fragment {
             groupsFragment = new AllGroupsFragment();
         }
 
+        AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
+        contactsModel.clearProperty(SELECTED_GROUP_ID);
+        contactsModel.clearProperty(SELECTED_GROUP_NAME);
+
         contactsService.loadAllContacts();
         contactsService.loadAllGroups();
     }
@@ -57,6 +63,9 @@ public class TabsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getActivity().setTitle(getString(R.string.contacts_activity_name));
+
         TabLayout tabLayout = (TabLayout) inflater.inflate(R.layout.tab_layout, container, false);
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
         viewPager.setVisibility(View.VISIBLE);

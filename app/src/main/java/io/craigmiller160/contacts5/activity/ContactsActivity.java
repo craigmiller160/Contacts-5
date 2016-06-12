@@ -16,6 +16,7 @@ import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
@@ -24,9 +25,8 @@ import io.craigmiller160.contacts5.service.PermissionsService;
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.LIST_FRAGMENT_TAG;
+import static io.craigmiller160.contacts5.util.ContactsConstants.NO_TABS_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
@@ -70,11 +70,7 @@ public class ContactsActivity extends AppCompatActivity {
         }
         else{
             //Only build the fragment and load contacts on a fresh instance creation
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
-                    .commit();
-            contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
+            FragmentChanger.displayTabsFragment(getSupportFragmentManager());
 
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
@@ -109,7 +105,7 @@ public class ContactsActivity extends AppCompatActivity {
         contactsService.loadAllGroups();
         String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
         Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
-        if(displayedFragment != null && displayedFragment.equals(LIST_FRAGMENT_TAG) && groupId != null && groupId >= 0){
+        if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
             contactsService.loadAllContactsInGroup(groupId);
         }
     }
@@ -117,7 +113,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
-        if(displayedFragment != null && displayedFragment.equals(TABS_FRAGMENT_TAG)){
+        if(displayedFragment == null || displayedFragment.equals(TABS_FRAGMENT_TAG)){
             finish();
         }
         else{
@@ -126,15 +122,7 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void backAction(){
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment listFragment = fm.findFragmentByTag(LIST_FRAGMENT_TAG);
-        fm.beginTransaction()
-                .remove(listFragment)
-                .replace(R.id.tabs_fragment_container, new TabsFragment(), TABS_FRAGMENT_TAG)
-                .commit();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        setTitle(getString(R.string.contacts_activity_name));
-        contactsModel.setProperty(DISPLAYED_FRAGMENT, TABS_FRAGMENT_TAG);
+        FragmentChanger.displayTabsFragment(getSupportFragmentManager());
     }
 
     @Override

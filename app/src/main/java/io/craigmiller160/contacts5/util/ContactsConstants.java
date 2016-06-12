@@ -57,7 +57,7 @@ public class ContactsConstants {
      * Fragment Tags
      */
     public static final String TABS_FRAGMENT_TAG = "TabsFragment";
-    public static final String LIST_FRAGMENT_TAG = "ListFragment";
+    public static final String NO_TABS_FRAGMENT_TAG = "NoTabsFragment";
     public static final String ADAPTER_FRAGMENT_TAG_PREFIX = "android:switcher:";
 
     /*
