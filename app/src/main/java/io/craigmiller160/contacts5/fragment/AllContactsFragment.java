@@ -12,11 +12,18 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
  */
 public class AllContactsFragment extends AbstractContactsPageFragment<Contact> {
 
+    public static final int PAGE_INDEX = 1;
+
     private static final String pageTitle = "All Contacts";
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
         return new ContactsArrayAdapter(getContext(), CONTACTS_LIST);
+    }
+
+    @Override
+    public int getPageIndex() {
+        return PAGE_INDEX;
     }
 
     @Override

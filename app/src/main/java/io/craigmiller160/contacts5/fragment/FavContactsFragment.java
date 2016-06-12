@@ -12,11 +12,18 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  */
 public class FavContactsFragment extends AbstractContactsPageFragment<Contact> {
 
+    public static final int PAGE_INDEX = 0;
+
     private static final String pageTitle = "Favorites";
 
     @Override
     public String getPageTitle() {
         return pageTitle;
+    }
+
+    @Override
+    public int getPageIndex() {
+        return PAGE_INDEX;
     }
 
     @Override

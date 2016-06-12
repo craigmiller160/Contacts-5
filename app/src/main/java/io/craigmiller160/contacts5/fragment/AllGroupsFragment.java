@@ -10,11 +10,18 @@ import io.craigmiller160.contacts5.model.ContactGroup;
  */
 public class AllGroupsFragment extends AbstractContactsPageFragment<ContactGroup> {
 
+    public static final int PAGE_INDEX = 2;
+
     private static final String pageTitle = "Groups";
 
     @Override
     protected ArrayAdapter<ContactGroup> getArrayAdapter() {
         return new GroupsArrayAdapter(getContext());
+    }
+
+    @Override
+    public int getPageIndex() {
+        return PAGE_INDEX;
     }
 
     @Override

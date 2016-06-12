@@ -2,20 +2,19 @@ package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 6/5/16.
@@ -34,9 +33,9 @@ public class TabsFragment extends Fragment {
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
-            favoritesFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-            contactsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
-            groupsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 2);
+            favoritesFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, FavContactsFragment.PAGE_INDEX));
+            contactsFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllContactsFragment.PAGE_INDEX));
+            groupsFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllGroupsFragment.PAGE_INDEX));
         }
 
         if(favoritesFragment == null){
@@ -76,9 +75,9 @@ public class TabsFragment extends Fragment {
             setDefaultTab = true;
         }
 
+        tabsAdapter.addPage((AbstractContactsPageFragment<?>) groupsFragment);
         tabsAdapter.addPage((AbstractContactsPageFragment<?>) favoritesFragment);
         tabsAdapter.addPage((AbstractContactsPageFragment<?>) contactsFragment);
-        tabsAdapter.addPage((AbstractContactsPageFragment<?>) groupsFragment);
 
         tabLayout.setupWithViewPager(viewPager);
 
