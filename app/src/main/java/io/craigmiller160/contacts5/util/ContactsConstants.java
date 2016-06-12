@@ -31,6 +31,7 @@ public class ContactsConstants {
      */
     public static final String CONTACTS_LIST = "ContactsList";
     public static final String GROUPS_LIST = "GroupsList";
+    public static final String FAVORITES_LIST = "FavoritesList";
     public static final String CONTACTS_IN_GROUP_LIST = "ContactsInGroupList";
     public static final String DISPLAYED_FRAGMENT = "DisplayedFragment";
     public static final String SELECTED_GROUP_ID = "SelectedGroupId";

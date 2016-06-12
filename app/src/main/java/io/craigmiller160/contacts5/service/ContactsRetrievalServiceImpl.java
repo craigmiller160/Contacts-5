@@ -10,9 +10,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -29,7 +31,7 @@ import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 5/29/16.
@@ -42,6 +44,9 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     private static final ExecutorService executor = Executors.newFixedThreadPool(4, new ContactsThreadFactory());
     private static final String TAG = "ContactsRetrievService";
+
+    private static final String ALL_CONTACTS_KEY = "AllContacts";
+    private static final String FAV_CONTACTS_KEY = "FavContacts";
 
     private static final int CONTACT = 101;
     private static final int GROUP = 102;
@@ -265,13 +270,16 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Log.d(TAG, "Starting load all contacts process");
 
             Future<Set<Long>> getExclusionsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetExclusionsTask(context, accountService));
-            Future<List<Contact>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));
+            Future<Map<String,List<Contact>>> getAllContactsFuture = ContactsRetrievalServiceImpl.executor.submit(new GetAllContactsTask(context));
 
             try{
                 Set<Long> exclusions = getExclusionsFuture.get();
-                final List<Contact> contacts = getAllContactsFuture.get();
+                Map<String,List<Contact>> results = getAllContactsFuture.get();
+                List<Contact> allContacts = results.get(ALL_CONTACTS_KEY);
+                List<Contact> favContacts = results.get(FAV_CONTACTS_KEY);
 
-                Iterator<Contact> contactIterator = contacts.iterator();
+                //Remove all contacts from excluded accounts
+                Iterator<Contact> contactIterator = allContacts.iterator();
                 while(contactIterator.hasNext()){
                     Contact contact = contactIterator.next();
                     if(exclusions.contains(contact.getId())){
@@ -279,9 +287,20 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     }
                 }
 
-                Log.d(TAG, "Total contacts loaded: " + contacts.size());
+                //Remove all favorites from excluded accounts. This extra iteration shouldn't add much overhead, as favorites lists are generally pretty small
+                Iterator<Contact> favIterator = favContacts.iterator();
+                while(favIterator.hasNext()){
+                    Contact contact = favIterator.next();
+                    if(exclusions.contains(contact.getId())){
+                        favIterator.remove();
+                    }
+                }
 
-                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_LIST, contacts);
+                Log.d(TAG, "Total contacts loaded: " + allContacts.size());
+                Log.d(TAG, "Favorite contacts loaded: " + favContacts.size());
+
+                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(CONTACTS_LIST, allContacts);
+                ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).setProperty(FAVORITES_LIST, favContacts);
             }
             catch(InterruptedException ex){
                 Log.e(TAG, "Error while retrieving contacts", ex);
@@ -295,7 +314,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         }
     }
 
-    private static class GetAllContactsTask implements Callable<List<Contact>>{
+    private static class GetAllContactsTask implements Callable<Map<String,List<Contact>>>{
 
         private final Context context;
 
@@ -304,14 +323,15 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         }
 
         @Override
-        public List<Contact> call() throws Exception {
+        public Map<String,List<Contact>> call() throws Exception {
             Log.v(TAG, "Starting get all contacts sub-task");
-            List<Contact> contacts = new ArrayList<>();
+            List<Contact> allContacts = new ArrayList<>();
+            List<Contact> favContacts = new ArrayList<>();
             Cursor cursor = null;
             try{
                 cursor = context.getContentResolver().query(
                         CONTACTS_URI,
-                        new String[]{CONTACT_DISPLAY_NAME, CONTACT_HAS_PHONE, CONTACT_PHOTO_THUMBNAIL_URI, CONTACT_ID},
+                        new String[]{CONTACT_DISPLAY_NAME, CONTACT_HAS_PHONE, CONTACT_PHOTO_THUMBNAIL_URI, CONTACT_ID, CONTACT_STARRED},
                         null, null, CONTACT_DISPLAY_NAME + " " + getSortOrder(CONTACT, context)
                 );
 
@@ -336,7 +356,12 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                             contact.setId(contactId);
                             contact.setPhotoUri(photoUri);
 
-                            contacts.add(contact);
+                            allContacts.add(contact);
+
+                            int starred = cursor.getInt(cursor.getColumnIndex(CONTACT_STARRED));
+                            if(starred == 1){
+                                favContacts.add(contact);
+                            }
                         }
 
                         cursor.moveToNext();
@@ -349,7 +374,11 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 }
             }
 
-            return contacts;
+            Map<String,List<Contact>> results = new HashMap<>();
+            results.put(ALL_CONTACTS_KEY, allContacts);
+            results.put(FAV_CONTACTS_KEY, favContacts);
+
+            return results;
         }
     }
 

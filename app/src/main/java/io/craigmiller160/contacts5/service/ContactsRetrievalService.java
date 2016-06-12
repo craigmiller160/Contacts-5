@@ -48,6 +48,7 @@ public interface ContactsRetrievalService {
     String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
     String CONTACT_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
     String CONTACT_ID = ContactsContract.Contacts._ID;
+    String CONTACT_STARRED = ContactsContract.Contacts.STARRED;
     String CONTACT_ENTITY_CONTENT_DIRECTORY = ContactsContract.Contacts.Entity.CONTENT_DIRECTORY;
 
 

@@ -24,6 +24,7 @@ public class TabsFragment extends Fragment {
 
     private Fragment contactsFragment;
     private Fragment groupsFragment;
+    private Fragment favoritesFragment;
     private ContactsRetrievalService contactsService;
 
     @Override
@@ -33,8 +34,13 @@ public class TabsFragment extends Fragment {
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
-            contactsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
-            groupsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+            favoritesFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 0);
+            contactsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 1);
+            groupsFragment = getFragmentManager().findFragmentByTag("android:switcher:" + R.id.contactsTabsViewPager + ":" + 2);
+        }
+
+        if(favoritesFragment == null){
+            favoritesFragment = new FavContactsFragment();
         }
 
         if(contactsFragment == null){
@@ -56,53 +62,32 @@ public class TabsFragment extends Fragment {
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
         viewPager.setVisibility(View.VISIBLE);
 
+        boolean setDefaultTab = false;
+
         ContactsTabsPagerAdapter tabsAdapter = null;
         if(viewPager.getAdapter() != null){
             tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
             tabsAdapter.removeAllPages();
+            setDefaultTab = false;
         }
         else{
             tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager());
             viewPager.setAdapter(tabsAdapter);
+            setDefaultTab = true;
         }
 
+        tabsAdapter.addPage((AbstractContactsPageFragment<?>) favoritesFragment);
         tabsAdapter.addPage((AbstractContactsPageFragment<?>) contactsFragment);
         tabsAdapter.addPage((AbstractContactsPageFragment<?>) groupsFragment);
 
         tabLayout.setupWithViewPager(viewPager);
 
+        //If it's the first time this fragment is being displayed, set the default tab
+        if(setDefaultTab){
+            viewPager.setCurrentItem(1);
+        }
+
         return tabLayout;
     }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstance){
-//        super.onActivityCreated(savedInstance);
-//        AppCompatActivity activity = (AppCompatActivity) getActivity();
-//        activity.setTitle(getString(R.string.contacts_activity_name));
-//        activity.getSupportActionBar().setHomeButtonEnabled(false);
-//        TabLayout tabLayout = (TabLayout) activity.findViewById(R.id.contactsActivityTabs);
-//        tabLayout.setVisibility(View.VISIBLE);
-//        ViewPager viewPager = (ViewPager) activity.findViewById(R.id.contactsTabsViewPager);
-//
-//        if(viewPager.getAdapter() != null && (viewPager.getAdapter() instanceof ContactsTabsPagerAdapter)){
-//            ContactsTabsPagerAdapter tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
-//            tabsAdapter.setContactsFragment(contactsFragment);
-//            tabsAdapter.setGroupsFragment(groupsFragment);
-//        }
-//        else{
-//            ContactsTabsPagerAdapter tabsAdapter = new ContactsTabsPagerAdapter(activity.getSupportFragmentManager(), contactsFragment, groupsFragment);
-//            viewPager.setAdapter(tabsAdapter);
-//            tabLayout.setupWithViewPager(viewPager);
-//        }
-//
-//
-//    }
-
-//    public void removeFragments(){
-//        getFragmentManager().beginTransaction()
-//                .remove(contactsFragment)
-//                .remove(groupsFragment)
-//                .commit();
-//    }
 
 }
