@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- TODO configure full app backup on marshmallow option -->
     <application
         android:name=".ContactsApp"
         android:allowBackup="true"
@@ -30,14 +29,6 @@
             android:name=".activity.DisplaySettingsActivity"
             android:label="@string/display_settings_activity_name"
             android:parentActivityName=".activity.ContactsActivity"
-            android:theme="@style/AppTheme.PreferencesTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ContactsActivity" />
-        </activity>
-        <activity
-            android:name=".activity.ContactsInGroupActivity"
-            android:label="@string/contacts_activity_name"
             android:theme="@style/AppTheme.PreferencesTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -17,6 +17,7 @@ import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
@@ -29,7 +30,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_
 public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
 
     private AndroidModel contactsModel;
-    private ContactsRetrievalService contactsService;
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
@@ -40,11 +40,12 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
-        this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
+        ContactsRetrievalService contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
+        PermissionsService permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
 
         Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
 
-        if(groupId != null && groupId >= 0){
+        if(groupId != null && groupId >= 0 && permissionsService.hasReadContactsPermission()){
             contactsService.loadAllContactsInGroup(groupId);
         }
     }

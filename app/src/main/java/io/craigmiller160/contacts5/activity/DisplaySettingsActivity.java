@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
@@ -30,23 +29,23 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupActionBar();
-
-        getFragmentManager().beginTransaction().replace(
-                android.R.id.content, new DisplaySettingsFragment()).commit();
-    }
-
-    //TODO consider if there is some way to move this to a separate view class... may not be worth the effort
-    private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        getFragmentManager().beginTransaction().replace(
+                android.R.id.content, new DisplaySettingsFragment()).commit();
     }
 
     @Override
     public void onBackPressed(){
+        closeAction();
+    }
+
+    private void closeAction(){
+        Log.i(TAG, "Closing DisplaySettingsActivity");
         finish();
     }
 
@@ -58,8 +57,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Log.v(TAG, "Leaving Display Settings");
-            finish();
+            closeAction();
             return true;
         }
 
@@ -78,7 +76,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstance){
             super.onCreate(savedInstance);
-            Log.d(TAG, "Creating DisplaySettingsFragment"); //TODO delete this
+            Log.d(TAG, "Creating DisplaySettingsFragment");
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
             this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
@@ -92,7 +90,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                getActivity().finish();
+                ((DisplaySettingsActivity) getActivity()).closeAction();
                 return true;
             }
 
@@ -101,8 +99,8 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         private void configurePreference(Preference pref){
             String key = pref.getKey();
+            Log.v(TAG, "Configuring preference: " + key);
             if(key.equals(getString(R.string.accounts_to_display_prop))){
-                //TODO consider illegal argument exception
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 

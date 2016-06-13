@@ -5,8 +5,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,16 +15,18 @@ import android.view.View;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
-import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.util.CodeParser;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
+import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.NO_TABS_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
@@ -39,6 +39,8 @@ public class ContactsActivity extends AppCompatActivity {
 
     private static final String TAG = "ContactsActivity";
 
+    private static final String REQUEST_PERMISSION_ACTION = "Grant";
+
     private PermissionsService permissionsService;
     private ContactsRetrievalService contactsService;
     private AndroidModel contactsModel;
@@ -46,7 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        Log.v(TAG, "Creating ContactsActivity");
+        Log.i(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
 
         this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
@@ -68,11 +70,8 @@ public class ContactsActivity extends AppCompatActivity {
         FragmentChanger.displayTabsFragment(getSupportFragmentManager());
 
         if(savedInstance != null){
+            Log.v(TAG, "Restoring ContactsModel state");
             contactsModel.restoreState(savedInstance);
-        }
-        else{
-            contactsService.loadAllContacts();
-            contactsService.loadAllGroups();
         }
     }
 
@@ -94,18 +93,22 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
+        Log.v(TAG, "Storing ContactsModel state");
         contactsModel.storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        contactsService.loadAllContacts();
-        contactsService.loadAllGroups();
-        String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
-        Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
-        if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
-            contactsService.loadAllContactsInGroup(groupId);
+        Log.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
+        if(permissionsService.hasReadContactsPermission()){
+            contactsService.loadAllContacts();
+            contactsService.loadAllGroups();
+            String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
+            Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
+            if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
+                contactsService.loadAllContactsInGroup(groupId);
+            }
         }
     }
 
@@ -113,6 +116,7 @@ public class ContactsActivity extends AppCompatActivity {
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
         if(displayedFragment == null || displayedFragment.equals(TABS_FRAGMENT_TAG)){
+            Log.i(TAG, "Closing ContactsActivity");
             finish();
         }
         else{
@@ -121,6 +125,8 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void backAction(){
+        String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
+        Log.d(TAG, "Leaving Group: " + groupName);
         FragmentChanger.displayTabsFragment(getSupportFragmentManager());
     }
 
@@ -129,19 +135,18 @@ public class ContactsActivity extends AppCompatActivity {
         switch (requestCode) {
             case PermissionsService.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Log.d(TAG, "Contacts Permission Granted");
+                    Log.d(TAG, "Necessary permissions were granted");
                     Intent intent = new Intent(this, ContactsActivity.class);
-                    startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
+                    startActivity(intent);
+                    finish();
                 }
                 else{
-                    Log.e(TAG, "Contacts permission denied");
+                    Log.e(TAG, "Necessary permissions were denied!");
                     View view = findViewById(R.id.activity_contacts_layout);
-                    //TODO move text to Strings
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
-                            .setAction("GRANT", new View.OnClickListener(){
+                            .setAction(REQUEST_PERMISSION_ACTION, new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v) {
-                                    Log.d(TAG, "Requesting Contacts permissions from snackbar");
                                     permissionsService.requestReadContactsPermission(ContactsActivity.this);
                                 }
                             });
@@ -154,14 +159,12 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.displaySettings) {
-            Log.i(TAG, "Opening display settings");
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
             startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
             if(!permissionsService.hasReadContactsPermission()){
-                Log.i(TAG, "Requesting Permissions from menu item");
                 permissionsService.requestReadContactsPermission(this);
             }
             return true;

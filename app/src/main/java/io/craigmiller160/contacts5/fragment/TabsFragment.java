@@ -15,6 +15,7 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -26,12 +27,12 @@ public class TabsFragment extends Fragment {
     private Fragment contactsFragment;
     private Fragment groupsFragment;
     private Fragment favoritesFragment;
-    private ContactsRetrievalService contactsService;
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
+        ContactsRetrievalService contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
+        PermissionsService permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
@@ -56,8 +57,10 @@ public class TabsFragment extends Fragment {
         contactsModel.clearProperty(SELECTED_GROUP_ID);
         contactsModel.clearProperty(SELECTED_GROUP_NAME);
 
-        contactsService.loadAllContacts();
-        contactsService.loadAllGroups();
+        if(permissionsService.hasReadContactsPermission()){
+            contactsService.loadAllContacts();
+            contactsService.loadAllGroups();
+        }
     }
 
     @Nullable
