@@ -132,8 +132,7 @@ public class ContactsActivity extends AppCompatActivity {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Contacts Permission Granted");
                     Intent intent = new Intent(this, ContactsActivity.class);
-                    startActivity(intent);
-                    finish(); //TODO do I really want to do this here anymore?
+                    startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
                 }
                 else{
                     Log.e(TAG, "Contacts permission denied");
@@ -155,7 +154,6 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //TODO refactor this for changes to application
         if (item.getItemId() == R.id.displaySettings) {
             Log.i(TAG, "Opening display settings");
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
