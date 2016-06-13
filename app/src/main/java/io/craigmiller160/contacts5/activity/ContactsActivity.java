@@ -65,13 +65,12 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
+        FragmentChanger.displayTabsFragment(getSupportFragmentManager());
+
         if(savedInstance != null){
             contactsModel.restoreState(savedInstance);
         }
         else{
-            //Only build the fragment and load contacts on a fresh instance creation
-            FragmentChanger.displayTabsFragment(getSupportFragmentManager());
-
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
         }

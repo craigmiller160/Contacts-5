@@ -24,12 +24,6 @@ public class FragmentChanger {
     private static void displayFragment(FragmentManager fm, int displayContainerId, Class<? extends Fragment> displayFragmentType,
                                         String displayFragmentTag, String[] fragmentsToRemoveTags){
         AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
-        String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
-
-        if(displayFragmentTag.equals(displayedFragment)){
-            return;
-        }
-
         FragmentTransaction transaction = fm.beginTransaction();
 
         for(String tag : fragmentsToRemoveTags){
