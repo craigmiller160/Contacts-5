@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.L;
 
 import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ModelFactory;
@@ -46,6 +47,8 @@ public class ContactsApp extends Application {
                     .build();
             ImageLoader.getInstance().init(config);
         }
+
+        L.writeLogs(false);
 
         Thread.setDefaultUncaughtExceptionHandler(new ContactsUncaughtExceptionHandler());
     }
