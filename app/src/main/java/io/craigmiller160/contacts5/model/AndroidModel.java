@@ -62,6 +62,10 @@ public class AndroidModel {
         firePropertyChangeEvent(propertyName, null, null);
     }
 
+    public int getPropertyCount(){
+        return props.size();
+    }
+
     public Object getProperty(String propertyName){
         return props.get(propertyName);
     }

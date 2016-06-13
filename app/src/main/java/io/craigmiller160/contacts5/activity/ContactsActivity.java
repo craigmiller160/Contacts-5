@@ -56,7 +56,7 @@ public class ContactsActivity extends AppCompatActivity {
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
 
         if(savedInstance != null){
-            Log.v(TAG, "Restoring ContactsModel state");
+            Log.v(TAG, "Restoring ContactsModel state on Activity creation");
             contactsModel.restoreState(savedInstance);
         }
 
@@ -67,7 +67,7 @@ public class ContactsActivity extends AppCompatActivity {
         findViewById(R.id.add_contact_fab).setOnClickListener(
                 ContactsApp.getApp().controllerFactory().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
 
-        //Check permissions and load contacts
+        //Check permissions
         if(!permissionsService.hasReadContactsPermission()){
             permissionsService.requestReadContactsPermission(this);
         }
@@ -75,6 +75,22 @@ public class ContactsActivity extends AppCompatActivity {
         if(contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class) == null){
             FragmentChanger.displayTabsFragment(getSupportFragmentManager());
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.i(TAG, "Restarting ContactsActivity");
+        super.onRestart();
+        reloadContacts();
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstance){
+        if(contactsModel != null && contactsModel.getPropertyCount() == 0){
+            Log.v(TAG, "Restoring ContactsModel state on Activity restore");
+            contactsModel.restoreState(savedInstance);
+        }
+        super.onRestoreInstanceState(savedInstance);
     }
 
     @Override
@@ -103,6 +119,10 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
+        reloadContacts();
+    }
+
+    private void reloadContacts(){
         if(permissionsService.hasReadContactsPermission()){
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
