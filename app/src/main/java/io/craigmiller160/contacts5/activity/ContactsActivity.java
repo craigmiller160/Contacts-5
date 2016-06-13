@@ -55,6 +55,11 @@ public class ContactsActivity extends AppCompatActivity {
         this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
 
+        if(savedInstance != null){
+            Log.v(TAG, "Restoring ContactsModel state");
+            contactsModel.restoreState(savedInstance);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,11 +72,8 @@ public class ContactsActivity extends AppCompatActivity {
             permissionsService.requestReadContactsPermission(this);
         }
 
-        FragmentChanger.displayTabsFragment(getSupportFragmentManager());
-
-        if(savedInstance != null){
-            Log.v(TAG, "Restoring ContactsModel state");
-            contactsModel.restoreState(savedInstance);
+        if(contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class) == null){
+            FragmentChanger.displayTabsFragment(getSupportFragmentManager());
         }
     }
 

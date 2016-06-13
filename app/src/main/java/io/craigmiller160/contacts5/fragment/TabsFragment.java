@@ -79,6 +79,7 @@ public class TabsFragment extends Fragment {
         if(viewPager.getAdapter() != null){
             tabsAdapter = (ContactsTabsPagerAdapter) viewPager.getAdapter();
             tabsAdapter.removeAllPages();
+            tabLayout.removeAllTabs();
             setDefaultTab = false;
         }
         else{
