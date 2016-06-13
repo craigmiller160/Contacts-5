@@ -92,8 +92,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                System.out.println("Activity: " + getActivity().getClass().getName()); //TODO delete this
-                startActivity(new Intent(getActivity(), ContactsActivity.class));
+                getActivity().finish();
                 return true;
             }
 
