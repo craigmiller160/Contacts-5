@@ -1,23 +1,17 @@
 package io.craigmiller160.contacts5.controller;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.fragment.ContactsInGroupFragment;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.NO_TABS_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
-import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 6/3/16.
@@ -39,6 +33,6 @@ public class SelectGroupController extends AbstractAndroidController implements 
         contactsModel.setProperty(SELECTED_GROUP_ID, groupId);
         contactsModel.setProperty(SELECTED_GROUP_NAME, groupName);
 
-        FragmentChanger.displayNoTabsFragmnet(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
+        FragmentChanger.displayNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
     }
 }
