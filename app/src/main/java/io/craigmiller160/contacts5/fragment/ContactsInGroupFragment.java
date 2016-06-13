@@ -45,7 +45,7 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
 
         Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
 
-        if(groupId != null && groupId >= 0 && permissionsService.hasReadContactsPermission()){
+        if(groupId != null && groupId >= 0 && permissionsService.hasReadContactsPermission() && savedInstance == null){
             contactsService.loadAllContactsInGroup(groupId);
         }
     }
