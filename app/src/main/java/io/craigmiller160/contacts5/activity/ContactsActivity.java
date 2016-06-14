@@ -35,8 +35,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_T
  */
 public class ContactsActivity extends AppCompatActivity {
 
-    //TODO ensure that the accounts to display preference is properly updated after permission is provided
-
     private static final String TAG = "ContactsActivity";
 
     private static final String REQUEST_PERMISSION_ACTION = "Grant";
@@ -158,6 +156,7 @@ public class ContactsActivity extends AppCompatActivity {
             case PermissionsService.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Necessary permissions were granted");
+                    contactsModel.clearAllProperties();
                     Intent intent = new Intent(this, ContactsActivity.class);
                     startActivity(intent);
                     finish();

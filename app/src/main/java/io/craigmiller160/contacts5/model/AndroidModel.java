@@ -66,6 +66,10 @@ public class AndroidModel {
         return props.size();
     }
 
+    public void clearAllProperties(){
+        props.clear();
+    }
+
     public Object getProperty(String propertyName){
         return props.get(propertyName);
     }
