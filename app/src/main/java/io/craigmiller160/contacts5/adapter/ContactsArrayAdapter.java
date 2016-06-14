@@ -28,9 +28,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_
  */
 public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements SectionIndexer*/{
 
-    //TODO need this to be able to differentiate between group use and all contacts use
-
-    private Map<String,Object> sectionMap;
     private final ContactIconService contactIconService;
 
     public ContactsArrayAdapter(Context context, String propertyName){
