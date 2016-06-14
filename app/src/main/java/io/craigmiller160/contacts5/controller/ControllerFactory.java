@@ -12,9 +12,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CO
  */
 public class ControllerFactory extends AbstractControllerFactory{
 
-    private static ControllerFactory instance;
-    private static final Object instanceLock = new Object();
-
     public ControllerFactory(Context context){
         super(context);
         init();

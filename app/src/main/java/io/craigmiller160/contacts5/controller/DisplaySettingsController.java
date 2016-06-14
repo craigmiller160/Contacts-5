@@ -23,8 +23,6 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
         super(context);
     }
 
-    //TODO put validation here for the values
-
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         SharedPreferences.Editor settingsEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();

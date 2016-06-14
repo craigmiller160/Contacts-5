@@ -42,6 +42,7 @@ public class ContactsActivity extends AppCompatActivity {
     private PermissionsService permissionsService;
     private ContactsRetrievalService contactsService;
     private AndroidModel contactsModel;
+    private boolean reloadContacts = true;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -56,6 +57,7 @@ public class ContactsActivity extends AppCompatActivity {
         if(savedInstance != null){
             Log.v(TAG, "Restoring ContactsModel state on Activity creation");
             contactsModel.restoreState(savedInstance);
+            reloadContacts = false;
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
@@ -79,7 +81,16 @@ public class ContactsActivity extends AppCompatActivity {
     protected void onRestart() {
         Log.i(TAG, "Restarting ContactsActivity");
         super.onRestart();
-        reloadContacts();
+        reloadContacts = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(reloadContacts){
+            reloadContacts = false;
+            reloadContacts();
+        }
     }
 
     @Override

@@ -56,11 +56,6 @@ public class TabsFragment extends Fragment {
         AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
         contactsModel.clearProperty(SELECTED_GROUP_ID);
         contactsModel.clearProperty(SELECTED_GROUP_NAME);
-
-        if(permissionsService.hasReadContactsPermission() && savedInstance == null){
-            contactsService.loadAllContacts();
-            contactsService.loadAllGroups();
-        }
     }
 
     @Nullable
