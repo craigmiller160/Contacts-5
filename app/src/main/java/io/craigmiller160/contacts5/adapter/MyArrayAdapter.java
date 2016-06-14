@@ -39,7 +39,7 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
                 @Override
                 public void run() {
                     MyArrayAdapter.this.contents = contents;
-                    notifyDataSetChanged();
+                    MyArrayAdapter.this.notifyDataSetChanged();
                 }
             });
         }
