@@ -48,6 +48,7 @@ public class ContactsApp extends Application {
             ImageLoader.getInstance().init(config);
         }
 
+        //Disable UniversalImageLoader logging
         L.writeLogs(false);
 
         Thread.setDefaultUncaughtExceptionHandler(new ContactsUncaughtExceptionHandler());
