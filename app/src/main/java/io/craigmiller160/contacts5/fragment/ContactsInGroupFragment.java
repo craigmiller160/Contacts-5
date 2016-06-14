@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_
  */
 public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
 
+    private static final String TAG = "ContactsInGroupFragment";
+
     private AndroidModel contactsModel;
 
     @Override
@@ -39,6 +42,7 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+        Log.v(TAG, "ContactsInGroupFragment created");
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
         ContactsRetrievalService contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
         PermissionsService permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();

@@ -3,6 +3,7 @@ package io.craigmiller160.contacts5.fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
@@ -16,7 +17,10 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  */
 public class FragmentChanger {
 
+    private static final String TAG = "FragmentChanger";
+
     public static void displayTabsFragment(FragmentManager fm){
+        Log.d(TAG, "Displaying TabsFragment");
         displayFragment(fm, R.id.tabs_fragment_container, TabsFragment.class,
                 TABS_FRAGMENT_TAG, new String[]{NO_TABS_FRAGMENT_TAG});
     }
@@ -39,6 +43,7 @@ public class FragmentChanger {
     }
 
     public static void displayNoTabsFragment(FragmentManager fm){
+        Log.d(TAG, "Displaying NoTabsFragment");
         displayFragment(fm, R.id.no_tabs_fragment_container, ContactsInGroupFragment.class,
                 NO_TABS_FRAGMENT_TAG, new String[]{TABS_FRAGMENT_TAG});
     }

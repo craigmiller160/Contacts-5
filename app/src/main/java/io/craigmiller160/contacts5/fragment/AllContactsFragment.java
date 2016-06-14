@@ -1,5 +1,7 @@
 package io.craigmiller160.contacts5.fragment;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
@@ -12,9 +14,17 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
  */
 public class AllContactsFragment extends AbstractContactsPageFragment<Contact> {
 
+    private static final String TAG = "AllContactsFragment";
+
     public static final int PAGE_INDEX = 1;
 
     private static final String pageTitle = "All Contacts";
+
+    @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+        Log.v(TAG, "AllContactsFragment created");
+    }
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {

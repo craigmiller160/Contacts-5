@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  */
 public class TabsFragment extends Fragment {
 
+    private static final String TAG = "TabsFragment";
+
     private Fragment contactsFragment;
     private Fragment groupsFragment;
     private Fragment favoritesFragment;
@@ -31,8 +34,7 @@ public class TabsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        ContactsRetrievalService contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
-        PermissionsService permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
+        Log.v(TAG, "TabsFragment created");
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
