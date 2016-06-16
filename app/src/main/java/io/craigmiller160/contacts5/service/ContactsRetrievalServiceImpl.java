@@ -38,10 +38,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  */
 public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalService {
 
-    //TODO launder the execution exceptions
-    //TODO clean it up, only the all contacts task needs threads called from within threads
-    //TODO unify all contacts and contacts in group tasks
-
     private static final ExecutorService executor = Executors.newFixedThreadPool(4, new ContactsThreadFactory());
     private static final String TAG = "ContactsRetrievService";
 
@@ -52,7 +48,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static final int GROUP = 102;
 
     private static String getSortOrder(int type, Context context){
-        String result = "ASC"; //TODO this default may not ultimately be necessary
+        String result = "ASC";
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         switch(type){
             case CONTACT:
