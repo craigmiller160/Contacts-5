@@ -19,7 +19,7 @@ import java.util.Map;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.Contact;
-import io.craigmiller160.contacts5.service.ContactIconService;
+import io.craigmiller160.contacts5.util.ContactIconProvider;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
 
@@ -28,11 +28,11 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_
  */
 public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements SectionIndexer*/{
 
-    private final ContactIconService contactIconService;
+    private final ContactIconProvider contactIconProvider;
 
     public ContactsArrayAdapter(Context context, String propertyName){
         super(context, R.layout.contact_row, propertyName);
-        this.contactIconService = ContactsApp.getApp().serviceFactory().getContactIconService();
+        this.contactIconProvider = new ContactIconProvider(context);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
             TextView nameTextView = (TextView) view.findViewById(R.id.contactName);
             nameTextView.setText(contact.getDisplayName());
 
-            Drawable defaultPic = contactIconService.createContactIcon(contact.getDisplayName(), contact.getDisplayName().charAt(0));
+            Drawable defaultPic = contactIconProvider.createCircleContactIcon(contact.getDisplayName(), contact.getDisplayName().charAt(0));
 
             DisplayImageOptions options = new DisplayImageOptions.Builder()
                     .resetViewBeforeLoading(true)

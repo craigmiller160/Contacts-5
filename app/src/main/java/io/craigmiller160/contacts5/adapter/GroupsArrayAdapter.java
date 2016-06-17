@@ -14,7 +14,7 @@ import java.util.Map;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.ContactGroup;
-import io.craigmiller160.contacts5.service.ContactIconService;
+import io.craigmiller160.contacts5.util.ContactIconProvider;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
@@ -24,11 +24,11 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CO
  */
 public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
 
-    private ContactIconService contactIconService;
+    private final ContactIconProvider contactIconProvider;
 
     public GroupsArrayAdapter(Context context){
         super(context, R.layout.group_row, GROUPS_LIST);
-        contactIconService = ContactsApp.getApp().serviceFactory().getContactIconService();
+        contactIconProvider = new ContactIconProvider(context);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             view.setTag(R.string.group_id, group.getGroupId());
             view.setTag(R.string.group_name, group.getGroupName());
 
-            Drawable groupIcon = contactIconService.createContactIcon(group.getGroupName() + group.getAccountName(), group.getGroupName().charAt(0));
+            Drawable groupIcon = contactIconProvider.createSquareContactIcon(group.getGroupName() + group.getAccountName(), group.getGroupName().charAt(0));
 
             ImageView groupIconView = (ImageView) view.findViewById(R.id.group_icon);
             groupIconView.setImageDrawable(groupIcon);
