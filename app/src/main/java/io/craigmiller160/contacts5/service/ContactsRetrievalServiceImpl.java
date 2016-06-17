@@ -80,7 +80,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     @Override
     public void loadAllContacts(){
-        System.out.println("MAIN LOOPER: " + (Looper.myLooper() == Looper.getMainLooper())); //TODO delete this
         if(Looper.myLooper() == Looper.getMainLooper()){
             executor.submit(new ExecuteAllContactsQueriesTask(getContext(), getAccountService()));
         }
