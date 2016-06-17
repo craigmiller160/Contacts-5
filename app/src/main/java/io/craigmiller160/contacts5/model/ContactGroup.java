@@ -1,6 +1,7 @@
 package io.craigmiller160.contacts5.model;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -109,16 +110,12 @@ public class ContactGroup implements Comparable<ContactGroup>, Serializable{
         out.writeLong(groupId);
         out.writeUTF(groupName);
         out.writeInt(groupSize);
-        if(uri != null){
-            out.writeUTF(uri.toString());
-        }
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
         groupId = in.readLong();
         groupName = in.readUTF();
         groupSize = in.readInt();
-        uri = Uri.parse(in.readUTF());
     }
 
     private void readObjectNoData() throws ObjectStreamException {
