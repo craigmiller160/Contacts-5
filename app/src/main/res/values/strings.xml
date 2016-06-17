@@ -9,12 +9,18 @@
     <string name="about_contacts_menu_label">About Contacts5+</string>
 
     <!-- Settings Labels -->
-    <string name="accounts_to_display_setting_label">Accounts</string>
-    <string name="accounts_to_display_setting_description">The accounts to display contacts from</string>
-    <string name="phones_only_setting_label">Only Phones</string>
-    <string name="phones_only_setting_description">Filter contacts to only those with phone numbers</string>
-    <string name="sort_order_setting_label">Sort Order</string>
-    <string name="sort_order_setting_description">The order to sort the contacts in</string>
+    <string name="settings_category_contacts">Contacts Settings</string>
+    <string name="settings_category_general">General Settings</string>
+    <string name="settings_category_groups">Groups Settings</string>
+    <string name="setting_accounts_to_display">Accounts</string>
+    <string name="setting_phones_only">Only Phones</string>
+    <string name="setting_sort_order">Contact Sort Order</string>
+    <string name="setting_empty_group">Show Empty Groups</string>
+
+    <string name="settings_empty_group_description">Show groups that have no contacts in them</string>
+    <string name="setting_accounts_to_display_description">The accounts to display contacts from</string>
+    <string name="setting_phones_only_description">Filter contacts to only those with phone numbers</string>
+    <string name="setting_sort_order_description">The order to sort the contacts in</string>
 
     <!-- Settings Constant Values -->
     <string-array name="sort_order_display_values">
@@ -34,13 +40,6 @@
         <item>Last name first</item>
     </string-array>
 
-    <!-- Property Names -->
-    <string name="accounts_to_display_prop">AccountsToDisplay</string>
-    <string name="sort_by_prop">SortBy</string>
-    <string name="name_format_prop">NameFormat</string>
-    <string name="sort_order_prop">SortOrder</string>
-    <string name="phones_only_prop">PhonesOnly</string>
-
     <string name="contacts_storage_prop">ContactsStorage</string>
     <string name="contact_at_index_prop">ContactAtIndex</string>
     <string name="contacts_count_prop">ContactCount</string>
@@ -50,4 +49,5 @@
     <string name="contact_uri">ContactUri</string>
     <string name="group_id">GroupId</string>
     <string name="group_name">GroupName</string>
+
 </resources>

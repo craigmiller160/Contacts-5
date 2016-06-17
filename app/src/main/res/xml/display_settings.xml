@@ -1,24 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <MultiSelectListPreference
-        android:title="@string/accounts_to_display_setting_label"
-        android:key="@string/accounts_to_display_prop"
-        android:summary="@string/accounts_to_display_setting_description"/>
-    <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
+    <PreferenceCategory
+        android:key="@string/settings_category_general"
+        android:title="@string/settings_category_general">
 
-    <SwitchPreference
-        android:title="@string/phones_only_setting_label"
-        android:key="@string/phones_only_prop"
-        android:summary="@string/phones_only_setting_description"
-        android:defaultValue="true"/>
+        <MultiSelectListPreference
+            android:title="@string/setting_accounts_to_display"
+            android:key="@string/setting_accounts_to_display"
+            android:summary="@string/setting_accounts_to_display_description"/>
+        <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
 
-    <ListPreference
-        android:title="@string/sort_order_setting_label"
-        android:key="@string/sort_order_prop"
-        android:summary="@string/sort_order_setting_description"
-        android:entries="@array/sort_order_display_values"
-        android:entryValues="@array/sort_order_values"/>
+        <SwitchPreference
+            android:title="@string/setting_phones_only"
+            android:key="@string/setting_phones_only"
+            android:summary="@string/setting_phones_only_description"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_category_contacts"
+        android:title="@string/settings_category_contacts">
+
+        <ListPreference
+            android:title="@string/setting_sort_order"
+            android:key="@string/setting_sort_order"
+            android:summary="@string/setting_sort_order_description"
+            android:entries="@array/sort_order_display_values"
+            android:entryValues="@array/sort_order_values"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_category_groups"
+        android:title="@string/settings_category_groups">
+
+        <SwitchPreference
+            android:title="@string/setting_empty_group"
+            android:key="@string/setting_empty_group"
+            android:summary="@string/settings_empty_group_description"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+
+
 
     <!--<ListPreference-->
         <!--android:title="@string/sort_by_key"-->

@@ -28,31 +28,27 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
         SharedPreferences.Editor settingsEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
         String key = preference.getKey();
         Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
-        if(key.equals(getContext().getString(R.string.accounts_to_display_prop))){
+        if(key.equals(getContext().getString(R.string.setting_accounts_to_display))){
             if(newValue instanceof Set){
-                settingsEditor.putStringSet(getContext().getString(R.string.accounts_to_display_prop), (Set<String>) newValue);
+                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), (Set<String>) newValue);
                 return true;
             }
             else if(newValue instanceof String[]){
-                settingsEditor.putStringSet(getContext().getString(R.string.accounts_to_display_prop), new HashSet<>(Arrays.asList((String[]) newValue)));
+                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), new HashSet<>(Arrays.asList((String[]) newValue)));
                 return true;
             }
             return false;
         }
-        else if(key.equals(getContext().getString(R.string.sort_order_prop)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.sort_order_prop), newValue.toString());
+        else if(key.equals(getContext().getString(R.string.setting_sort_order)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.setting_sort_order), newValue.toString());
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.sort_by_prop)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.sort_by_prop), newValue.toString());
+        else if(key.equals(getContext().getString(R.string.setting_phones_only)) && newValue != null){
+            settingsEditor.putBoolean(getContext().getString(R.string.setting_phones_only), (Boolean) newValue);
             return true;
         }
-        else if(key.equals(getContext().getString(R.string.name_format_prop)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.name_format_prop), newValue.toString());
-            return true;
-        }
-        else if(key.equals(getContext().getString(R.string.phones_only_prop)) && newValue != null){
-            settingsEditor.putBoolean(getContext().getString(R.string.phones_only_prop), (Boolean) newValue);
+        else if(key.equals(getContext().getString(R.string.setting_empty_group)) && newValue != null){
+            settingsEditor.putBoolean(getContext().getString(R.string.setting_empty_group), (Boolean) newValue);
             return true;
         }
 

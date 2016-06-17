@@ -81,9 +81,10 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
             this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
 
-            configurePreference(findPreference(getString(R.string.accounts_to_display_prop)));
-            configurePreference(findPreference(getString(R.string.sort_order_prop)));
-            configurePreference(findPreference(getString(R.string.phones_only_prop)));
+            configurePreference(findPreference(getString(R.string.setting_accounts_to_display)));
+            configurePreference(findPreference(getString(R.string.setting_sort_order)));
+            configurePreference(findPreference(getString(R.string.setting_phones_only)));
+            configurePreference(findPreference(getString(R.string.setting_empty_group)));
         }
 
         @Override
@@ -100,7 +101,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         private void configurePreference(Preference pref){
             String key = pref.getKey();
             Log.v(TAG, "Configuring preference: " + key);
-            if(key.equals(getString(R.string.accounts_to_display_prop))){
+            if(key.equals(getString(R.string.setting_accounts_to_display))){
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
@@ -111,30 +112,28 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
                     //Get the values to be selected and set them
                     Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                            .getStringSet(getString(R.string.accounts_to_display_prop), accountService.getAllContactAccountNamesSet());
+                            .getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
                     if(accountsToDisplay != null){
                         mPref.setValues(accountsToDisplay);
                     }
                 }
             }
-            else if(key.equals(getString(R.string.sort_order_prop))){
+            else if(key.equals(getString(R.string.setting_sort_order))){
                 String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.sort_order_prop), getResources().getStringArray(R.array.sort_order_values)[0]);
+                        .getString(getString(R.string.setting_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
                 if(sortOrder != null){
                     ((ListPreference) pref).setValue(sortOrder);
                 }
             }
-            else if(key.equals(getString(R.string.sort_by_prop))){
-                String sortBy = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.sort_by_prop), getResources().getStringArray(R.array.sort_by_values)[0]);
-                if(sortBy != null){
-                    pref.setDefaultValue(sortBy);
-                }
-            }
-            else if(key.equals(getString(R.string.phones_only_prop))){
+            else if(key.equals(getString(R.string.setting_phones_only))){
                 boolean phonesOnly = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getBoolean(getString(R.string.phones_only_prop), true);
+                        .getBoolean(getString(R.string.setting_phones_only), true);
                 pref.setDefaultValue(phonesOnly);
+            }
+            else if(key.equals(getString(R.string.setting_empty_group))){
+                boolean emptyGroups = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getBoolean(getString(R.string.setting_empty_group), false);
+                pref.setDefaultValue(emptyGroups);
             }
 
             pref.setOnPreferenceChangeListener(ContactsApp.getApp().controllerFactory()

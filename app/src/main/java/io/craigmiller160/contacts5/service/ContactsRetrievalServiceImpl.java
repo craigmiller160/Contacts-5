@@ -52,7 +52,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         switch(type){
             case CONTACT:
-                result = prefs.getString(context.getString(R.string.sort_order_prop),
+                result = prefs.getString(context.getString(R.string.setting_sort_order),
                         context.getResources().getStringArray(R.array.sort_order_values)[0]);
                 break;
             case GROUP:
@@ -65,12 +65,17 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     private static Set<String> getAccountsToDisplay(Context context, AccountService accountService){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getStringSet(context.getString(R.string.accounts_to_display_prop), accountService.getAllContactAccountNamesSet());
+        return prefs.getStringSet(context.getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
+    }
+
+    private static boolean useEmptyGroups(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.setting_empty_group), false);
     }
 
     private static int isPhonesOnly(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.phones_only_prop), true) ? 1 : 0;
+        return prefs.getBoolean(context.getString(R.string.setting_phones_only), true) ? 1 : 0;
     }
 
     public ContactsRetrievalServiceImpl(Context context, AccountService accountService) {
@@ -201,6 +206,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
             List<ContactGroup> groups = new ArrayList<>();
             Set<String> accountsToDisplay = getAccountsToDisplay(context, accountService);
+            boolean useEmptyGroups = useEmptyGroups(context);
             Cursor cursor = null;
             try{
                 cursor = context.getContentResolver().query(
@@ -211,7 +217,6 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
                 if(cursor != null){
                     Log.v(TAG, "Total number of group query rows: " + cursor.getCount());
-
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
                         String accountName = cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME));
@@ -228,7 +233,9 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                                 group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
                             }
 
-                            groups.add(group);
+                            if(group.getGroupSize() > 0 || useEmptyGroups){
+                                groups.add(group);
+                            }
                         }
 
                         cursor.moveToNext();
@@ -393,7 +400,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(context)
-                    .getStringSet(context.getString(R.string.accounts_to_display_prop),
+                    .getStringSet(context.getString(R.string.setting_accounts_to_display),
                             accountService.getAllContactAccountNamesSet());
 
             try{
