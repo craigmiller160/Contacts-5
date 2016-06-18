@@ -1,5 +1,7 @@
 package io.craigmiller160.contacts5.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
@@ -16,6 +18,7 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.AccountService;
 
+import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_PREFS;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;
 
 /**
@@ -87,6 +90,8 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             configurePreference(findPreference(getString(R.string.setting_empty_group)));
             configurePreference(findPreference(getString(R.string.setting_group_sort_order)));
             configurePreference(findPreference(getString(R.string.setting_group_sort_by)));
+            configurePreference(findPreference(getString(R.string.setting_contact_name_format)));
+            configurePreference(findPreference(getString(R.string.setting_contact_sort_by)));
         }
 
         @Override
@@ -103,6 +108,8 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         private void configurePreference(Preference pref){
             String key = pref.getKey();
             Log.v(TAG, "Configuring preference: " + key);
+            SharedPreferences prefs = getActivity().getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
+
             if(key.equals(getString(R.string.setting_accounts_to_display))){
                 if(pref instanceof MultiSelectListPreference){
                     MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
@@ -113,42 +120,52 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     mPref.setEntryValues(accountNames);
 
                     //Get the values to be selected and set them
-                    Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                            .getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
+                    Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
                     if(accountsToDisplay != null){
                         mPref.setValues(accountsToDisplay);
                     }
                 }
             }
             else if(key.equals(getString(R.string.setting_contact_sort_order))){
-                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.setting_contact_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
-                if(sortOrder != null){
-                    ((ListPreference) pref).setValue(sortOrder);
-                }
+                String sortOrder = prefs.getString(getString(R.string.setting_contact_sort_order), "0");
+                int sortOrderIndex = Integer.parseInt(sortOrder);
+                System.out.println("SORT ORDER: " + sortOrderIndex); //TODO delete this
+                ((ListPreference) pref).setValueIndex(sortOrderIndex);
             }
             else if(key.equals(getString(R.string.setting_phones_only))){
-                boolean phonesOnly = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getBoolean(getString(R.string.setting_phones_only), true);
+                boolean phonesOnly = prefs.getBoolean(getString(R.string.setting_phones_only), true);
                 pref.setDefaultValue(phonesOnly);
             }
             else if(key.equals(getString(R.string.setting_empty_group))){
-                boolean emptyGroups = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getBoolean(getString(R.string.setting_empty_group), false);
+                boolean emptyGroups = prefs.getBoolean(getString(R.string.setting_empty_group), false);
                 pref.setDefaultValue(emptyGroups);
             }
             else if(key.equals(getString(R.string.setting_group_sort_order))){
-                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.setting_group_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
+                String sortOrder = prefs.getString(getString(R.string.setting_group_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
+
+                String s = getResources().getStringArray(R.array.sort_order_values)[0];
+                System.out.println("S: " + s); //TODO delete this
                 if(sortOrder != null){
                     ((ListPreference) pref).setValue(sortOrder);
                 }
             }
             else if(key.equals(getString(R.string.setting_group_sort_by))){
-                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.setting_group_sort_by), getResources().getStringArray(R.array.group_sort_by_values)[0]);
-                if(sortOrder != null){
-                    ((ListPreference) pref).setValue(sortOrder);
+                String sortBy = prefs.getString(getString(R.string.setting_group_sort_by), getResources().getStringArray(R.array.group_sort_by_values)[0]);
+                if(sortBy != null){
+                    ((ListPreference) pref).setValue(sortBy);
+                }
+            }
+            else if(key.equals(getString(R.string.setting_contact_name_format))){
+                String nameFormat = prefs.getString(getString(R.string.setting_contact_name_format), getResources().getStringArray(R.array.name_format_values)[0]); //TODO need new values here
+                System.out.println("NAME FORMAT: " + nameFormat); //TODO delete this
+                if(nameFormat != null){
+                    ((ListPreference) pref).setValue(nameFormat);
+                }
+            }
+            else if(key.equals(getString(R.string.setting_contact_sort_by))){
+                String sortBy = prefs.getString(getString(R.string.setting_contact_sort_by), getResources().getStringArray(R.array.contact_sort_by_values)[0]); //TODO need new values here
+                if(sortBy != null){
+                    ((ListPreference) pref).setValue(sortBy);
                 }
             }
 

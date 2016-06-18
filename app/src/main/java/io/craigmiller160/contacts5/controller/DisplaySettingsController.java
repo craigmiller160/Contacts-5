@@ -12,6 +12,8 @@ import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
 
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+
 /**
  * Created by craig on 5/7/16.
  */
@@ -25,38 +27,38 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        SharedPreferences.Editor settingsEditor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+        SharedPreferences.Editor settingsEditor = getContext().getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE).edit();
         String key = preference.getKey();
         Log.d(TAG, "Preference changed: Key: " + key + " New Value: " + newValue);
         if(key.equals(getContext().getString(R.string.setting_accounts_to_display))){
             if(newValue instanceof Set){
-                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), (Set<String>) newValue);
+                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), (Set<String>) newValue).apply();
                 return true;
             }
             else if(newValue instanceof String[]){
-                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), new HashSet<>(Arrays.asList((String[]) newValue)));
+                settingsEditor.putStringSet(getContext().getString(R.string.setting_accounts_to_display), new HashSet<>(Arrays.asList((String[]) newValue))).apply();
                 return true;
             }
             return false;
         }
         else if(key.equals(getContext().getString(R.string.setting_contact_sort_order)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.setting_contact_sort_order), newValue.toString());
+            settingsEditor.putString(getContext().getString(R.string.setting_contact_sort_order), newValue.toString()).apply();
             return true;
         }
         else if(key.equals(getContext().getString(R.string.setting_phones_only)) && newValue != null){
-            settingsEditor.putBoolean(getContext().getString(R.string.setting_phones_only), (Boolean) newValue);
+            settingsEditor.putBoolean(getContext().getString(R.string.setting_phones_only), (Boolean) newValue).apply();
             return true;
         }
         else if(key.equals(getContext().getString(R.string.setting_empty_group)) && newValue != null){
-            settingsEditor.putBoolean(getContext().getString(R.string.setting_empty_group), (Boolean) newValue);
+            settingsEditor.putBoolean(getContext().getString(R.string.setting_empty_group), (Boolean) newValue).apply();
             return true;
         }
         else if(key.equals(getContext().getString(R.string.setting_group_sort_order)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_order), newValue.toString());
+            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_order), newValue.toString()).apply();
             return true;
         }
         else if(key.equals(getContext().getString(R.string.setting_group_sort_by)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_by), newValue.toString());
+            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_by), newValue.toString()).apply();
             return true;
         }
 

@@ -49,7 +49,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     private static String getSortOrder(int type, Context context){
         String result = "ASC";
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = context.getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
         switch(type){
             case CONTACT:
                 result = prefs.getString(context.getString(R.string.setting_contact_sort_order),
@@ -65,7 +65,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     }
 
     private static String getGroupSortString(Context context){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = context.getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
         String sortBySetting = prefs.getString(context.getString(R.string.setting_group_sort_by),
                 context.getResources().getStringArray(R.array.group_sort_by_values)[0]);
         String sortOrderSetting = prefs.getString(context.getString(R.string.setting_group_sort_order),
@@ -80,17 +80,17 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     }
 
     private static Set<String> getAccountsToDisplay(Context context, AccountService accountService){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = context.getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
         return prefs.getStringSet(context.getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
     }
 
     private static boolean useEmptyGroups(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        return context.getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE)
                 .getBoolean(context.getString(R.string.setting_empty_group), false);
     }
 
     private static int isPhonesOnly(Context context){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = context.getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(context.getString(R.string.setting_phones_only), true) ? 1 : 0;
     }
 

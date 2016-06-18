@@ -18,13 +18,17 @@
     <string name="setting_empty_group">Show Empty Groups</string>
     <string name="setting_group_sort_order">Group Sort Order</string>
     <string name="setting_group_sort_by">Group Sort By</string>
+    <string name="setting_contact_name_format">Contact Name Format</string>
+    <string name="setting_contact_sort_by">Contact Sort By</string>
 
     <string name="settings_empty_group_description">Show groups that have no contacts in them</string>
     <string name="setting_accounts_to_display_description">The accounts to display contacts from</string>
     <string name="setting_phones_only_description">Show only contacts with phone numbers</string>
     <string name="setting_contact_sort_order_description">The order to sort the contacts in</string>
     <string name="setting_group_sort_order_description">The order to sort the groups in</string>
-    <string name="setting_group_sort_by_description">Sort by name/account, or account/name</string>
+    <string name="setting_group_sort_by_description">How to sort the groups</string> <!-- TODO figure out a better description -->
+    <string name="setting_contact_name_format_description">How the name is displayed</string>
+    <string name="setting_contact_sort_by_description">How to sort the names</string> <!-- TODO figure out a better description -->
 
     <!-- Settings Constant Values -->
     <string-array name="sort_order_display_values">
@@ -44,8 +48,8 @@
         <item>Account Name/Group Name</item>
     </string-array>
     <string-array name="name_format_values">
-        <item>First name first</item>
-        <item>Last name first</item>
+        <item>First Last</item>
+        <item>Last, First</item>
     </string-array>
 
     <string name="contacts_storage_prop">ContactsStorage</string>

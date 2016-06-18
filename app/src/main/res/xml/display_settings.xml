@@ -24,11 +24,27 @@
         android:title="@string/settings_category_contacts">
 
         <ListPreference
+            android:title="@string/setting_contact_name_format"
+            android:key="@string/setting_contact_name_format"
+            android:summary="@string/setting_contact_name_format_description"
+            android:entries="@array/name_format_values"
+            android:entryValues="@array/name_format_values"
+            android:defaultValue="0" />
+
+        <ListPreference
             android:title="@string/setting_contact_sort_order"
             android:key="@string/setting_contact_sort_order"
             android:summary="@string/setting_contact_sort_order_description"
             android:entries="@array/sort_order_display_values"
             android:entryValues="@array/sort_order_values"
+            android:defaultValue="0"/>
+
+        <ListPreference
+            android:title="@string/setting_contact_sort_by"
+            android:key="@string/setting_contact_sort_by"
+            android:summary="@string/setting_contact_sort_by_description"
+            android:entries="@array/contact_sort_by_values"
+            android:entryValues="@array/contact_sort_by_values"
             android:defaultValue="0"/>
 
     </PreferenceCategory>
@@ -60,22 +76,5 @@
             android:defaultValue="0"/>
 
     </PreferenceCategory>
-
-
-
-
-    <!--<ListPreference-->
-        <!--android:title="@string/sort_by_key"-->
-        <!--android:key="@string/sort_by_key"-->
-        <!--android:summary="First or last name to sort contacts by (Not Working)"-->
-        <!--android:entries="@array/sort_by_values"-->
-        <!--android:entryValues="@array/sort_by_values"/>-->
-
-    <!--<ListPreference-->
-        <!--android:title="@string/name_format_key"-->
-        <!--android:key="@string/name_format_key"-->
-        <!--android:summary="The format to display the contacts' names (Not Working)"-->
-        <!--android:entries="@array/name_format_values"-->
-        <!--android:entryValues="@array/name_format_values"/>-->
 
 </PreferenceScreen>

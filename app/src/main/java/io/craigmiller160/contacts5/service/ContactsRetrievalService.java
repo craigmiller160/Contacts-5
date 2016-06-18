@@ -45,6 +45,7 @@ public interface ContactsRetrievalService {
     String DATA_GROUP_CONTACT_THUMB_PHOTO_URI = ContactsContract.CommonDataKinds.GroupMembership.PHOTO_THUMBNAIL_URI;
 
     String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+    String CONTACT_DISPLAY_NAME_ALTERNATE = ContactsContract.Contacts.DISPLAY_NAME_ALTERNATIVE;
     String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
     String CONTACT_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
     String CONTACT_ID = ContactsContract.Contacts._ID;

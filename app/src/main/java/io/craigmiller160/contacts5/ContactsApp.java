@@ -1,6 +1,7 @@
 package io.craigmiller160.contacts5;
 
 import android.app.Application;
+import android.preference.PreferenceManager;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -10,6 +11,8 @@ import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.util.ContactsUncaughtExceptionHandler;
+
+import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * The application class for Contacts 5+.
@@ -34,6 +37,8 @@ public class ContactsApp extends Application {
     public void onCreate(){
         super.onCreate();
         instance = this;
+
+        PreferenceManager.setDefaultValues(this, CONTACTS_PREFS, MODE_PRIVATE, R.xml.display_settings, false);
 
         synchronized (factoryLock){
             serviceFactory = new ServiceFactory(this);

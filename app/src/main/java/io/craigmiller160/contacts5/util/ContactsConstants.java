@@ -12,6 +12,8 @@ public class ContactsConstants {
     //TODO integrate these constant values into the strings.xml, and create a ResourceBundle type class to access them
     //TODO also make all static service classes independent of needing context params passed to them, by initializing them with context params
 
+    public static final String CONTACTS_PREFS = "ContactsPref";
+
     /*
      * Controller names
      */
