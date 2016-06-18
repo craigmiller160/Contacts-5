@@ -14,9 +14,9 @@
         android:title="Grant Permissions"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/aboutApp"
-        android:orderInCategory="102"
-        android:title="@string/about_contacts_menu_label"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/aboutApp"-->
+        <!--android:orderInCategory="102"-->
+        <!--android:title="@string/about_contacts_menu_label"-->
+        <!--app:showAsAction="never"/>-->
 </menu>
