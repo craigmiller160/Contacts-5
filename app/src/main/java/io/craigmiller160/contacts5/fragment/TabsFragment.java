@@ -15,8 +15,6 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
-import io.craigmiller160.contacts5.service.PermissionsService;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
@@ -64,7 +62,7 @@ public class TabsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getActivity().setTitle(getString(R.string.contacts_activity_name));
+        getActivity().setTitle(getString(R.string.activity_contacts_name_label));
 
         TabLayout tabLayout = (TabLayout) inflater.inflate(R.layout.tab_layout, container, false);
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);

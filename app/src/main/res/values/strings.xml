@@ -1,25 +1,51 @@
 <resources>
     <!-- App and Activity Names -->
-    <string name="app_name">Contacts5+</string>
-    <string name="contacts_activity_name">Contacts 5+</string>
-    <string name="display_settings_activity_name">Display Settings</string>
+    <string name="app_name" translatable="false">Contacts5+</string>
+    <string name="activity_contacts_name" translatable="false">ContactsActivity</string>
+    <string name="activity_settings_name" translatable="false">DisplaySettingsActivity</string>
+
+    <!--App and Activity Labels -->
+    <string name="activity_contacts_name_label">Contacts 5+</string>
+    <string name="activity_settings_name_label">Display Settings</string>
 
     <!-- Main Menu Item Labels -->
-    <string name="display_settings_menu_label">Display Settings</string>
-    <string name="about_contacts_menu_label">About Contacts5+</string>
+    <string name="menu_settings_label">Display Settings</string>
+    <string name="menu_grant_permissions_label">Grant Permissions</string>
+    <string name="menu_about_contacts_label">About Contacts5+</string>
+
+    <!-- TODO need to move tab names in here to be internationalized -->
+
+    <!-- Settings Keys -->
+    <string name="settings_category_contacts_key" translatable="false">ContactsSettingCategory</string>
+    <string name="settings_category_general_key" translatable="false">GeneralSettingsCategory</string>
+    <string name="settings_category_groups_key" translatable="false">GroupsSettingsCategory</string>
+
+    <string name="setting_accounts_to_display_key" translatable="false">AccountsToDisplay</string>
+    <string name="setting_phones_only_key" translatable="false">PhonesOnly</string>
+
+    <string name="setting_contact_sort_order_key" translatable="false">ContactSortOrder</string>
+    <string name="setting_contact_sort_by_key" translatable="false">ContactSortBy</string>
+    <string name="setting_contact_name_format_key" translatable="false">ContactNameFormat</string>
+
+    <string name="setting_group_empty_key" translatable="false">EmptyGroup</string>
+    <string name="setting_group_sort_order_key" translatable="false">GroupSortOrder</string>
+    <string name="setting_group_sort_by_key" translatable="false">GroupSortBy</string>
 
     <!-- Settings Labels -->
-    <string name="settings_category_contacts">Contacts Settings</string>
-    <string name="settings_category_general">General Settings</string>
-    <string name="settings_category_groups">Groups Settings</string>
-    <string name="setting_accounts_to_display">Accounts to Display</string>
-    <string name="setting_phones_only">Show Only Phones</string>
-    <string name="setting_contact_sort_order">Contact Sort Order</string>
-    <string name="setting_empty_group">Show Empty Groups</string>
-    <string name="setting_group_sort_order">Group Sort Order</string>
-    <string name="setting_group_sort_by">Group Sort By</string>
-    <string name="setting_contact_name_format">Contact Name Format</string>
-    <string name="setting_contact_sort_by">Contact Sort By</string>
+    <string name="settings_category_contacts_label">Contacts Settings</string>
+    <string name="settings_category_general_label">General Settings</string>
+    <string name="settings_category_groups_label">Groups Settings</string>
+
+    <string name="setting_accounts_to_display_label">Accounts to Display</string>
+    <string name="setting_phones_only_label">Show Only Phones</string>
+
+    <string name="setting_contact_sort_order_label">Contact Sort Order</string>
+    <string name="setting_contact_name_format_label">Contact Name Format</string>
+    <string name="setting_contact_sort_by_label">Contact Sort By</string>
+
+    <string name="setting_group_empty_label">Show Empty Groups</string>
+    <string name="setting_group_sort_order_label">Group Sort Order</string>
+    <string name="setting_group_sort_by_label">Group Sort By</string>
 
     <string name="setting_phones_only_summary_on">Hide contacts without phone numbers</string>
     <string name="setting_phones_only_summary_off">Show contacts without phone numbers</string>
@@ -27,10 +53,6 @@
     <string name="setting_empty_group_summary_off">Hide groups with no contacts</string>
 
     <!-- Settings Constant Values -->
-    <string-array name="sort_order_display_values">
-        <item>Ascending</item>
-        <item>Descending</item>
-    </string-array>
     <string-array name="sort_order_values">
         <item>@string/array_sort_order_asc</item>
         <item>@string/array_sort_order_desc</item>
@@ -48,21 +70,57 @@
         <item>@string/array_name_format_last_first</item>
     </string-array>
 
-    <!-- Array contents -->
-    <string name="array_sort_order_asc">ASC</string>
-    <string name="array_sort_order_desc">DESC</string>
-    <string name="array_contact_sort_by_first">First Name</string>
-    <string name="array_contact_sort_by_last">Last Name</string>
-    <string name="array_group_sort_by_group">Group Name/Account Name</string>
-    <string name="array_group_sort_by_account">Account Name/Group Name</string>
-    <string name="array_name_format_first_last">First Last</string>
-    <string name="array_name_format_last_first">Last, First</string>
+    <!-- Settings Constant Values Labels -->
+    <string-array name="sort_order_value_labels">
+        <item>@string/array_sort_order_asc_label</item>
+        <item>@string/array_sort_order_desc_label</item>
+    </string-array>
+    <string-array name="contact_sort_by_value_labels">
+        <item>@string/array_contact_sort_by_first_label</item>
+        <item>@string/array_contact_sort_by_last_label</item>
+    </string-array>
+    <string-array name="group_sort_by_value_labels">
+        <item>@string/array_group_sort_by_group_label</item>
+        <item>@string/array_group_sort_by_account_label</item>
+    </string-array>
+    <string-array name="name_format_value_labels">
+        <item>@string/array_name_format_first_last_label</item>
+        <item>@string/array_name_format_last_first_label</item>
+    </string-array>
 
-    <!-- Other Strings -->
-    <string name="permission_denied_snackbar_text">Permission Denied!</string>
+    <!-- Array constant values -->
+    <string name="array_sort_order_asc" translatable="false">ASC</string> <!-- TODO change these to be more descriptive, but change ContactsService to reflect this -->
+    <string name="array_sort_order_desc" translatable="false">DESC</string>
+
+    <string name="array_contact_sort_by_first" translatable="false">SortByFirstName</string>
+    <string name="array_contact_sort_by_last" translatable="false">SortByLastName</string>
+
+    <string name="array_group_sort_by_group" translatable="false">SortByGroupAccount</string>
+    <string name="array_group_sort_by_account" translatable="false">SortByAccountGroup</string>
+
+    <string name="array_name_format_first_last" translatable="false">NameFormatFirstLast</string>
+    <string name="array_name_format_last_first" translatable="false">NameFormatLastFirst</string>
+
+    <!-- Array constant value labels -->
+    <string name="array_sort_order_asc_label">Ascending</string>
+    <string name="array_sort_order_desc_label">Descending</string>
+
+    <string name="array_contact_sort_by_first_label">First Name</string>
+    <string name="array_contact_sort_by_last_label">Last Name</string>
+
+    <string name="array_group_sort_by_group_label">Group Name/Account Name</string>
+    <string name="array_group_sort_by_account_label">Account Name/Group Name</string>
+
+    <string name="array_name_format_first_last_label">First Last</string>
+    <string name="array_name_format_last_first_label">Last, First</string>
+
+    <!-- Constants -->
     <string name="contact_uri" translatable="false">ContactUri</string>
     <string name="contact_name" translatable="false">ContactName</string>
     <string name="group_id" translatable="false">GroupId</string>
     <string name="group_name" translatable="false">GroupName</string>
+
+    <!-- Other Strings -->
+    <string name="permission_denied_snackbar_text">Permission Denied!</string>
 
 </resources>

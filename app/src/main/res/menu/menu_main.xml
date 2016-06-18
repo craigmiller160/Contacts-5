@@ -1,17 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".old.activity.ContactsActivity">
+    tools:context=".activity.ContactsActivity">
     <item
         android:id="@+id/displaySettings"
         android:orderInCategory="100"
-        android:title="@string/display_settings_activity_name"
+        android:title="@string/activity_settings_name_label"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/grantPermissions"
         android:orderInCategory="101"
-        android:title="Grant Permissions"
+        android:title="@string/menu_grant_permissions_label"
         app:showAsAction="never"/>
 
     <!--<item-->

@@ -33,6 +33,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(getString(R.string.activity_settings_name_label));
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -86,14 +87,14 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
             this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
 
-            configurePreference(findPreference(getString(R.string.setting_accounts_to_display)));
-            configurePreference(findPreference(getString(R.string.setting_contact_sort_order)));
-            configurePreference(findPreference(getString(R.string.setting_phones_only)));
-            configurePreference(findPreference(getString(R.string.setting_empty_group)));
-            configurePreference(findPreference(getString(R.string.setting_group_sort_order)));
-            configurePreference(findPreference(getString(R.string.setting_group_sort_by)));
-            configurePreference(findPreference(getString(R.string.setting_contact_name_format)));
-            configurePreference(findPreference(getString(R.string.setting_contact_sort_by)));
+            configurePreference(findPreference(getString(R.string.setting_accounts_to_display_key)));
+            configurePreference(findPreference(getString(R.string.setting_contact_sort_order_key)));
+            configurePreference(findPreference(getString(R.string.setting_phones_only_key)));
+            configurePreference(findPreference(getString(R.string.setting_group_empty_key)));
+            configurePreference(findPreference(getString(R.string.setting_group_sort_order_key)));
+            configurePreference(findPreference(getString(R.string.setting_group_sort_by_key)));
+            configurePreference(findPreference(getString(R.string.setting_contact_name_format_key)));
+            configurePreference(findPreference(getString(R.string.setting_contact_sort_by_key)));
         }
 
         @Override
@@ -113,7 +114,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             pref.setOnPreferenceChangeListener(bindSummaryListener);
 
-            if(key.equals(getString(R.string.setting_accounts_to_display))){
+            if(key.equals(getString(R.string.setting_accounts_to_display_key))){
                 MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
                 //Set the initial list of all account names
@@ -122,7 +123,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 mPref.setEntryValues(accountNames);
 
                 //Get the values to be selected and set them
-                Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
+                Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display_key), accountService.getAllContactAccountNamesSet());
                 if(accountsToDisplay != null){
                     mPref.setValues(accountsToDisplay);
                 }

@@ -18,7 +18,7 @@
         android:resizeableActivity="true">
         <activity
             android:name=".activity.ContactsActivity"
-            android:label="@string/contacts_activity_name"
+            android:label="@string/activity_contacts_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".activity.DisplaySettingsActivity"
-            android:label="@string/display_settings_activity_name"
+            android:label="@string/activity_settings_name"
             android:parentActivityName=".activity.ContactsActivity"
             android:theme="@style/AppTheme.PreferencesTheme">
             <meta-data

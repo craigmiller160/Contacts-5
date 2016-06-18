@@ -2,18 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="@string/settings_category_general"
-        android:title="@string/settings_category_general">
+        android:key="@string/settings_category_general_key"
+        android:title="@string/settings_category_general_label">
 
         <MultiSelectListPreference
-            android:title="@string/setting_accounts_to_display"
-            android:key="@string/setting_accounts_to_display"
+            android:title="@string/setting_accounts_to_display_label"
+            android:key="@string/setting_accounts_to_display_key"
             android:persistent="true"/>
         <!-- The entries/entry values are put in by DisplaySettingsActivity class -->
 
         <SwitchPreference
-            android:title="@string/setting_phones_only"
-            android:key="@string/setting_phones_only"
+            android:title="@string/setting_phones_only_label"
+            android:key="@string/setting_phones_only_key"
             android:defaultValue="true"
             android:persistent="true"
             android:summaryOn="@string/setting_phones_only_summary_on"
@@ -22,29 +22,29 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="@string/settings_category_contacts"
-        android:title="@string/settings_category_contacts">
+        android:key="@string/settings_category_contacts_key"
+        android:title="@string/settings_category_contacts_label">
 
         <ListPreference
-            android:title="@string/setting_contact_name_format"
-            android:key="@string/setting_contact_name_format"
-            android:entries="@array/name_format_values"
+            android:title="@string/setting_contact_name_format_label"
+            android:key="@string/setting_contact_name_format_key"
+            android:entries="@array/name_format_value_labels"
             android:entryValues="@array/name_format_values"
             android:defaultValue="@string/array_name_format_first_last"
             android:persistent="true"/>
 
         <ListPreference
-            android:title="@string/setting_contact_sort_order"
-            android:key="@string/setting_contact_sort_order"
-            android:entries="@array/sort_order_display_values"
+            android:title="@string/setting_contact_sort_order_label"
+            android:key="@string/setting_contact_sort_order_key"
+            android:entries="@array/sort_order_value_labels"
             android:entryValues="@array/sort_order_values"
             android:defaultValue="@string/array_sort_order_asc"
             android:persistent="true"/>
 
         <ListPreference
-            android:title="@string/setting_contact_sort_by"
-            android:key="@string/setting_contact_sort_by"
-            android:entries="@array/contact_sort_by_values"
+            android:title="@string/setting_contact_sort_by_label"
+            android:key="@string/setting_contact_sort_by_key"
+            android:entries="@array/contact_sort_by_value_labels"
             android:entryValues="@array/contact_sort_by_values"
             android:defaultValue="@string/array_contact_sort_by_first"
             android:persistent="true"/>
@@ -52,29 +52,29 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="@string/settings_category_groups"
-        android:title="@string/settings_category_groups">
+        android:key="@string/settings_category_groups_key"
+        android:title="@string/settings_category_groups_label">
 
         <SwitchPreference
-            android:title="@string/setting_empty_group"
-            android:key="@string/setting_empty_group"
+            android:title="@string/setting_group_empty_label"
+            android:key="@string/setting_group_empty_key"
             android:defaultValue="false"
             android:persistent="true"
             android:summaryOn="@string/setting_empty_group_summary_on"
             android:summaryOff="@string/setting_empty_group_summary_off"/>
 
         <ListPreference
-            android:title="@string/setting_group_sort_order"
-            android:key="@string/setting_group_sort_order"
-            android:entries="@array/sort_order_display_values"
+            android:title="@string/setting_group_sort_order_label"
+            android:key="@string/setting_group_sort_order_key"
+            android:entries="@array/sort_order_value_labels"
             android:entryValues="@array/sort_order_values"
             android:defaultValue="@string/array_sort_order_asc"
             android:persistent="true"/>
 
         <ListPreference
-            android:title="@string/setting_group_sort_by"
-            android:key="@string/setting_group_sort_by"
-            android:entries="@array/group_sort_by_values"
+            android:title="@string/setting_group_sort_by_label"
+            android:key="@string/setting_group_sort_by_key"
+            android:entries="@array/group_sort_by_value_labels"
             android:entryValues="@array/group_sort_by_values"
             android:defaultValue="@string/array_group_sort_by_group"
             android:persistent="true"/>

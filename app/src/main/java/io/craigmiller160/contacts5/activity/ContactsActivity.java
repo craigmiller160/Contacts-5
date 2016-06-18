@@ -60,6 +60,9 @@ public class ContactsActivity extends AppCompatActivity {
             contactsModel.restoreState(savedInstance);
             reloadContacts = false;
         }
+        else{
+            setTitle(getString(R.string.activity_contacts_name_label));
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);

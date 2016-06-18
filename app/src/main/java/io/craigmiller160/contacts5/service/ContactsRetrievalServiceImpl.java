@@ -49,9 +49,9 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     private static String getContactSortString(Context context, int type){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sortBy = prefs.getString(context.getString(R.string.setting_contact_sort_by),
+        String sortBy = prefs.getString(context.getString(R.string.setting_contact_sort_by_key),
                 context.getString(R.string.array_contact_sort_by_first));
-        String sortOrder = prefs.getString(context.getString(R.string.setting_contact_sort_order),
+        String sortOrder = prefs.getString(context.getString(R.string.setting_contact_sort_order_key),
                 context.getString(R.string.array_sort_order_asc));
 
         String displayNameColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME : DATA_GROUP_CONTACT_NAME;
@@ -67,37 +67,37 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
     private static String getGroupSortString(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sortBy = prefs.getString(context.getString(R.string.setting_group_sort_by),
+        String sortBy = prefs.getString(context.getString(R.string.setting_group_sort_by_key),
                 context.getString(R.string.array_group_sort_by_group));
-        String sortOrder = prefs.getString(context.getString(R.string.setting_group_sort_order),
+        String sortOrder = prefs.getString(context.getString(R.string.setting_group_sort_order_key),
                 context.getString(R.string.array_sort_order_asc));
 
         if(context.getString(R.string.array_group_sort_by_group).equals(sortBy)){
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrder, GROUP_TITLE);
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrder, GROUP_ACCOUNT_NAME);
         }
         else{
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrder, GROUP_ACCOUNT_NAME);
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrder, GROUP_TITLE);
         }
     }
 
     private static Set<String> getAccountsToDisplay(Context context, AccountService accountService){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getStringSet(context.getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
+        return prefs.getStringSet(context.getString(R.string.setting_accounts_to_display_key), accountService.getAllContactAccountNamesSet());
     }
 
     private static boolean useEmptyGroups(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.setting_empty_group), false);
+        return prefs.getBoolean(context.getString(R.string.setting_group_empty_key), false);
     }
 
     private static int isPhonesOnly(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.setting_phones_only), true) ? 1 : 0;
+        return prefs.getBoolean(context.getString(R.string.setting_phones_only_key), true) ? 1 : 0;
     }
 
     private static boolean isFirstNameLastName(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String nameFormat = prefs.getString(context.getString(R.string.setting_contact_name_format),
+        String nameFormat = prefs.getString(context.getString(R.string.setting_contact_name_format_key),
                 context.getString(R.string.array_name_format_first_last));
         return context.getString(R.string.array_name_format_first_last).equals(nameFormat);
     }
@@ -428,7 +428,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = PreferenceManager.getDefaultSharedPreferences(context)
-                    .getStringSet(context.getString(R.string.setting_accounts_to_display),
+                    .getStringSet(context.getString(R.string.setting_accounts_to_display_key),
                             accountService.getAllContactAccountNamesSet());
 
             try{
