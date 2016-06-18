@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.activity;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -8,18 +7,19 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.AccountService;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_PREFS;
-import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTINGS_CONTROLLER;
 
 /**
  * Created by craig on 5/7/16.
@@ -27,6 +27,8 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAY_SETTING
 public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static final String TAG = "DisplaySettingsActivity";
+
+    private static final BindSummaryToValueListener bindSummaryListener = new BindSummaryToValueListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,69 +110,52 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         private void configurePreference(Preference pref){
             String key = pref.getKey();
             Log.v(TAG, "Configuring preference: " + key);
-            SharedPreferences prefs = getActivity().getSharedPreferences(CONTACTS_PREFS, Context.MODE_PRIVATE);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            pref.setOnPreferenceChangeListener(bindSummaryListener);
 
             if(key.equals(getString(R.string.setting_accounts_to_display))){
-                if(pref instanceof MultiSelectListPreference){
-                    MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
+                MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
-                    //Set the initial list of all account names
-                    String[] accountNames = accountService.getAllContactAccountNames();
-                    mPref.setEntries(accountNames);
-                    mPref.setEntryValues(accountNames);
+                //Set the initial list of all account names
+                String[] accountNames = accountService.getAllContactAccountNames();
+                mPref.setEntries(accountNames);
+                mPref.setEntryValues(accountNames);
 
-                    //Get the values to be selected and set them
-                    Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
-                    if(accountsToDisplay != null){
-                        mPref.setValues(accountsToDisplay);
-                    }
+                //Get the values to be selected and set them
+                Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display), accountService.getAllContactAccountNamesSet());
+                if(accountsToDisplay != null){
+                    mPref.setValues(accountsToDisplay);
                 }
+                bindSummaryListener.onPreferenceChange(mPref, accountsToDisplay);
             }
-            else if(key.equals(getString(R.string.setting_contact_sort_order))){
-                String sortOrder = prefs.getString(getString(R.string.setting_contact_sort_order), "0");
-                int sortOrderIndex = Integer.parseInt(sortOrder);
-                System.out.println("SORT ORDER: " + sortOrderIndex); //TODO delete this
-                ((ListPreference) pref).setValueIndex(sortOrderIndex);
+            else if(!(pref instanceof SwitchPreference)){
+                String value = prefs.getString(key, "");
+                bindSummaryListener.onPreferenceChange(pref, value);
             }
-            else if(key.equals(getString(R.string.setting_phones_only))){
-                boolean phonesOnly = prefs.getBoolean(getString(R.string.setting_phones_only), true);
-                pref.setDefaultValue(phonesOnly);
-            }
-            else if(key.equals(getString(R.string.setting_empty_group))){
-                boolean emptyGroups = prefs.getBoolean(getString(R.string.setting_empty_group), false);
-                pref.setDefaultValue(emptyGroups);
-            }
-            else if(key.equals(getString(R.string.setting_group_sort_order))){
-                String sortOrder = prefs.getString(getString(R.string.setting_group_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
+        }
+    }
 
-                String s = getResources().getStringArray(R.array.sort_order_values)[0];
-                System.out.println("S: " + s); //TODO delete this
-                if(sortOrder != null){
-                    ((ListPreference) pref).setValue(sortOrder);
-                }
+    private static class BindSummaryToValueListener implements Preference.OnPreferenceChangeListener{
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String stringValue = newValue != null ? newValue.toString() : "";
+            if(preference instanceof ListPreference){
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(stringValue);
+                preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
             }
-            else if(key.equals(getString(R.string.setting_group_sort_by))){
-                String sortBy = prefs.getString(getString(R.string.setting_group_sort_by), getResources().getStringArray(R.array.group_sort_by_values)[0]);
-                if(sortBy != null){
-                    ((ListPreference) pref).setValue(sortBy);
-                }
+            else if(preference instanceof MultiSelectListPreference){
+                MultiSelectListPreference mListPref = (MultiSelectListPreference) preference;
+                List<String> values = new ArrayList<>((Set<String>) newValue);
+                Collections.sort(values);
+                mListPref.setSummary(values.toString());
             }
-            else if(key.equals(getString(R.string.setting_contact_name_format))){
-                String nameFormat = prefs.getString(getString(R.string.setting_contact_name_format), getResources().getStringArray(R.array.name_format_values)[0]); //TODO need new values here
-                System.out.println("NAME FORMAT: " + nameFormat); //TODO delete this
-                if(nameFormat != null){
-                    ((ListPreference) pref).setValue(nameFormat);
-                }
-            }
-            else if(key.equals(getString(R.string.setting_contact_sort_by))){
-                String sortBy = prefs.getString(getString(R.string.setting_contact_sort_by), getResources().getStringArray(R.array.contact_sort_by_values)[0]); //TODO need new values here
-                if(sortBy != null){
-                    ((ListPreference) pref).setValue(sortBy);
-                }
+            else if(!(preference instanceof SwitchPreference)){
+                preference.setSummary(stringValue);
             }
 
-            pref.setOnPreferenceChangeListener(ContactsApp.getApp().controllerFactory()
-                    .getController(DISPLAY_SETTINGS_CONTROLLER, Preference.OnPreferenceChangeListener.class));
+            return true;
         }
     }
 }

@@ -38,7 +38,7 @@ public class ContactsApp extends Application {
         super.onCreate();
         instance = this;
 
-        PreferenceManager.setDefaultValues(this, CONTACTS_PREFS, MODE_PRIVATE, R.xml.display_settings, false);
+        PreferenceManager.setDefaultValues(this, R.xml.display_settings, false);
 
         synchronized (factoryLock){
             serviceFactory = new ServiceFactory(this);
