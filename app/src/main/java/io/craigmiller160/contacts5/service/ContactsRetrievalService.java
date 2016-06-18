@@ -42,6 +42,7 @@ public interface ContactsRetrievalService {
     String DATA_GROUP_CONTACT_ID = ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID;
     String DATA_GROUP_GROUP_ID = ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID;
     String DATA_GROUP_CONTACT_NAME = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME;
+    String DATA_GROUP_CONTACT_NAME_ALTERNATE = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME_ALTERNATIVE;
     String DATA_GROUP_CONTACT_THUMB_PHOTO_URI = ContactsContract.CommonDataKinds.GroupMembership.PHOTO_THUMBNAIL_URI;
 
     String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;

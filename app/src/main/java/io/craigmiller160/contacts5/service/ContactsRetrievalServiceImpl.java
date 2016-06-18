@@ -44,38 +44,39 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static final String ALL_CONTACTS_KEY = "AllContacts";
     private static final String FAV_CONTACTS_KEY = "FavContacts";
 
-    private static final int CONTACT = 101;
-    private static final int GROUP = 102;
+    private static final int ALL_CONTACTS = 101;
+    private static final int CONTACTS_IN_GROUP = 102;
 
-    private static String getSortOrder(int type, Context context){
-        String result = "ASC";
+    private static String getContactSortString(Context context, int type){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        switch(type){
-            case CONTACT:
-                result = prefs.getString(context.getString(R.string.setting_contact_sort_order),
-                        context.getResources().getStringArray(R.array.sort_order_values)[0]);
-                break;
-            case GROUP:
-                result = prefs.getString(context.getString(R.string.setting_group_sort_order),
-                        context.getResources().getStringArray(R.array.sort_order_values)[0]);
-                break;
-        }
+        String sortBy = prefs.getString(context.getString(R.string.setting_contact_sort_by),
+                context.getString(R.string.array_contact_sort_by_first));
+        String sortOrder = prefs.getString(context.getString(R.string.setting_contact_sort_order),
+                context.getString(R.string.array_sort_order_asc));
 
-        return result;
+        String displayNameColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME : DATA_GROUP_CONTACT_NAME;
+        String displayNameAltColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME_ALTERNATE : DATA_GROUP_CONTACT_NAME_ALTERNATE;
+
+        if(context.getString(R.string.array_contact_sort_by_first).equals(sortBy)){
+            return String.format("%1$s %2$s", displayNameColumn, sortOrder);
+        }
+        else{
+            return String.format("%1$s %2$s", displayNameAltColumn, sortOrder);
+        }
     }
 
     private static String getGroupSortString(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sortBySetting = prefs.getString(context.getString(R.string.setting_group_sort_by),
-                context.getResources().getStringArray(R.array.group_sort_by_values)[0]);
-        String sortOrderSetting = prefs.getString(context.getString(R.string.setting_group_sort_order),
-                context.getResources().getStringArray(R.array.sort_order_values)[0]);
+        String sortBy = prefs.getString(context.getString(R.string.setting_group_sort_by),
+                context.getString(R.string.array_group_sort_by_group));
+        String sortOrder = prefs.getString(context.getString(R.string.setting_group_sort_order),
+                context.getString(R.string.array_sort_order_asc));
 
-        if(context.getResources().getStringArray(R.array.group_sort_by_values)[1].equals(sortBySetting)){
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrderSetting, GROUP_TITLE);
+        if(context.getString(R.string.array_group_sort_by_group).equals(sortBy)){
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrder, GROUP_TITLE);
         }
         else{
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrderSetting, GROUP_ACCOUNT_NAME);
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrder, GROUP_ACCOUNT_NAME);
         }
     }
 
@@ -92,6 +93,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
     private static int isPhonesOnly(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.setting_phones_only), true) ? 1 : 0;
+    }
+
+    private static boolean isFirstNameLastName(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String nameFormat = prefs.getString(context.getString(R.string.setting_contact_name_format),
+                context.getString(R.string.array_name_format_first_last));
+        return context.getString(R.string.array_name_format_first_last).equals(nameFormat);
     }
 
     public ContactsRetrievalServiceImpl(Context context, AccountService accountService) {
@@ -153,13 +161,14 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                                 DATA_GROUP_GROUP_ID,
                                 DATA_GROUP_CONTACT_ID,
                                 DATA_GROUP_CONTACT_NAME,
+                                DATA_GROUP_CONTACT_NAME_ALTERNATE,
                                 DATA_MIMETYPE_COLUMN,
                                 CONTACT_HAS_PHONE,
                                 DATA_GROUP_CONTACT_THUMB_PHOTO_URI
                         },
                         DATA_GROUP_GROUP_ID + " = ? and " + DATA_MIMETYPE_COLUMN + " = ?",
                         new String[]{"" + groupId, GROUP_MEMBERSHIP_MIMETYPE},
-                        DATA_GROUP_CONTACT_NAME + " " + getSortOrder(CONTACT, context)
+                        getContactSortString(context, CONTACTS_IN_GROUP)
                 );
 
                 if(cursor != null){
@@ -169,7 +178,9 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
                             long contactId = cursor.getLong(cursor.getColumnIndex(DATA_GROUP_CONTACT_ID));
-                            String displayName = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME));
+                            int nameColumnIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME) :
+                                    cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME_ALTERNATE);
+                            String displayName = cursor.getString(nameColumnIndex);
                             Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
                             String photoUriString = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_THUMB_PHOTO_URI));
                             Uri photoUri = null;
@@ -349,8 +360,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             try{
                 cursor = context.getContentResolver().query(
                         CONTACTS_URI,
-                        new String[]{CONTACT_DISPLAY_NAME, CONTACT_HAS_PHONE, CONTACT_PHOTO_THUMBNAIL_URI, CONTACT_ID, CONTACT_STARRED},
-                        null, null, CONTACT_DISPLAY_NAME + " " + getSortOrder(CONTACT, context)
+                        new String[]{CONTACT_DISPLAY_NAME, CONTACT_DISPLAY_NAME_ALTERNATE, CONTACT_HAS_PHONE, CONTACT_PHOTO_THUMBNAIL_URI, CONTACT_ID, CONTACT_STARRED},
+                        null, null, getContactSortString(context, ALL_CONTACTS)
                 );
 
                 if(cursor != null){
@@ -360,7 +371,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
                             long contactId = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
-                            String displayName = cursor.getString(cursor.getColumnIndex(CONTACT_DISPLAY_NAME));
+                            int displayNameIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(CONTACT_DISPLAY_NAME) : cursor.getColumnIndex(CONTACT_DISPLAY_NAME_ALTERNATE);
+                            String displayName = cursor.getString(displayNameIndex);
                             Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
                             String photoUriString = cursor.getString(cursor.getColumnIndex(CONTACT_PHOTO_THUMBNAIL_URI));
                             Uri photoUri = null;
