@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
@@ -54,11 +55,15 @@ public class ModelFactory extends AbstractAndroidUtil{
         }
 
         if(modelType == null){
-            throw new IllegalArgumentException("Model type value cannot be null");
+            throw new IllegalArgumentCtxException("Model type value cannot be null")
+                    .addContextValue("Model Name", modelName);
         }
 
         if(!modelType.isAssignableFrom(model.getClass())){
-            throw new IllegalArgumentException(String.format("Invalid type for model. %1$s is not assignable from %2$s", modelType.getName(), model.getClass().getName()));
+            throw new IllegalArgumentCtxException("Invalid return type for this model")
+                    .addContextValue("Model Name", modelName)
+                    .addContextValue("Model Type", model.getClass().getName())
+                    .addContextValue("Specified Return Type", modelType.getName());
         }
         return (T) model;
     }

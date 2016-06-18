@@ -12,6 +12,7 @@ import android.view.View;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
+import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
@@ -47,7 +48,8 @@ public class OnClickController extends AbstractAndroidController implements View
                 this.type = type;
                 break;
             default:
-                throw new IllegalArgumentException("Illegal type: " + type);
+                throw new IllegalArgumentCtxException("Provided type not supported by this controller")
+                        .addContextValue("Type", type);
         }
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
     }

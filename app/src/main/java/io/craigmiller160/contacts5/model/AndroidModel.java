@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import io.craigmiller160.contacts5.IllegalArgumentCtxException;
+
 /**
  * Created by craig on 6/4/16.
  */
@@ -76,7 +78,8 @@ public class AndroidModel {
 
     public <T> T getProperty(String propertyName, Class<?> returnType){
         if(returnType == null){
-            throw new IllegalArgumentException("Return type value cannot be null");
+            throw new IllegalArgumentCtxException("Return type value cannot be null")
+                    .addContextValue("Property Name", propertyName);
         }
 
         Object value = getProperty(propertyName);
@@ -85,8 +88,10 @@ public class AndroidModel {
         }
 
         if(!returnType.isAssignableFrom(value.getClass())){
-            throw new IllegalArgumentException(String.format("Invalid type for property value. %1$s is not assignable from %2$s",
-                    returnType.getName(), value.getClass().getName()));
+            throw new IllegalArgumentCtxException("Invalid return type for property value")
+                    .addContextValue("Property Name", propertyName)
+                    .addContextValue("Value Type", value.getClass().getName())
+                    .addContextValue("Specified Return Type", returnType.getName());
         }
         return (T) value;
     }

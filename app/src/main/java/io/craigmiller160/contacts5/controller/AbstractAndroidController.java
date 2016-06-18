@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
@@ -42,11 +43,15 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
         }
 
         if(returnType == null){
-            throw new IllegalArgumentException("Return type value cannot be null");
+            throw new IllegalArgumentCtxException("Return type value cannot be null")
+                    .addContextValue("Arg Key", key);
         }
 
         if(!returnType.isAssignableFrom(value.getClass())){
-            throw new IllegalArgumentException(String.format("Invalid type for argument. %1$s is not assignable from %2$s", returnType.getName(), value.getClass().getName()));
+            throw new IllegalArgumentCtxException("Invalid type for argument value")
+                    .addContextValue("Arg Key", key)
+                    .addContextValue("Arg Value Type", value.getClass().getName())
+                    .addContextValue("Specified Return Type", returnType.getName());
         }
         return (T) value;
     }

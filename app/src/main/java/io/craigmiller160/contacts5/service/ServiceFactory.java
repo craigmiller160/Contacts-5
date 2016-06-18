@@ -23,39 +23,6 @@ public class ServiceFactory {
         this.permissionsService = new PermissionsService(context);
     }
 
-//    public static void initialize(Context context){
-//        if(instance == null){
-//            synchronized (instanceLock){
-//                if(instance == null){
-//                    instance = new ServiceFactory(context);
-//                }
-//                else{
-//                    throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-//                }
-//            }
-//        }
-//        else{
-//            throw new AndroidRuntimeException("ServiceFactory can only be initialized once");
-//        }
-//    }
-//
-//    public static boolean isInitialized(){
-//        synchronized (instanceLock){
-//            return instance != null;
-//        }
-//    }
-//
-//    public static ServiceFactory getInstance(){
-//        if(instance == null){
-//            synchronized (instanceLock){
-//                if(instance == null){
-//                    throw new AndroidRuntimeException("ServiceFactory is not initialized");
-//                }
-//            }
-//        }
-//        return instance;
-//    }
-
     public AccountService getAccountService(){
         return accountService;
     }

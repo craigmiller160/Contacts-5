@@ -2,6 +2,8 @@ package io.craigmiller160.contacts5.util;
 
 import android.app.Activity;
 
+import io.craigmiller160.contacts5.IllegalArgumentCtxException;
+
 import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
@@ -25,7 +27,8 @@ public class CodeParser {
             case NEW_CONTACT_REQUEST:
                 return NEW_CONTACT;
             default:
-                throw new IllegalArgumentException("Unknown request code provided: " + requestCode);
+                throw new IllegalArgumentCtxException("Unknown request code provided, cannot parse")
+                        .addContextValue("Request Code", requestCode);
         }
     }
 
@@ -36,7 +39,8 @@ public class CodeParser {
             case Activity.RESULT_CANCELED:
                 return CANCELED;
             default:
-                throw new IllegalArgumentException("Unknown result code provided: " + resultCode);
+                throw new IllegalArgumentCtxException("Unknown result code provided, cannot parse")
+                        .addContextValue("Result Code", resultCode);
         }
     }
 
