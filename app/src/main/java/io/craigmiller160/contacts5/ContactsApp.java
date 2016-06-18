@@ -26,7 +26,6 @@ public class ContactsApp extends Application {
     private static final Object factoryLock = new Object();
 
     private ServiceFactory serviceFactory;
-    private ControllerFactory controllerFactory;
     private ModelFactory modelFactory;
 
     public static ContactsApp getApp(){
@@ -42,7 +41,6 @@ public class ContactsApp extends Application {
 
         synchronized (factoryLock){
             serviceFactory = new ServiceFactory(this);
-            controllerFactory = new ControllerFactory(this);
             modelFactory = new ModelFactory(this);
         }
 
@@ -62,12 +60,6 @@ public class ContactsApp extends Application {
     public ServiceFactory serviceFactory(){
         synchronized (factoryLock){
             return serviceFactory;
-        }
-    }
-
-    public ControllerFactory controllerFactory(){
-        synchronized (factoryLock){
-            return controllerFactory;
         }
     }
 

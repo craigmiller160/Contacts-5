@@ -18,6 +18,7 @@ import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.util.ContactIconProvider;
 
@@ -63,8 +64,9 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
 
             Map<String,Object> args = new HashMap<>();
             args.put(getContext().getString(R.string.contact_uri), contact.getUri());
+            args.put(getContext().getString(R.string.contact_name), contact.getDisplayName());
 
-            view.setOnClickListener(ContactsApp.getApp().controllerFactory().getController(SELECT_CONTACT_CONTROLLER, View.OnClickListener.class, args));
+            view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.CONTACTS_LIST));
         }
 
         return view;

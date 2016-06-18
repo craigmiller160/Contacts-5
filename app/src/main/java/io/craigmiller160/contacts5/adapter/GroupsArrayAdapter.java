@@ -13,6 +13,7 @@ import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.util.ContactIconProvider;
 
@@ -57,7 +58,7 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             args.put(getContext().getString(R.string.group_id), group.getGroupId());
             args.put(getContext().getString(R.string.group_name), group.getGroupName());
 
-            view.setOnClickListener(ContactsApp.getApp().controllerFactory().getController(SELECT_GROUP_CONTROLLER, View.OnClickListener.class, args));
+            view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.GROUPS_LIST));
         }
 
         return view;

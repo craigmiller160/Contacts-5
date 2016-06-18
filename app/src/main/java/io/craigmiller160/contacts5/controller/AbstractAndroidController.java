@@ -15,7 +15,12 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
     private Map<String,Object> args = new HashMap<>();
 
     protected AbstractAndroidController(Context context) {
+        this(context, null);
+    }
+
+    protected AbstractAndroidController(Context context, Map<String,Object> args){
         super(context);
+        setArgs(args);
     }
 
     public void setArgs(Map<String,Object> args){

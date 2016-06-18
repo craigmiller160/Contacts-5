@@ -14,6 +14,7 @@ import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
@@ -64,8 +65,7 @@ public class ContactsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //noinspection ConstantConditions
-        findViewById(R.id.add_contact_fab).setOnClickListener(
-                ContactsApp.getApp().controllerFactory().getController(ADD_CONTACT_CONTROLLER, View.OnClickListener.class));
+        findViewById(R.id.add_contact_fab).setOnClickListener(new OnClickController(this, null, OnClickController.ADD_BUTTON));
 
         //Check permissions
         if(!permissionsService.hasReadContactsPermission()){

@@ -58,15 +58,11 @@
     <string name="array_name_format_first_last">First Last</string>
     <string name="array_name_format_last_first">Last, First</string>
 
-    <!-- Property names -->
-    <string name="contacts_storage_prop">ContactsStorage</string>
-    <string name="contact_at_index_prop">ContactAtIndex</string>
-    <string name="contacts_count_prop">ContactCount</string>
-
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
-    <string name="contact_uri">ContactUri</string>
-    <string name="group_id">GroupId</string>
-    <string name="group_name">GroupName</string>
+    <string name="contact_uri" translatable="false">ContactUri</string>
+    <string name="contact_name" translatable="false">ContactName</string>
+    <string name="group_id" translatable="false">GroupId</string>
+    <string name="group_name" translatable="false">GroupName</string>
 
 </resources>
