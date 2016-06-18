@@ -7,7 +7,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 
-import io.craigmiller160.contacts5.controller.ControllerFactory;
 import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.util.ContactsUncaughtExceptionHandler;
