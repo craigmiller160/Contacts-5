@@ -14,13 +14,17 @@
     <string name="settings_category_groups">Groups Settings</string>
     <string name="setting_accounts_to_display">Accounts</string>
     <string name="setting_phones_only">Only Phones</string>
-    <string name="setting_sort_order">Contact Sort Order</string>
+    <string name="setting_contact_sort_order">Contact Sort Order</string>
     <string name="setting_empty_group">Show Empty Groups</string>
+    <string name="setting_group_sort_order">Group Sort Order</string>
+    <string name="setting_group_sort_by">Group Sort By</string>
 
     <string name="settings_empty_group_description">Show groups that have no contacts in them</string>
     <string name="setting_accounts_to_display_description">The accounts to display contacts from</string>
-    <string name="setting_phones_only_description">Filter contacts to only those with phone numbers</string>
-    <string name="setting_sort_order_description">The order to sort the contacts in</string>
+    <string name="setting_phones_only_description">Show only contacts with phone numbers</string>
+    <string name="setting_contact_sort_order_description">The order to sort the contacts in</string>
+    <string name="setting_group_sort_order_description">The order to sort the groups in</string>
+    <string name="setting_group_sort_by_description">Sort by name/account, or account/name</string>
 
     <!-- Settings Constant Values -->
     <string-array name="sort_order_display_values">
@@ -31,9 +35,13 @@
         <item>ASC</item>
         <item>DESC</item>
     </string-array>
-    <string-array name="sort_by_values">
+    <string-array name="contact_sort_by_values">
         <item>First name</item>
         <item>Last name</item>
+    </string-array>
+    <string-array name="group_sort_by_values">
+        <item>Group Name/Account Name</item>
+        <item>Account Name/Group Name</item>
     </string-array>
     <string-array name="name_format_values">
         <item>First name first</item>

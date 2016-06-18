@@ -82,9 +82,11 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
 
             configurePreference(findPreference(getString(R.string.setting_accounts_to_display)));
-            configurePreference(findPreference(getString(R.string.setting_sort_order)));
+            configurePreference(findPreference(getString(R.string.setting_contact_sort_order)));
             configurePreference(findPreference(getString(R.string.setting_phones_only)));
             configurePreference(findPreference(getString(R.string.setting_empty_group)));
+            configurePreference(findPreference(getString(R.string.setting_group_sort_order)));
+            configurePreference(findPreference(getString(R.string.setting_group_sort_by)));
         }
 
         @Override
@@ -118,9 +120,9 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                     }
                 }
             }
-            else if(key.equals(getString(R.string.setting_sort_order))){
+            else if(key.equals(getString(R.string.setting_contact_sort_order))){
                 String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .getString(getString(R.string.setting_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
+                        .getString(getString(R.string.setting_contact_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
                 if(sortOrder != null){
                     ((ListPreference) pref).setValue(sortOrder);
                 }
@@ -134,6 +136,20 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 boolean emptyGroups = PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .getBoolean(getString(R.string.setting_empty_group), false);
                 pref.setDefaultValue(emptyGroups);
+            }
+            else if(key.equals(getString(R.string.setting_group_sort_order))){
+                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(getString(R.string.setting_group_sort_order), getResources().getStringArray(R.array.sort_order_values)[0]);
+                if(sortOrder != null){
+                    ((ListPreference) pref).setValue(sortOrder);
+                }
+            }
+            else if(key.equals(getString(R.string.setting_group_sort_by))){
+                String sortOrder = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .getString(getString(R.string.setting_group_sort_by), getResources().getStringArray(R.array.group_sort_by_values)[0]);
+                if(sortOrder != null){
+                    ((ListPreference) pref).setValue(sortOrder);
+                }
             }
 
             pref.setOnPreferenceChangeListener(ContactsApp.getApp().controllerFactory()

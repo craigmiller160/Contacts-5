@@ -24,11 +24,12 @@
         android:title="@string/settings_category_contacts">
 
         <ListPreference
-            android:title="@string/setting_sort_order"
-            android:key="@string/setting_sort_order"
-            android:summary="@string/setting_sort_order_description"
+            android:title="@string/setting_contact_sort_order"
+            android:key="@string/setting_contact_sort_order"
+            android:summary="@string/setting_contact_sort_order_description"
             android:entries="@array/sort_order_display_values"
-            android:entryValues="@array/sort_order_values"/>
+            android:entryValues="@array/sort_order_values"
+            android:defaultValue="0"/>
 
     </PreferenceCategory>
 
@@ -41,6 +42,22 @@
             android:key="@string/setting_empty_group"
             android:summary="@string/settings_empty_group_description"
             android:defaultValue="false"/>
+
+        <ListPreference
+            android:title="@string/setting_group_sort_order"
+            android:key="@string/setting_group_sort_order"
+            android:summary="@string/setting_group_sort_order_description"
+            android:entries="@array/sort_order_display_values"
+            android:entryValues="@array/sort_order_values"
+            android:defaultValue="0"/>
+
+        <ListPreference
+            android:title="@string/setting_group_sort_by"
+            android:key="@string/setting_group_sort_by"
+            android:summary="@string/setting_group_sort_by_description"
+            android:entries="@array/group_sort_by_values"
+            android:entryValues="@array/group_sort_by_values"
+            android:defaultValue="0"/>
 
     </PreferenceCategory>
 

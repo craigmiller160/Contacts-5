@@ -39,8 +39,8 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
             }
             return false;
         }
-        else if(key.equals(getContext().getString(R.string.setting_sort_order)) && newValue != null){
-            settingsEditor.putString(getContext().getString(R.string.setting_sort_order), newValue.toString());
+        else if(key.equals(getContext().getString(R.string.setting_contact_sort_order)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.setting_contact_sort_order), newValue.toString());
             return true;
         }
         else if(key.equals(getContext().getString(R.string.setting_phones_only)) && newValue != null){
@@ -49,6 +49,14 @@ public class DisplaySettingsController extends AbstractAndroidController impleme
         }
         else if(key.equals(getContext().getString(R.string.setting_empty_group)) && newValue != null){
             settingsEditor.putBoolean(getContext().getString(R.string.setting_empty_group), (Boolean) newValue);
+            return true;
+        }
+        else if(key.equals(getContext().getString(R.string.setting_group_sort_order)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_order), newValue.toString());
+            return true;
+        }
+        else if(key.equals(getContext().getString(R.string.setting_group_sort_by)) && newValue != null){
+            settingsEditor.putString(getContext().getString(R.string.setting_group_sort_by), newValue.toString());
             return true;
         }
 

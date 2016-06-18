@@ -52,15 +52,31 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         switch(type){
             case CONTACT:
-                result = prefs.getString(context.getString(R.string.setting_sort_order),
+                result = prefs.getString(context.getString(R.string.setting_contact_sort_order),
                         context.getResources().getStringArray(R.array.sort_order_values)[0]);
                 break;
             case GROUP:
-                //TODO group sort order setting???
+                result = prefs.getString(context.getString(R.string.setting_group_sort_order),
+                        context.getResources().getStringArray(R.array.sort_order_values)[0]);
                 break;
         }
 
         return result;
+    }
+
+    private static String getGroupSortString(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String sortBySetting = prefs.getString(context.getString(R.string.setting_group_sort_by),
+                context.getResources().getStringArray(R.array.group_sort_by_values)[0]);
+        String sortOrderSetting = prefs.getString(context.getString(R.string.setting_group_sort_order),
+                context.getResources().getStringArray(R.array.sort_order_values)[0]);
+
+        if(context.getResources().getStringArray(R.array.group_sort_by_values)[1].equals(sortBySetting)){
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrderSetting, GROUP_TITLE);
+        }
+        else{
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrderSetting, GROUP_ACCOUNT_NAME);
+        }
     }
 
     private static Set<String> getAccountsToDisplay(Context context, AccountService accountService){
@@ -212,7 +228,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                 cursor = context.getContentResolver().query(
                         GROUP_URI,
                         new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT, GROUP_COUNT_PHONES},
-                        null, null, GROUP_TITLE + " " + getSortOrder(GROUP, context)
+                        null, null, getGroupSortString(context)
                 );
 
                 if(cursor != null){
