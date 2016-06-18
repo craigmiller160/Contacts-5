@@ -2,6 +2,7 @@ package io.craigmiller160.contacts5.controller;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import io.craigmiller160.contacts5.ContactsApp;
@@ -22,6 +23,8 @@ public class SelectGroupController extends AbstractAndroidController implements 
 
     private AndroidModel contactsModel;
 
+    private static final String TAG = "SelectGroupController";
+
     public SelectGroupController(Context context) {
         super(context);
         contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
@@ -34,6 +37,8 @@ public class SelectGroupController extends AbstractAndroidController implements 
 
         contactsModel.setProperty(SELECTED_GROUP_ID, groupId);
         contactsModel.setProperty(SELECTED_GROUP_NAME, groupName);
+
+        Log.d(TAG, "Entering group: " + groupName);
 
         if(contactsModel.getProperty(DISPLAYED_FRAGMENT) == null ||
                 contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class).equals(TABS_FRAGMENT_TAG)){
