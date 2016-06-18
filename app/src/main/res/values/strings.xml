@@ -89,8 +89,8 @@
     </string-array>
 
     <!-- Array constant values -->
-    <string name="array_sort_order_asc" translatable="false">ASC</string> <!-- TODO change these to be more descriptive, but change ContactsService to reflect this -->
-    <string name="array_sort_order_desc" translatable="false">DESC</string>
+    <string name="array_sort_order_asc" translatable="false">SortAsc</string>
+    <string name="array_sort_order_desc" translatable="false">SortDesc</string>
 
     <string name="array_contact_sort_by_first" translatable="false">SortByFirstName</string>
     <string name="array_contact_sort_by_last" translatable="false">SortByLastName</string>

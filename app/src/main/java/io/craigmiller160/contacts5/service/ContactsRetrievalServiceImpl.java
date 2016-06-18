@@ -57,11 +57,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         String displayNameColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME : DATA_GROUP_CONTACT_NAME;
         String displayNameAltColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME_ALTERNATE : DATA_GROUP_CONTACT_NAME_ALTERNATE;
 
+        String sort = context.getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
+
         if(context.getString(R.string.array_contact_sort_by_first).equals(sortBy)){
-            return String.format("%1$s %2$s", displayNameColumn, sortOrder);
+            return String.format("%1$s %2$s", displayNameColumn, sort);
         }
         else{
-            return String.format("%1$s %2$s", displayNameAltColumn, sortOrder);
+            return String.format("%1$s %2$s", displayNameAltColumn, sort);
         }
     }
 
@@ -72,11 +74,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         String sortOrder = prefs.getString(context.getString(R.string.setting_group_sort_order_key),
                 context.getString(R.string.array_sort_order_asc));
 
+        String sort = context.getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
+
         if(context.getString(R.string.array_group_sort_by_group).equals(sortBy)){
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sortOrder, GROUP_ACCOUNT_NAME);
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sort, GROUP_ACCOUNT_NAME);
         }
         else{
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sortOrder, GROUP_TITLE);
+            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sort, GROUP_TITLE);
         }
     }
 
