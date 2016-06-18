@@ -78,7 +78,7 @@ public class TabsFragment extends Fragment {
             setDefaultTab = false;
         }
         else{
-            tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager());
+            tabsAdapter = new ContactsTabsPagerAdapter(getFragmentManager(), getActivity());
             viewPager.setAdapter(tabsAdapter);
             setDefaultTab = true;
         }

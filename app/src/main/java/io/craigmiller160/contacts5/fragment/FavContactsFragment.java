@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.Contact;
 
@@ -18,17 +19,10 @@ public class FavContactsFragment extends AbstractContactsPageFragment<Contact> {
 
     public static final int PAGE_INDEX = 0;
 
-    private static final String pageTitle = "Favorites";
-
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         Log.v(TAG, "FavContactsFragment created");
-    }
-
-    @Override
-    public String getPageTitle() {
-        return pageTitle;
     }
 
     @Override
@@ -39,5 +33,10 @@ public class FavContactsFragment extends AbstractContactsPageFragment<Contact> {
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
         return new ContactsArrayAdapter(getContext(), FAVORITES_LIST);
+    }
+
+    @Override
+    public int getPageTitleResId() {
+        return R.string.tab_favorites;
     }
 }

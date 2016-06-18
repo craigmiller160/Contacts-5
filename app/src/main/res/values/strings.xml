@@ -13,7 +13,10 @@
     <string name="menu_grant_permissions_label">Grant Permissions</string>
     <string name="menu_about_contacts_label">About Contacts5+</string>
 
-    <!-- TODO need to move tab names in here to be internationalized -->
+    <!-- Tab Name Labels -->
+    <string name="tab_contacts">All Contacts</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="tab_groups">Groups</string>
 
     <!-- Settings Keys -->
     <string name="settings_category_contacts_key" translatable="false">ContactsSettingCategory</string>

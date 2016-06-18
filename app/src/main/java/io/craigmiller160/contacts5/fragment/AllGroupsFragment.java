@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.GroupsArrayAdapter;
 import io.craigmiller160.contacts5.model.ContactGroup;
 
@@ -15,8 +16,6 @@ public class AllGroupsFragment extends AbstractContactsPageFragment<ContactGroup
     private static final String TAG = "AllGroupsFragment";
 
     public static final int PAGE_INDEX = 2;
-
-    private static final String pageTitle = "Groups";
 
     @Override
     public void onCreate(Bundle savedInstance){
@@ -35,7 +34,7 @@ public class AllGroupsFragment extends AbstractContactsPageFragment<ContactGroup
     }
 
     @Override
-    public String getPageTitle() {
-        return pageTitle;
+    public int getPageTitleResId() {
+        return R.string.tab_groups;
     }
 }

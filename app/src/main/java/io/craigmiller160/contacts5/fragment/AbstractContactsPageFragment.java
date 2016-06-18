@@ -5,7 +5,7 @@ package io.craigmiller160.contacts5.fragment;
  */
 public abstract class AbstractContactsPageFragment<T> extends AbstractContactsFragment<T> implements Comparable<AbstractContactsPageFragment<T>> {
 
-    public abstract String getPageTitle();
+    public abstract int getPageTitleResId();
 
     public abstract int getPageIndex();
 
