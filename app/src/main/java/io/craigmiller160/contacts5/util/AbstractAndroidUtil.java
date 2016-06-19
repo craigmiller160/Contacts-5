@@ -11,6 +11,9 @@ public abstract class AbstractAndroidUtil {
     private final Context context;
 
     protected AbstractAndroidUtil(Context context){
+        if(context == null){
+            throw new IllegalArgumentException("Context cannot be null");
+        }
         this.context = context;
     }
 
@@ -19,7 +22,11 @@ public abstract class AbstractAndroidUtil {
     }
 
     public Resources getResources(){
-        return context != null ? context.getResources() : null;
+        return context.getResources();
+    }
+
+    public String getString(int resId){
+        return context.getString(resId);
     }
 
 }

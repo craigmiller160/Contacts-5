@@ -77,8 +77,8 @@ public class OnClickController extends AbstractAndroidController implements View
     }
 
     private void onClickContact(View view){
-        String name = getArg(getResources().getString(R.string.contact_name), String.class);
-        Uri uri = getArg(getResources().getString(R.string.contact_uri), Uri.class);
+        String name = getArg(getString(R.string.contact_name), String.class);
+        Uri uri = getArg(getString(R.string.contact_uri), Uri.class);
 
         Log.i(TAG, "Opening Edit Contact ActionView for contact: " + name);
 
@@ -88,8 +88,8 @@ public class OnClickController extends AbstractAndroidController implements View
     }
 
     private void onClickGroup(View view){
-        long groupId = getArg(getResources().getString(R.string.group_id), Long.class);
-        String groupName = getArg(getResources().getString(R.string.group_name), String.class);
+        long groupId = getArg(getString(R.string.group_id), Long.class);
+        String groupName = getArg(getString(R.string.group_name), String.class);
 
         Log.i(TAG, "Opening group: " + groupName);
 
