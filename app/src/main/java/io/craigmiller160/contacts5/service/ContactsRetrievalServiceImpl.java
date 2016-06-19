@@ -54,8 +54,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         String sortOrder = prefs.getString(context.getString(R.string.setting_contact_sort_order_key),
                 context.getString(R.string.array_sort_order_asc));
 
-        String displayNameColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME : DATA_GROUP_CONTACT_NAME;
-        String displayNameAltColumn = type == ALL_CONTACTS ? CONTACT_DISPLAY_NAME_ALTERNATE : DATA_GROUP_CONTACT_NAME_ALTERNATE;
+        String displayNameColumn = type == ALL_CONTACTS ? COL_CONTACTS_CONTACT_NAME : COL_DATA_GROUP_CONTACT_NAME;
+        String displayNameAltColumn = type == ALL_CONTACTS ? COL_CONTACTS_CONTACT_NAME_ALT : COL_DATA_GROUP_CONTACT_NAME_ALT;
 
         String sort = context.getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
 
@@ -77,10 +77,10 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
         String sort = context.getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
 
         if(context.getString(R.string.array_group_sort_by_group).equals(sortBy)){
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_TITLE, sort, GROUP_ACCOUNT_NAME);
+            return String.format("%1$s %2$s, %3$s %2$s", COL_GROUP_TITLE, sort, COL_GROUP_ACCOUNT);
         }
         else{
-            return String.format("%1$s %2$s, %3$s %2$s", GROUP_ACCOUNT_NAME, sort, GROUP_TITLE);
+            return String.format("%1$s %2$s, %3$s %2$s", COL_GROUP_ACCOUNT, sort, COL_GROUP_TITLE);
         }
     }
 
@@ -160,18 +160,18 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Cursor cursor = null;
             try{
                 cursor = context.getContentResolver().query(
-                        DATA_URI,
+                        URI_DATA,
                         new String[]{
-                                DATA_GROUP_GROUP_ID,
-                                DATA_GROUP_CONTACT_ID,
-                                DATA_GROUP_CONTACT_NAME,
-                                DATA_GROUP_CONTACT_NAME_ALTERNATE,
-                                DATA_MIMETYPE_COLUMN,
-                                CONTACT_HAS_PHONE,
-                                DATA_GROUP_CONTACT_THUMB_PHOTO_URI
+                                COL_DATA_GROUP_GROUP_ID,
+                                COL_DATA_GROUP_CONTACT_ID,
+                                COL_DATA_GROUP_CONTACT_NAME,
+                                COL_DATA_GROUP_CONTACT_NAME_ALT,
+                                COL_DATA_MIMETYPE,
+                                COL_CONTACTS_HAS_PHONE,
+                                COL_DATA_GROUP_CONTACT_PHOTO_URI
                         },
-                        DATA_GROUP_GROUP_ID + " = ? and " + DATA_MIMETYPE_COLUMN + " = ?",
-                        new String[]{"" + groupId, GROUP_MEMBERSHIP_MIMETYPE},
+                        COL_DATA_GROUP_GROUP_ID + " = ? and " + COL_DATA_MIMETYPE + " = ?",
+                        new String[]{"" + groupId, MIMETYPE_GROUP_MEMBERSHIP},
                         getContactSortString(context, CONTACTS_IN_GROUP)
                 );
 
@@ -179,14 +179,14 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     cursor.moveToFirst();
 
                     while(!cursor.isAfterLast()){
-                        int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
-                            long contactId = cursor.getLong(cursor.getColumnIndex(DATA_GROUP_CONTACT_ID));
-                            int nameColumnIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME) :
-                                    cursor.getColumnIndex(DATA_GROUP_CONTACT_NAME_ALTERNATE);
+                            long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_ID));
+                            int nameColumnIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME) :
+                                    cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME_ALT);
                             String displayName = cursor.getString(nameColumnIndex);
-                            Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
-                            String photoUriString = cursor.getString(cursor.getColumnIndex(DATA_GROUP_CONTACT_THUMB_PHOTO_URI));
+                            Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+                            String photoUriString = cursor.getString(cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_PHOTO_URI));
                             Uri photoUri = null;
                             if(photoUriString != null && !photoUriString.isEmpty()){
                                 photoUri = Uri.parse(photoUriString);
@@ -241,8 +241,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Cursor cursor = null;
             try{
                 cursor = context.getContentResolver().query(
-                        GROUP_URI,
-                        new String[]{GROUP_ID, GROUP_TITLE, GROUP_ACCOUNT_NAME, GROUP_COUNT, GROUP_COUNT_PHONES},
+                        URI_GROUPS,
+                        new String[]{COL_GROUP_ID, COL_GROUP_TITLE, COL_GROUP_ACCOUNT, COL_GROUP_COUNT, COL_GROUP_COUNT_PHONES},
                         null, null, getGroupSortString(context)
                 );
 
@@ -250,18 +250,18 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     Log.v(TAG, "Total number of group query rows: " + cursor.getCount());
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
-                        String accountName = cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME));
+                        String accountName = cursor.getString(cursor.getColumnIndex(COL_GROUP_ACCOUNT));
                         if(accountsToDisplay.contains(accountName)){
                             ContactGroup group = new ContactGroup();
-                            group.setGroupId(cursor.getLong(cursor.getColumnIndex(GROUP_ID)));
-                            group.setGroupName(cursor.getString(cursor.getColumnIndex(GROUP_TITLE)));
-                            group.setAccountName(cursor.getString(cursor.getColumnIndex(GROUP_ACCOUNT_NAME)));
+                            group.setGroupId(cursor.getLong(cursor.getColumnIndex(COL_GROUP_ID)));
+                            group.setGroupName(cursor.getString(cursor.getColumnIndex(COL_GROUP_TITLE)));
+                            group.setAccountName(cursor.getString(cursor.getColumnIndex(COL_GROUP_ACCOUNT)));
 
                             if(isPhonesOnly(context) == 1){
-                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT_PHONES)));
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(COL_GROUP_COUNT_PHONES)));
                             }
                             else{
-                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(GROUP_COUNT)));
+                                group.setGroupSize(cursor.getInt(cursor.getColumnIndex(COL_GROUP_COUNT)));
                             }
 
                             if(group.getGroupSize() > 0 || useEmptyGroups){
@@ -363,8 +363,8 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
             Cursor cursor = null;
             try{
                 cursor = context.getContentResolver().query(
-                        CONTACTS_URI,
-                        new String[]{CONTACT_DISPLAY_NAME, CONTACT_DISPLAY_NAME_ALTERNATE, CONTACT_HAS_PHONE, CONTACT_PHOTO_THUMBNAIL_URI, CONTACT_ID, CONTACT_STARRED},
+                        URI_CONTACTS,
+                        new String[]{COL_CONTACTS_CONTACT_NAME, COL_CONTACTS_CONTACT_NAME_ALT, COL_CONTACTS_HAS_PHONE, COL_CONTACTS_CONTACT_PHOTO_URI, COL_CONTACTS_ID, COL_CONTACTS_STARRED},
                         null, null, getContactSortString(context, ALL_CONTACTS)
                 );
 
@@ -372,13 +372,13 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                     cursor.moveToFirst();
 
                     while(!cursor.isAfterLast()){
-                        int hasPhone = cursor.getInt(cursor.getColumnIndex(CONTACT_HAS_PHONE));
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_HAS_PHONE));
                         if(isPhonesOnly(context) == hasPhone){
-                            long contactId = cursor.getLong(cursor.getColumnIndex(CONTACT_ID));
-                            int displayNameIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(CONTACT_DISPLAY_NAME) : cursor.getColumnIndex(CONTACT_DISPLAY_NAME_ALTERNATE);
+                            long contactId = cursor.getLong(cursor.getColumnIndex(COL_CONTACTS_ID));
+                            int displayNameIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
                             String displayName = cursor.getString(displayNameIndex);
-                            Uri contactUri = ContentUris.withAppendedId(CONTACTS_URI, contactId);
-                            String photoUriString = cursor.getString(cursor.getColumnIndex(CONTACT_PHOTO_THUMBNAIL_URI));
+                            Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+                            String photoUriString = cursor.getString(cursor.getColumnIndex(COL_CONTACTS_CONTACT_PHOTO_URI));
                             Uri photoUri = null;
                             if(photoUriString != null && !photoUriString.isEmpty()){
                                 photoUri = Uri.parse(photoUriString);
@@ -392,7 +392,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
                             allContacts.add(contact);
 
-                            int starred = cursor.getInt(cursor.getColumnIndex(CONTACT_STARRED));
+                            int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
                             if(starred == 1){
                                 favContacts.add(contact);
                             }
@@ -437,17 +437,17 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
 
             try{
                 cursor = context.getContentResolver().query(
-                        RAW_CONTACTS_URI,
-                        new String[]{RAW_CONTACT_ID, RAW_CONTACT_CONTACT_ID, RAW_CONTACT_ACCOUNT_NAME},
+                        URI_RAW_CONTACTS,
+                        new String[]{COL_RAW_ID, COL_RAW_CONTACT_ID, COL_RAW_ACCOUNT},
                         null, null, null, null
                 );
 
                 if(cursor != null){
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
-                        String accountName = cursor.getString(cursor.getColumnIndex(RAW_CONTACT_ACCOUNT_NAME));
+                        String accountName = cursor.getString(cursor.getColumnIndex(COL_RAW_ACCOUNT));
                         if(!accountsToDisplay.contains(accountName)){
-                            contactsToExclude.add(cursor.getLong(cursor.getColumnIndex(RAW_CONTACT_CONTACT_ID)));
+                            contactsToExclude.add(cursor.getLong(cursor.getColumnIndex(COL_RAW_CONTACT_ID)));
                         }
 
                         cursor.moveToNext();

@@ -8,54 +8,47 @@ import android.provider.ContactsContract;
  */
 public interface ContactsRetrievalService {
 
-    String GROUP_MEMBERSHIP_MIMETYPE = ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE;
-    String EMAIL_MIMETYPE = ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
-    String PHONE_MIMETYPE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
-    String PHOTO_MIMETYPE = ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE;
-    String STRUCTURED_NAME_MIMETYPE = ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
+    String MIMETYPE_GROUP_MEMBERSHIP = ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE;
+    String MIMETYPE_EMAIL = ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
+    String MIMETYPE_PHONE = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+    String MIMETYPE_PHOTO = ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE;
+    String MIMETYPE_STRUCTURED_NAME = ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 
-    String CONTACTS_ENTITY_CONTENT_DIRECTORY = ContactsContract.Contacts.Entity.CONTENT_DIRECTORY;
+    String COL_DATA_ID = ContactsContract.Data._ID;
+    String COL_DATA_MIMETYPE = ContactsContract.Data.MIMETYPE;
+    String COL_DATA_CONTACT_ID = ContactsContract.Data.CONTACT_ID;
+    String COL_DATA_HAS_PHONE = ContactsContract.Data.HAS_PHONE_NUMBER;
+    String COL_DATA_DISPLAY_NAME = ContactsContract.Data.DISPLAY_NAME;
+    String COL_DATA_GROUP_ID = ContactsContract.Data.DATA1;
 
-    String DATA_ID_COLUMN = ContactsContract.Data._ID;
-    String DATA_MIMETYPE_COLUMN = ContactsContract.Data.MIMETYPE;
-    String DATA_CONTACT_ID_COLUMN = ContactsContract.Data.CONTACT_ID;
-    String DATA_HAS_PHONE_COLUMN = ContactsContract.Data.HAS_PHONE_NUMBER;
-    String DATA_DISPLAY_NAME_COLUMN = ContactsContract.Data.DISPLAY_NAME;
-    String DATA_GROUP_ID_COLUMN = ContactsContract.Data.DATA1;
+    Uri URI_CONTACTS = ContactsContract.Contacts.CONTENT_URI;
+    Uri URI_DATA = ContactsContract.Data.CONTENT_URI;
+    Uri URI_RAW_CONTACTS = ContactsContract.RawContacts.CONTENT_URI;
+    Uri URI_GROUPS = ContactsContract.Groups.CONTENT_SUMMARY_URI;
 
-    Uri CONTACTS_URI = ContactsContract.Contacts.CONTENT_URI;
-    Uri DATA_URI = ContactsContract.Data.CONTENT_URI;
-    Uri RAW_CONTACTS_URI = ContactsContract.RawContacts.CONTENT_URI;
-    Uri GROUP_URI = ContactsContract.Groups.CONTENT_SUMMARY_URI;
+    String COL_RAW_CONTACT_NAME = ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY;
+    String COL_RAW_ID = ContactsContract.RawContacts._ID;
+    String COL_RAW_CONTACT_ID = ContactsContract.RawContacts.CONTACT_ID;
+    String COL_RAW_ACCOUNT = ContactsContract.RawContacts.ACCOUNT_NAME;
 
-    String RAW_CONTACT_NAME = ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY;
-    String RAW_CONTACT_ID = ContactsContract.RawContacts._ID;
-    String RAW_CONTACT_CONTACT_ID = ContactsContract.RawContacts.CONTACT_ID;
-    String RAW_CONTACT_ACCOUNT_NAME = ContactsContract.RawContacts.ACCOUNT_NAME;
+    String COL_GROUP_TITLE = ContactsContract.Groups.TITLE;
+    String COL_GROUP_ID = ContactsContract.Groups._ID;
+    String COL_GROUP_ACCOUNT = ContactsContract.Groups.ACCOUNT_NAME;
+    String COL_GROUP_COUNT = ContactsContract.Groups.SUMMARY_COUNT;
+    String COL_GROUP_COUNT_PHONES = ContactsContract.Groups.SUMMARY_WITH_PHONES;
 
-    String GROUP_TITLE = ContactsContract.Groups.TITLE;
-    String GROUP_ID = ContactsContract.Groups._ID;
-    String GROUP_ACCOUNT_NAME = ContactsContract.Groups.ACCOUNT_NAME;
-    String GROUP_COUNT = ContactsContract.Groups.SUMMARY_COUNT;
-    String GROUP_COUNT_PHONES = ContactsContract.Groups.SUMMARY_WITH_PHONES;
+    String COL_DATA_GROUP_CONTACT_ID = ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID;
+    String COL_DATA_GROUP_GROUP_ID = ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID;
+    String COL_DATA_GROUP_CONTACT_NAME = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME;
+    String COL_DATA_GROUP_CONTACT_NAME_ALT = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME_ALTERNATIVE;
+    String COL_DATA_GROUP_CONTACT_PHOTO_URI = ContactsContract.CommonDataKinds.GroupMembership.PHOTO_THUMBNAIL_URI;
 
-    String DATA_GROUP_CONTACT_ID = ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID;
-    String DATA_GROUP_GROUP_ID = ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID;
-    String DATA_GROUP_CONTACT_NAME = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME;
-    String DATA_GROUP_CONTACT_NAME_ALTERNATE = ContactsContract.CommonDataKinds.GroupMembership.DISPLAY_NAME_ALTERNATIVE;
-    String DATA_GROUP_CONTACT_THUMB_PHOTO_URI = ContactsContract.CommonDataKinds.GroupMembership.PHOTO_THUMBNAIL_URI;
-
-    String CONTACT_DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
-    String CONTACT_DISPLAY_NAME_ALTERNATE = ContactsContract.Contacts.DISPLAY_NAME_ALTERNATIVE;
-    String CONTACT_PHOTO_THUMBNAIL_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
-    String CONTACT_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-    String CONTACT_ID = ContactsContract.Contacts._ID;
-    String CONTACT_STARRED = ContactsContract.Contacts.STARRED;
-    String CONTACT_ENTITY_CONTENT_DIRECTORY = ContactsContract.Contacts.Entity.CONTENT_DIRECTORY;
-
-
-    String LIMIT_CLAUSE = "limit";
-    String OFFSET_CLAUSE = "offset";
+    String COL_CONTACTS_CONTACT_NAME = ContactsContract.Contacts.DISPLAY_NAME;
+    String COL_CONTACTS_CONTACT_NAME_ALT = ContactsContract.Contacts.DISPLAY_NAME_ALTERNATIVE;
+    String COL_CONTACTS_CONTACT_PHOTO_URI = ContactsContract.Contacts.PHOTO_THUMBNAIL_URI;
+    String COL_CONTACTS_HAS_PHONE = ContactsContract.Contacts.HAS_PHONE_NUMBER;
+    String COL_CONTACTS_ID = ContactsContract.Contacts._ID;
+    String COL_CONTACTS_STARRED = ContactsContract.Contacts.STARRED;
 
     void loadAllContacts();
 
