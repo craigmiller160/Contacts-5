@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 /**
  * Created by craig on 6/5/16.
@@ -19,22 +18,23 @@ public abstract class AbstractContactsFragment<T> extends Fragment {
 
     private static final String PROPERTY_NAME = "PropertyName";
 
-    private PermissionsService permissionsService;
+    private AndroidSystemUtil androidSystemUtil;
     private ArrayAdapter<T> arrayAdapter;
 
     protected AbstractContactsFragment(){
-        this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arrayAdapter = getArrayAdapter();
+        this.arrayAdapter = getArrayAdapter();
+        this.androidSystemUtil = new AndroidSystemUtil(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
-        if(permissionsService.hasReadContactsPermission()){
+        if(androidSystemUtil.permissions().hasReadContactsPermission()){
             ListView view = (ListView) inflater.inflate(R.layout.content_list, container, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);

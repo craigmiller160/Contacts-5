@@ -20,6 +20,7 @@ import java.util.Set;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.service.AccountService;
+import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 /**
  * Created by craig on 5/7/16.
@@ -77,7 +78,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     public static class DisplaySettingsFragment extends PreferenceFragment {
 
-        private AccountService accountService;
+        private AndroidSystemUtil androidSystemUtil;
 
         @Override
         public void onCreate(Bundle savedInstance){
@@ -85,7 +86,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             Log.d(TAG, "Creating DisplaySettingsFragment");
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
-            this.accountService = ContactsApp.getApp().serviceFactory().getAccountService();
+            this.androidSystemUtil = new AndroidSystemUtil(getActivity());
 
             configurePreference(findPreference(getString(R.string.setting_accounts_to_display_key)));
             configurePreference(findPreference(getString(R.string.setting_contact_sort_order_key)));
@@ -118,12 +119,12 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
 
                 //Set the initial list of all account names
-                String[] accountNames = accountService.getAllContactAccountNames();
+                String[] accountNames = androidSystemUtil.accounts().getAllContactAccountNames();
                 mPref.setEntries(accountNames);
                 mPref.setEntryValues(accountNames);
 
                 //Get the values to be selected and set them
-                Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display_key), accountService.getAllContactAccountNamesSet());
+                Set<String> accountsToDisplay = prefs.getStringSet(getString(R.string.setting_accounts_to_display_key), androidSystemUtil.accounts().getAllContactAccountNamesSet());
                 if(accountsToDisplay != null){
                     mPref.setValues(accountsToDisplay);
                 }

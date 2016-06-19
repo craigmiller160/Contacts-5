@@ -1,16 +1,12 @@
 package io.craigmiller160.contacts5.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
@@ -18,7 +14,7 @@ import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
-import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
@@ -45,11 +41,11 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
         Log.v(TAG, "ContactsInGroupFragment created");
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
         ContactsRetrievalService contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
-        PermissionsService permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
+        AndroidSystemUtil androidSystemUtil = new AndroidSystemUtil(getActivity());
 
         Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
 
-        if(groupId != null && groupId >= 0 && permissionsService.hasReadContactsPermission() && savedInstance == null){
+        if(groupId != null && groupId >= 0 && androidSystemUtil.permissions().hasReadContactsPermission() && savedInstance == null){
             contactsService.loadAllContactsInGroup(groupId);
         }
     }

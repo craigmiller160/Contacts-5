@@ -11,7 +11,6 @@ public class ServiceFactory {
 
     private final AccountService accountService;
     private final ContactsRetrievalService contactsRetrievalService;
-    private final PermissionsService permissionsService;
 
     private static ServiceFactory instance;
     private static final Object instanceLock = new Object();
@@ -20,15 +19,6 @@ public class ServiceFactory {
         this.context = context;
         this.accountService = new AccountService(context);
         this.contactsRetrievalService = new ContactsRetrievalServiceImpl(context, accountService);
-        this.permissionsService = new PermissionsService(context);
-    }
-
-    public AccountService getAccountService(){
-        return accountService;
-    }
-
-    public PermissionsService getPermissionsService(){
-        return permissionsService;
     }
 
     public ContactsRetrievalService getContactsRetrievalService(){

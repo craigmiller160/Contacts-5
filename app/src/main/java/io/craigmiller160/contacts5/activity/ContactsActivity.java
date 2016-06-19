@@ -18,7 +18,7 @@ import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
-import io.craigmiller160.contacts5.service.PermissionsService;
+import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.CodeParser;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
@@ -40,7 +40,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private static final String REQUEST_PERMISSION_ACTION = "Grant";
 
-    private PermissionsService permissionsService;
+    private AndroidSystemUtil androidSystemUtil;
     private ContactsRetrievalService contactsService;
     private AndroidModel contactsModel;
     private boolean reloadContacts = true;
@@ -51,7 +51,7 @@ public class ContactsActivity extends AppCompatActivity {
         Log.i(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
 
-        this.permissionsService = ContactsApp.getApp().serviceFactory().getPermissionsService();
+        this.androidSystemUtil = new AndroidSystemUtil(this);
         this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
 
@@ -71,8 +71,8 @@ public class ContactsActivity extends AppCompatActivity {
         findViewById(R.id.add_contact_fab).setOnClickListener(new OnClickController(this, null, OnClickController.ADD_BUTTON));
 
         //Check permissions
-        if(!permissionsService.hasReadContactsPermission()){
-            permissionsService.requestReadContactsPermission(this);
+        if(!androidSystemUtil.permissions().hasReadContactsPermission()){
+            androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
 
         if(contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class) == null){
@@ -115,7 +115,7 @@ public class ContactsActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.grantPermissions);
         if(item != null){
-            item.setVisible(!permissionsService.hasReadContactsPermission());
+            item.setVisible(!androidSystemUtil.permissions().hasReadContactsPermission());
         }
 
         return true;
@@ -135,7 +135,7 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void reloadContacts(){
-        if(permissionsService.hasReadContactsPermission()){
+        if(androidSystemUtil.permissions().hasReadContactsPermission()){
             contactsService.loadAllContacts();
             contactsService.loadAllGroups();
             String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
@@ -167,7 +167,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PermissionsService.CONTACTS_PERMISSION_REQUEST:
+            case AndroidSystemUtil.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Necessary permissions were granted");
                     contactsModel.clearAllProperties();
@@ -182,7 +182,7 @@ public class ContactsActivity extends AppCompatActivity {
                             .setAction(REQUEST_PERMISSION_ACTION, new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v) {
-                                    permissionsService.requestReadContactsPermission(ContactsActivity.this);
+                                    androidSystemUtil.permissions().requestReadContactsPermission(ContactsActivity.this);
                                 }
                             });
                     snackbar.setActionTextColor(Color.YELLOW);
@@ -199,8 +199,8 @@ public class ContactsActivity extends AppCompatActivity {
             return true;
         }
         else if(item.getItemId() == R.id.grantPermissions){
-            if(!permissionsService.hasReadContactsPermission()){
-                permissionsService.requestReadContactsPermission(this);
+            if(!androidSystemUtil.permissions().hasReadContactsPermission()){
+                androidSystemUtil.permissions().requestReadContactsPermission(this);
             }
             return true;
         }
