@@ -167,8 +167,7 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                                 COL_DATA_GROUP_CONTACT_NAME,
                                 COL_DATA_GROUP_CONTACT_NAME_ALT,
                                 COL_DATA_MIMETYPE,
-                                COL_CONTACTS_HAS_PHONE,
-                                COL_DATA_GROUP_CONTACT_PHOTO_URI
+                                COL_CONTACTS_HAS_PHONE
                         },
                         COL_DATA_GROUP_GROUP_ID + " = ? and " + COL_DATA_MIMETYPE + " = ?",
                         new String[]{"" + groupId, MIMETYPE_GROUP_MEMBERSHIP},
@@ -186,17 +185,11 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                                     cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME_ALT);
                             String displayName = cursor.getString(nameColumnIndex);
                             Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
-                            String photoUriString = cursor.getString(cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_PHOTO_URI));
-                            Uri photoUri = null;
-                            if(photoUriString != null && !photoUriString.isEmpty()){
-                                photoUri = Uri.parse(photoUriString);
-                            }
 
                             Contact contact = new Contact();
                             contact.setDisplayName(displayName);
                             contact.setUri(contactUri);
                             contact.setId(contactId);
-                            contact.setPhotoUri(photoUri);
 
                             contacts.add(contact);
                         }
@@ -378,17 +371,11 @@ public class ContactsRetrievalServiceImpl extends AbstractContactsRetrievalServi
                             int displayNameIndex = isFirstNameLastName(context) ? cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
                             String displayName = cursor.getString(displayNameIndex);
                             Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
-                            String photoUriString = cursor.getString(cursor.getColumnIndex(COL_CONTACTS_CONTACT_PHOTO_URI));
-                            Uri photoUri = null;
-                            if(photoUriString != null && !photoUriString.isEmpty()){
-                                photoUri = Uri.parse(photoUriString);
-                            }
 
                             Contact contact = new Contact();
                             contact.setDisplayName(displayName);
                             contact.setUri(contactUri);
                             contact.setId(contactId);
-                            contact.setPhotoUri(photoUri);
 
                             allContacts.add(contact);
 
