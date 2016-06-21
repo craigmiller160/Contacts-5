@@ -14,21 +14,10 @@ import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
  */
 public class ModelFactory extends AbstractAndroidUtil{
 
-    private static ModelFactory instance;
-    private static final Object instanceLock = new Object();
-
     private final Map<String,AndroidModel> models = Collections.synchronizedMap(new HashMap<String, AndroidModel>());
 
     public ModelFactory(Context context) {
         super(context);
-    }
-
-    protected void registerModel(String modelName, AndroidModel model){
-        models.put(modelName, model);
-    }
-
-    protected void unregisterModel(String modelName){
-        models.remove(modelName);
     }
 
     public int getModelCount(){
