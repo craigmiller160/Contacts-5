@@ -1,5 +1,6 @@
 package io.craigmiller160.contacts5.model;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,11 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 import io.craigmiller160.contacts5.IllegalArgumentCtxException;
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
  * Created by craig on 6/4/16.
  */
-public class AndroidModel {
+public class AndroidModel extends AbstractAndroidUtil{
 
     //TODO test to make sure that the weak references to the listeners are working. the ArrayAdapters are good candidates for this
 
@@ -28,7 +30,9 @@ public class AndroidModel {
     private final WeakPropertyChangeSupport support = new WeakPropertyChangeSupport(this);
     private final Map<String,Object> props = Collections.synchronizedMap(new HashMap<String, Object>());
 
-    protected AndroidModel(){}
+    protected AndroidModel(Context context){
+        super(context);
+    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener){
         support.addPropertyChangeListener(listener);
@@ -50,18 +54,30 @@ public class AndroidModel {
         this.modelName = modelName;
     }
 
+    protected synchronized void setModelName(int resId){
+        setModelName(getString(resId));
+    }
+
     protected synchronized String getModelName(){
         return modelName;
     }
 
-    public void setProperty(String propertyName, Object value){
+    public synchronized void setProperty(String propertyName, Object value){
         props.put(propertyName, value);
         firePropertyChangeEvent(propertyName, null, value);
     }
 
-    public void clearProperty(String propertyName){
+    public void setProperty(int resId, Object value){
+        setProperty(getString(resId), value);
+    }
+
+    public synchronized void clearProperty(String propertyName){
         props.remove(propertyName);
         firePropertyChangeEvent(propertyName, null, null);
+    }
+
+    public void clearProperty(int resId){
+        clearProperty(getString(resId));
     }
 
     public int getPropertyCount(){
@@ -76,7 +92,11 @@ public class AndroidModel {
         return props.get(propertyName);
     }
 
-    public <T> T getProperty(String propertyName, Class<?> returnType){
+    public Object getProperty(int resId){
+        return getProperty(getString(resId));
+    }
+
+    public <T> T getProperty(String propertyName, Class<T> returnType){
         if(returnType == null){
             throw new IllegalArgumentCtxException("Return type value cannot be null")
                     .addContextValue("Property Name", propertyName);
@@ -94,6 +114,10 @@ public class AndroidModel {
                     .addContextValue("Specified Return Type", returnType.getName());
         }
         return (T) value;
+    }
+
+    public <T> T getProperty(int resId, Class<T> returnType){
+        return getProperty(getString(resId), returnType);
     }
 
     public void storeState(Bundle savedInstance){
