@@ -17,7 +17,6 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
-import io.craigmiller160.contacts5.service.ContactQueryTasks;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
@@ -140,14 +139,14 @@ public class ContactsActivity extends AppCompatActivity {
     private void reloadContacts(){
         if(androidSystemUtil.permissions().hasReadContactsPermission()){
             Intent intent = new Intent(this, ContactsService.class);
-            intent.putExtra(ContactQueryTasks.LOAD_CONTACTS, true);
-            intent.putExtra(ContactQueryTasks.LOAD_GROUPS, true);
+            intent.putExtra(ContactsService.LOAD_CONTACTS, true);
+            intent.putExtra(ContactsService.LOAD_GROUPS, true);
 
             String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
             Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
             String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
             if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
-                intent.putExtra(ContactQueryTasks.LOAD_CONTACTS_IN_GROUP, true);
+                intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
                 intent.putExtra(SELECTED_GROUP_ID, groupId);
                 intent.putExtra(SELECTED_GROUP_NAME, groupName);
             }
