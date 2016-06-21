@@ -1,5 +1,6 @@
 package io.craigmiller160.contacts5.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +15,7 @@ import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
@@ -44,9 +46,15 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
         AndroidSystemUtil androidSystemUtil = new AndroidSystemUtil(getActivity());
 
         Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
+        String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
 
         if(groupId != null && groupId >= 0 && androidSystemUtil.permissions().hasReadContactsPermission() && savedInstance == null){
-            contactsService.loadAllContactsInGroup(groupId);
+            Intent intent = new Intent(getActivity(), ContactsService.class);
+            intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
+            intent.putExtra(SELECTED_GROUP_ID, groupId);
+            intent.putExtra(SELECTED_GROUP_NAME, groupName);
+
+            getActivity().startService(intent);
         }
     }
 

@@ -18,8 +18,10 @@ import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsRetrievalService;
+import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.CodeParser;
+import io.craigmiller160.contacts5.util.ContactsConstants;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
@@ -136,13 +138,19 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void reloadContacts(){
         if(androidSystemUtil.permissions().hasReadContactsPermission()){
-            contactsService.loadAllContacts();
-            contactsService.loadAllGroups();
+            Intent intent = new Intent(this, ContactsService.class);
+            intent.putExtra(ContactsService.LOAD_CONTACTS, true);
+            intent.putExtra(ContactsService.LOAD_GROUPS, true);
+
             String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
             Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
+            String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
             if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
-                contactsService.loadAllContactsInGroup(groupId);
+                intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
+                intent.putExtra(SELECTED_GROUP_ID, groupId);
+                intent.putExtra(SELECTED_GROUP_NAME, groupName);
             }
+            startService(intent);
         }
     }
 

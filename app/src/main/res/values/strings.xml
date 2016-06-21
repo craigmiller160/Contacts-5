@@ -4,9 +4,10 @@
     <string name="activity_contacts_name" translatable="false">ContactsActivity</string>
     <string name="activity_settings_name" translatable="false">DisplaySettingsActivity</string>
 
-    <!--App and Activity Labels -->
+    <!--App, Activity, and Service Labels -->
     <string name="activity_contacts_name_label">Contacts 5+</string>
     <string name="activity_settings_name_label">Display Settings</string>
+    <string name="service_contacts_label">ContactsService</string>
 
     <!-- Main Menu Item Labels -->
     <string name="menu_settings_label">Display Settings</string>

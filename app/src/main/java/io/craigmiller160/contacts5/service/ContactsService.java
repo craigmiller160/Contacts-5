@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageItemInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
@@ -112,21 +113,21 @@ public class ContactsService extends Service{
         private final Intent intent;
         private final AndroidModel contactsModel;
         private final int startId;
-        private final String startIdString;
+        private final String tagid;
 
         public ExecuteQueries(ContactsService service, Intent intent, int startId){
             super(service);
             this.service = service;
             this.intent = intent;
             this.startId = startId;
-            this.startIdString = String.format(Locale.getDefault(), "%03d", startId);
+            this.tagid = String.format(Locale.getDefault(), "%s-%03d", TAG, startId);
             this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
         }
 
         @Override
         public void run() {
             long startTime = System.currentTimeMillis();
-            Log.i(TAG, String.format(Locale.getDefault(), "ContactsService-%s starting", startIdString));
+            Log.i(tagid, "Service is starting");
 
             try{
                 runService();
@@ -136,7 +137,7 @@ public class ContactsService extends Service{
             }
 
             long endTime = System.currentTimeMillis();
-            Log.i(TAG, String.format("ContactsService-%s finished. Time: %dms", startIdString, (endTime - startTime)));
+            Log.i(tagid, String.format("Service finished. Time: %dms", (endTime - startTime)));
         }
 
         private void runService(){
@@ -151,7 +152,7 @@ public class ContactsService extends Service{
                 groupId = intent.getLongExtra(SELECTED_GROUP_ID, -1);
                 groupName = intent.getStringExtra(SELECTED_GROUP_NAME);
                 if(groupId >= 0){
-                    Log.d(TAG, String.format("ContactsService-%s running query for contacts in group %s", startIdString, groupName));
+                    Log.d(tagid, String.format("Running query for contacts in group '%s'", groupName));
                     contactsInGroupQuery = service.submit(new ContactsInGroupQuery(getContext(), groupId));
                 }
             }
@@ -159,28 +160,28 @@ public class ContactsService extends Service{
             Future<Map<String,List<Contact>>> allContactsFuture = null;
             Future<Set<Long>> exclusionsFuture = null;
             if(loadContacts){
-                Log.d(TAG, String.format("ContactsService-%s running query for all contacts", startIdString));
-                Log.d(TAG, String.format("ContactsService-%s running query for favorite contacts", startIdString));
+                Log.d(tagid, "Running query for all contacts");
+                Log.d(tagid, "Running query for favorite contacts");
                 allContactsFuture = service.submit(new AllContactsQuery(getContext()));
                 exclusionsFuture = service.submit(new ExclusionsQuery(getContext()));
             }
 
             Future<List<ContactGroup>> allGroupsFuture = null;
             if(loadGroups){
-                Log.d(TAG, String.format("ContactsService-%s running query for all groups", startIdString));
+                Log.d(tagid, "Running query for all groups");
                 allGroupsFuture = service.submit(new AllGroupsQuery(getContext()));
             }
 
             try{
                 if(contactsInGroupQuery != null){
                     List<Contact> contactsInGroup = contactsInGroupQuery.get();
-                    Log.d(TAG, String.format("ContactsService-%s loaded contacts for group %s. Count: %d", startIdString, groupName, contactsInGroup.size()));
+                    Log.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
                     contactsModel.setProperty(CONTACTS_IN_GROUP_LIST, contactsInGroup);
                 }
 
                 if(allGroupsFuture != null){
                     List<ContactGroup> groups = allGroupsFuture.get();
-                    Log.d(TAG, String.format("ContactsService-%s loaded all groups. Count: %d", startIdString, groups.size()));
+                    Log.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
                     contactsModel.setProperty(GROUPS_LIST, groups);
                 }
 
@@ -206,18 +207,18 @@ public class ContactsService extends Service{
                         }
                     }
 
-                    Log.d(TAG, String.format("ContactsService-%s loaded all contacts. Count: %d", startIdString, contacts.size()));
-                    Log.d(TAG, String.format("ContactsService-%s loaded all favorites. Count: %d", startIdString, favorites.size()));
+                    Log.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
+                    Log.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
 
                     contactsModel.setProperty(CONTACTS_LIST, contacts);
                     contactsModel.setProperty(FAVORITES_LIST, favorites);
                 }
             }
             catch(InterruptedException ex){
-                Log.e(TAG, String.format("ContactsService-%s was interrupted during execution", startIdString), ex);
+                Log.e(tagid, "Service was interrupted during execution", ex);
             }
             catch(ExecutionException ex){
-                Log.e(TAG, String.format("ContactsService-%s failed during execution", startIdString), ex);
+                Log.e(tagid, "Service failed during execution", ex);
             }
         }
     }

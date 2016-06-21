@@ -16,13 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:resizeableActivity="true">
+        <service android:name=".service.ContactsService"
+            android:label="@string/service_contacts_label"/>
         <activity
             android:name=".activity.ContactsActivity"
             android:label="@string/activity_contacts_name_label"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
