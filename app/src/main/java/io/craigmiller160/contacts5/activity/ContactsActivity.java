@@ -17,16 +17,12 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
-import io.craigmiller160.contacts5.service.ContactsRetrievalService;
 import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.CodeParser;
-import io.craigmiller160.contacts5.util.ContactsConstants;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.ADD_CONTACT_CONTROLLER;
 import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
 import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.NO_TABS_FRAGMENT_TAG;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
@@ -43,7 +39,6 @@ public class ContactsActivity extends AppCompatActivity {
     private static final String REQUEST_PERMISSION_ACTION = "Grant";
 
     private AndroidSystemUtil androidSystemUtil;
-    private ContactsRetrievalService contactsService;
     private AndroidModel contactsModel;
     private boolean reloadContacts = true;
 
@@ -54,7 +49,6 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
 
         this.androidSystemUtil = new AndroidSystemUtil(this);
-        this.contactsService = ContactsApp.getApp().serviceFactory().getContactsRetrievalService();
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
 
         if(savedInstance != null){

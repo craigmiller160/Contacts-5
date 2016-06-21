@@ -8,10 +8,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 
 import io.craigmiller160.contacts5.model.ModelFactory;
-import io.craigmiller160.contacts5.service.ServiceFactory;
 import io.craigmiller160.contacts5.util.ContactsUncaughtExceptionHandler;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * The application class for Contacts 5+.
@@ -24,7 +21,6 @@ public class ContactsApp extends Application {
 
     private static final Object factoryLock = new Object();
 
-    private ServiceFactory serviceFactory;
     private ModelFactory modelFactory;
 
     public static ContactsApp getApp(){
@@ -39,7 +35,6 @@ public class ContactsApp extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.display_settings, false);
 
         synchronized (factoryLock){
-            serviceFactory = new ServiceFactory(this);
             modelFactory = new ModelFactory(this);
         }
 
@@ -54,12 +49,6 @@ public class ContactsApp extends Application {
         L.writeLogs(false);
 
         Thread.setDefaultUncaughtExceptionHandler(new ContactsUncaughtExceptionHandler());
-    }
-
-    public ServiceFactory serviceFactory(){
-        synchronized (factoryLock){
-            return serviceFactory;
-        }
     }
 
     public ModelFactory modelFactory(){

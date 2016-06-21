@@ -17,9 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.service.AccountService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 /**
