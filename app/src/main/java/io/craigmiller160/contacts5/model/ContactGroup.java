@@ -1,7 +1,6 @@
 package io.craigmiller160.contacts5.model;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,10 +17,7 @@ public class ContactGroup implements Comparable<ContactGroup>, Serializable{
     private String groupName;
     private int groupSize;
     private String accountName;
-    private Uri uri;
-
-    public static final String GROUP_ID_PROP = "GroupId";
-    public static final String GROUP_NAME_PROP = "GroupName";
+    private String uri;
 
     public ContactGroup(){}
 
@@ -64,11 +60,11 @@ public class ContactGroup implements Comparable<ContactGroup>, Serializable{
     }
 
     public Uri getUri() {
-        return uri;
+        return Uri.parse(uri);
     }
 
     public void setUri(Uri uri) {
-        this.uri = uri;
+        this.uri = uri.toString();
     }
 
     @Override
@@ -106,19 +102,4 @@ public class ContactGroup implements Comparable<ContactGroup>, Serializable{
         return groupName.compareToIgnoreCase(another.groupName);
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeLong(groupId);
-        out.writeUTF(groupName);
-        out.writeInt(groupSize);
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-        groupId = in.readLong();
-        groupName = in.readUTF();
-        groupSize = in.readInt();
-    }
-
-    private void readObjectNoData() throws ObjectStreamException {
-        //Do nothing
-    }
 }

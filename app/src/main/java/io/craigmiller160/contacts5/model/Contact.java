@@ -14,13 +14,8 @@ import java.io.Serializable;
 public class Contact implements Comparable<Contact>, Serializable{
 
     private long id;
-    private String firstName;
-    private String lastName;
     private String displayName;
-    private Uri uri;
-    //private Bitmap photo;
-    private String accountName;
-    private Uri photoUri;
+    private String uri;
 
     public Contact(){}
 
@@ -46,44 +41,13 @@ public class Contact implements Comparable<Contact>, Serializable{
     }
 
     public Uri getUri() {
-        return uri;
+        return Uri.parse(uri);
     }
 
     public void setUri(Uri uri) {
-        this.uri = uri;
+        this.uri = uri.toString();
     }
 
-    public void setAccountName(String accountName){
-        this.accountName = accountName;
-    }
-
-    public String getAccountName(){
-        return accountName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setPhotoUri(Uri photoUri){
-        this.photoUri = photoUri;
-    }
-
-    public Uri getPhotoUri(){
-        return photoUri;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -93,25 +57,17 @@ public class Contact implements Comparable<Contact>, Serializable{
         Contact contact = (Contact) o;
 
         if (id != contact.id) return false;
-        if (firstName != null ? !firstName.equals(contact.firstName) : contact.firstName != null)
-            return false;
-        if (lastName != null ? !lastName.equals(contact.lastName) : contact.lastName != null)
-            return false;
         if (displayName != null ? !displayName.equals(contact.displayName) : contact.displayName != null)
             return false;
-        if (uri != null ? !uri.equals(contact.uri) : contact.uri != null) return false;
-        return !(accountName != null ? !accountName.equals(contact.accountName) : contact.accountName != null);
+        return uri != null ? uri.equals(contact.uri) : contact.uri == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
         result = 31 * result + (uri != null ? uri.hashCode() : 0);
-        result = 31 * result + (accountName != null ? accountName.hashCode() : 0);
         return result;
     }
 
@@ -125,25 +81,4 @@ public class Contact implements Comparable<Contact>, Serializable{
         return displayName.compareToIgnoreCase(another.displayName);
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException{
-        out.writeLong(id);
-        out.writeUTF(displayName);
-        if(uri != null){
-            out.writeUTF(uri.toString());
-        }
-        if(photoUri != null){
-            out.writeUTF(photoUri.toString());
-        }
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-        id = in.readLong();
-        displayName = in.readUTF();
-        uri = Uri.parse(in.readUTF());
-        photoUri = Uri.parse(in.readUTF());
-    }
-
-    private void readObjectNoData() throws ObjectStreamException{
-        //Do nothing
-    }
 }
