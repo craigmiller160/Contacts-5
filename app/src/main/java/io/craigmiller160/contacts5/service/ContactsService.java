@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageItemInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
@@ -43,12 +42,6 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.*;
  */
 public class ContactsService extends Service{
 
-    //TODO this needs to support its own interruption.
-    // TODO It also needs to cancel a running service if a new one is started
-    //TODO the service needs to be stopped after each operation is finished
-
-    //TODO reduce numbers of constants used, here and everywhere, and consolidate them all in strings.xml
-
     private static final String TAG = "ContactsService";
     private static final String ALL_CONTACTS_KEY = "AllContacts";
     private static final String FAV_CONTACTS_KEY = "FavContacts";
@@ -59,6 +52,7 @@ public class ContactsService extends Service{
 
     private AndroidSystemUtil androidSystemUtil;
     private ExecutorService executor;
+    private Future<?> queries;
 
     @Override
     public void onCreate() {
@@ -77,17 +71,23 @@ public class ContactsService extends Service{
 
     @Override
     public void onDestroy() {
-        //TODO ensure that the service is interrupted
+        executor.shutdownNow();
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(androidSystemUtil.permissions().hasReadContactsPermission()){
-            Log.d(TAG, "ContactsService start command received. Contacts permissions are available");
-            ExecuteQueries executeQueries = new ExecuteQueries(this, intent, startId);
+            String tagid = String.format(Locale.getDefault(), "%s-%03d", TAG, startId);
+            Log.d(tagid, "Start command received. Contacts permissions are available");
+            if(queries != null && !queries.isDone()){
+                queries.cancel(true);
+                Log.e(tagid, "ContactsService already running, terminating before starting new operation");
+            }
+
+            ExecuteQueries executeQueries = new ExecuteQueries(this, intent, startId, tagid);
             if(Looper.myLooper() == Looper.getMainLooper()){
-                executor.submit(executeQueries);
+                queries = executor.submit(executeQueries);
             }
             else{
                 executeQueries.run();
@@ -115,12 +115,17 @@ public class ContactsService extends Service{
         private final int startId;
         private final String tagid;
 
-        public ExecuteQueries(ContactsService service, Intent intent, int startId){
+        private Future<List<Contact>> contactsInGroupQuery;
+        Future<Map<String,List<Contact>>> allContactsQuery;
+        Future<Set<Long>> exclusionsQuery;
+        Future<List<ContactGroup>> allGroupsQuery;
+
+        public ExecuteQueries(ContactsService service, Intent intent, int startId, String tagid){
             super(service);
             this.service = service;
             this.intent = intent;
             this.startId = startId;
-            this.tagid = String.format(Locale.getDefault(), "%s-%03d", TAG, startId);
+            this.tagid = tagid;
             this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
         }
 
@@ -131,23 +136,57 @@ public class ContactsService extends Service{
 
             try{
                 runService();
+                long endTime = System.currentTimeMillis();
+                Log.i(tagid, String.format("Service finished. Time: %dms", (endTime - startTime)));
+            }
+            catch(InterruptedException ex){
+                Log.e(tagid, "Service was interrupted during execution", ex);
+            }
+            catch(ExecutionException ex){
+                Log.e(tagid, "Service failed during execution", ex);
             }
             finally{
                 service.stopSelf(startId);
             }
-
-            long endTime = System.currentTimeMillis();
-            Log.i(tagid, String.format("Service finished. Time: %dms", (endTime - startTime)));
         }
 
-        private void runService(){
+        private void interruptTasks(){
+            if(contactsInGroupQuery != null){
+                contactsInGroupQuery.cancel(true);
+                contactsInGroupQuery = null;
+            }
+
+            if(allContactsQuery != null){
+                allContactsQuery.cancel(true);
+                allContactsQuery = null;
+            }
+
+            if(exclusionsQuery != null){
+                exclusionsQuery.cancel(true);
+                exclusionsQuery = null;
+            }
+
+            if(allGroupsQuery != null){
+                allGroupsQuery.cancel(true);
+                allGroupsQuery = null;
+            }
+        }
+
+        private void runService() throws InterruptedException, ExecutionException{
             boolean loadContacts = intent.getBooleanExtra(LOAD_CONTACTS, false);
             boolean loadGroups = intent.getBooleanExtra(LOAD_GROUPS, false);
             boolean loadContactsInGroup = intent.getBooleanExtra(LOAD_CONTACTS_IN_GROUP, false);
             long groupId = -1;
             String groupName = "";
 
-            Future<List<Contact>> contactsInGroupQuery = null;
+                /*
+                 * Start the requested tasks
+                 */
+
+            if(Thread.currentThread().isInterrupted()){
+                throw new InterruptedException();
+            }
+
             if(loadContactsInGroup){
                 groupId = intent.getLongExtra(SELECTED_GROUP_ID, -1);
                 groupName = intent.getStringExtra(SELECTED_GROUP_NAME);
@@ -157,75 +196,94 @@ public class ContactsService extends Service{
                 }
             }
 
-            Future<Map<String,List<Contact>>> allContactsFuture = null;
-            Future<Set<Long>> exclusionsFuture = null;
+            if(Thread.currentThread().isInterrupted()){
+                interruptTasks();
+                throw new InterruptedException();
+            }
+
             if(loadContacts){
                 Log.d(tagid, "Running query for all contacts");
                 Log.d(tagid, "Running query for favorite contacts");
-                allContactsFuture = service.submit(new AllContactsQuery(getContext(), tagid));
-                exclusionsFuture = service.submit(new ExclusionsQuery(getContext(), tagid));
+                allContactsQuery = service.submit(new AllContactsQuery(getContext(), tagid));
+                exclusionsQuery = service.submit(new ExclusionsQuery(getContext(), tagid));
             }
 
-            Future<List<ContactGroup>> allGroupsFuture = null;
+            if(Thread.currentThread().isInterrupted()){
+                interruptTasks();
+                throw new InterruptedException();
+            }
+
             if(loadGroups){
                 Log.d(tagid, "Running query for all groups");
-                allGroupsFuture = service.submit(new AllGroupsQuery(getContext(), tagid));
+                allGroupsQuery = service.submit(new AllGroupsQuery(getContext(), tagid));
             }
 
-            try{
-                if(contactsInGroupQuery != null){
-                    List<Contact> contactsInGroup = contactsInGroupQuery.get();
-                    Log.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
-                    contactsModel.setProperty(CONTACTS_IN_GROUP_LIST, contactsInGroup);
-                }
+            if(Thread.currentThread().isInterrupted()){
+                interruptTasks();
+                throw new InterruptedException();
+            }
 
-                if(allGroupsFuture != null){
-                    List<ContactGroup> groups = allGroupsFuture.get();
-                    Log.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
-                    contactsModel.setProperty(GROUPS_LIST, groups);
-                }
+                /*
+                 * Retrieve the results from the tasks
+                 */
 
-                if(allContactsFuture != null){
-                    Map<String,List<Contact>> results = allContactsFuture.get();
-                    List<Contact> contacts = results.get(ALL_CONTACTS_KEY);
-                    List<Contact> favorites = results.get(FAV_CONTACTS_KEY);
-                    Set<Long> exclusions = exclusionsFuture.get();
+            if(contactsInGroupQuery != null){
+                List<Contact> contactsInGroup = contactsInGroupQuery.get();
+                Log.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
+                contactsModel.setProperty(CONTACTS_IN_GROUP_LIST, contactsInGroup);
+            }
 
-                    Iterator<Contact> contactIterator = contacts.iterator();
-                    while(contactIterator.hasNext()){
-                        if(Thread.currentThread().isInterrupted()){
-                            throw new InterruptedException();
-                        }
-                        Contact contact = contactIterator.next();
-                        if(exclusions.contains(contact.getId())){
-                            contactIterator.remove();
-                        }
+            if(Thread.currentThread().isInterrupted()){
+                interruptTasks();
+                throw new InterruptedException();
+            }
+
+            if(allGroupsQuery != null){
+                List<ContactGroup> groups = allGroupsQuery.get();
+                Log.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
+                contactsModel.setProperty(GROUPS_LIST, groups);
+            }
+
+            if(Thread.currentThread().isInterrupted()){
+                interruptTasks();
+                throw new InterruptedException();
+            }
+
+            if(allContactsQuery != null){
+                Map<String,List<Contact>> results = allContactsQuery.get();
+                List<Contact> contacts = results.get(ALL_CONTACTS_KEY);
+                List<Contact> favorites = results.get(FAV_CONTACTS_KEY);
+                Set<Long> exclusions = exclusionsQuery.get();
+
+                Iterator<Contact> contactIterator = contacts.iterator();
+                while(contactIterator.hasNext()){
+                    if(Thread.currentThread().isInterrupted()){
+                        throw new InterruptedException();
                     }
-
-                    Iterator<Contact> favIterator = favorites.iterator();
-                    while(favIterator.hasNext()){
-                        if(Thread.currentThread().isInterrupted()){
-                            throw new InterruptedException();
-                        }
-                        Contact contact = favIterator.next();
-                        if(exclusions.contains(contact.getId())){
-                            favIterator.remove();
-                        }
+                    Contact contact = contactIterator.next();
+                    if(exclusions.contains(contact.getId())){
+                        contactIterator.remove();
                     }
-
-                    Log.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
-                    Log.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
-
-                    contactsModel.setProperty(CONTACTS_LIST, contacts);
-                    contactsModel.setProperty(FAVORITES_LIST, favorites);
                 }
+
+                Iterator<Contact> favIterator = favorites.iterator();
+                while(favIterator.hasNext()){
+                    if(Thread.currentThread().isInterrupted()){
+                        throw new InterruptedException();
+                    }
+                    Contact contact = favIterator.next();
+                    if(exclusions.contains(contact.getId())){
+                        favIterator.remove();
+                    }
+                }
+
+                Log.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
+                Log.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
+
+                contactsModel.setProperty(CONTACTS_LIST, contacts);
+                contactsModel.setProperty(FAVORITES_LIST, favorites);
             }
-            catch(InterruptedException ex){
-                Log.e(tagid, "Service was interrupted during execution", ex);
-            }
-            catch(ExecutionException ex){
-                Log.e(tagid, "Service failed during execution", ex);
-            }
+
         }
     }
 
