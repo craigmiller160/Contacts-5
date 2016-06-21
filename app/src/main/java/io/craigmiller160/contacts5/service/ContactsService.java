@@ -263,23 +263,26 @@ public class ContactsService extends Service{
                         }
 
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_HAS_PHONE));
-                        if(prefHelper.isPhonesOnly() == hasPhone){
-                            long contactId = cursor.getLong(cursor.getColumnIndex(COL_CONTACTS_ID));
-                            int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
-                            String displayName = cursor.getString(displayNameIndex);
-                            Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
+                            cursor.moveToNext();
+                            continue;
+                        }
 
-                            Contact contact = new Contact();
-                            contact.setDisplayName(displayName);
-                            contact.setUri(contactUri);
-                            contact.setId(contactId);
+                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_CONTACTS_ID));
+                        int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
+                        String displayName = cursor.getString(displayNameIndex);
+                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
 
-                            allContacts.add(contact);
+                        Contact contact = new Contact();
+                        contact.setDisplayName(displayName);
+                        contact.setUri(contactUri);
+                        contact.setId(contactId);
 
-                            int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
-                            if(starred == 1){
-                                favContacts.add(contact);
-                            }
+                        allContacts.add(contact);
+
+                        int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
+                        if(starred == 1){
+                            favContacts.add(contact);
                         }
 
                         cursor.moveToNext();
@@ -460,20 +463,23 @@ public class ContactsService extends Service{
                         }
 
                         int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_HAS_PHONE));
-                        if(prefHelper.isPhonesOnly() == hasPhone){ //TODO fix the phones only bug
-                            long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_ID));
-                            int nameColumnIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME) :
-                                    cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME_ALT);
-                            String displayName = cursor.getString(nameColumnIndex);
-                            Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
-
-                            Contact contact = new Contact();
-                            contact.setDisplayName(displayName);
-                            contact.setUri(contactUri);
-                            contact.setId(contactId);
-
-                            contacts.add(contact);
+                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
+                            cursor.moveToNext();
+                            continue;
                         }
+
+                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_ID));
+                        int nameColumnIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME) :
+                                cursor.getColumnIndex(COL_DATA_GROUP_CONTACT_NAME_ALT);
+                        String displayName = cursor.getString(nameColumnIndex);
+                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+
+                        Contact contact = new Contact();
+                        contact.setDisplayName(displayName);
+                        contact.setUri(contactUri);
+                        contact.setId(contactId);
+
+                        contacts.add(contact);
 
                         cursor.moveToNext();
                     }
