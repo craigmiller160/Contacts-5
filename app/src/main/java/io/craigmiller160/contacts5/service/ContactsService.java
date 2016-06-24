@@ -43,8 +43,6 @@ import static io.craigmiller160.contacts5.service.ContactsQueryConstants.*;
 public class ContactsService extends Service{
 
     private static final String TAG = "ContactsService";
-    private static final String ALL_CONTACTS_KEY = "AllContacts";
-    private static final String FAV_CONTACTS_KEY = "FavContacts";
 
     public static final String LOAD_CONTACTS = "LoadContacts";
     public static final String LOAD_GROUPS = "LoadGroups";
@@ -251,8 +249,8 @@ public class ContactsService extends Service{
 
             if(allContactsQuery != null){
                 Map<String,List<Contact>> results = allContactsQuery.get();
-                List<Contact> contacts = results.get(ALL_CONTACTS_KEY);
-                List<Contact> favorites = results.get(FAV_CONTACTS_KEY);
+                List<Contact> contacts = results.get(getString(R.string.prop_contacts_list));
+                List<Contact> favorites = results.get(getString(R.string.prop_favorites_list));
                 Set<Long> exclusions = exclusionsQuery.get();
 
                 Iterator<Contact> contactIterator = contacts.iterator();
@@ -354,8 +352,8 @@ public class ContactsService extends Service{
             }
 
             Map<String,List<Contact>> results = new HashMap<>();
-            results.put(ALL_CONTACTS_KEY, allContacts);
-            results.put(FAV_CONTACTS_KEY, favContacts);
+            results.put(getString(R.string.prop_contacts_list), allContacts);
+            results.put(getString(R.string.prop_favorites_list), favContacts);
 
             return results;
         }
