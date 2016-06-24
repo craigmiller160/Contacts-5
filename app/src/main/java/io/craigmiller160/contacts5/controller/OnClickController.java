@@ -17,13 +17,8 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
 import static io.craigmiller160.contacts5.util.ContactsConstants.NEW_CONTACT_REQUEST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 6/18/16.
@@ -38,6 +33,7 @@ public class OnClickController extends AbstractAndroidController implements View
 
     private final int type;
     private final AndroidModel contactsModel;
+    private FragmentChanger fragmentChanger;
 
     public OnClickController(Context context, Map<String,Object> args, int type){
         super(context, args);
@@ -51,7 +47,8 @@ public class OnClickController extends AbstractAndroidController implements View
                 throw new IllegalArgumentCtxException("Provided type not supported by this controller")
                         .addContextValue("Type", type);
         }
-        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
+        this.fragmentChanger = new FragmentChanger(context);
     }
 
     @Override
@@ -88,17 +85,17 @@ public class OnClickController extends AbstractAndroidController implements View
     }
 
     private void onClickGroup(View view){
-        long groupId = getArg(getString(R.string.group_id), Long.class);
-        String groupName = getArg(getString(R.string.group_name), String.class);
+        long groupId = getArg(getString(R.string.prop_selected_group_id), Long.class);
+        String groupName = getArg(getString(R.string.prop_selected_group_name), String.class);
 
         Log.i(TAG, "Opening group: " + groupName);
 
-        contactsModel.setProperty(SELECTED_GROUP_ID, groupId);
-        contactsModel.setProperty(SELECTED_GROUP_NAME, groupName);
+        contactsModel.setProperty(R.string.prop_selected_group_id, groupId);
+        contactsModel.setProperty(R.string.prop_selected_group_name, groupName);
 
-        if(contactsModel.getProperty(DISPLAYED_FRAGMENT) == null ||
-                contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class).equals(TABS_FRAGMENT_TAG)){
-            FragmentChanger.displayNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
+        if(contactsModel.getProperty(R.string.prop_displayed_fragment) == null ||
+                contactsModel.getProperty(R.string.prop_displayed_fragment, String.class).equals(getString(R.string.tag_tabs_fragment))){
+            fragmentChanger.displayNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
         }
     }
 }

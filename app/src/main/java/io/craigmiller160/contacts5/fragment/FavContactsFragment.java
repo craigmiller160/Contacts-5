@@ -32,7 +32,7 @@ public class FavContactsFragment extends AbstractContactsPageFragment<Contact> {
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
-        return new ContactsArrayAdapter(getContext(), FAVORITES_LIST);
+        return new ContactsArrayAdapter(getContext(), R.string.prop_favorites_list);
     }
 
     @Override

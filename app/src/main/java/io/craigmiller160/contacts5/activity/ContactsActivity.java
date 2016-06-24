@@ -21,13 +21,7 @@ import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.CodeParser;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.DISPLAYED_FRAGMENT;
-import static io.craigmiller160.contacts5.util.ContactsConstants.NO_TABS_FRAGMENT_TAG;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.TABS_FRAGMENT_TAG;
 
 /**
  * Created by craig on 5/4/16.
@@ -39,6 +33,7 @@ public class ContactsActivity extends AppCompatActivity {
     private static final String REQUEST_PERMISSION_ACTION = "Grant";
 
     private AndroidSystemUtil androidSystemUtil;
+    private FragmentChanger fragmentChanger;
     private AndroidModel contactsModel;
     private boolean reloadContacts = true;
 
@@ -49,7 +44,8 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
 
         this.androidSystemUtil = new AndroidSystemUtil(this);
-        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
+        this.fragmentChanger = new FragmentChanger(this);
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
 
         if(savedInstance != null){
             Log.v(TAG, "Restoring ContactsModel state on Activity creation");
@@ -71,8 +67,8 @@ public class ContactsActivity extends AppCompatActivity {
             androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
 
-        if(contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class) == null){
-            FragmentChanger.displayTabsFragment(getSupportFragmentManager());
+        if(contactsModel.getProperty(R.string.prop_displayed_fragment, String.class) == null){
+            fragmentChanger.displayTabsFragment(getSupportFragmentManager());
         }
     }
 
@@ -136,13 +132,13 @@ public class ContactsActivity extends AppCompatActivity {
             intent.putExtra(ContactsService.LOAD_CONTACTS, true);
             intent.putExtra(ContactsService.LOAD_GROUPS, true);
 
-            String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
-            Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
-            String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
-            if(displayedFragment != null && displayedFragment.equals(NO_TABS_FRAGMENT_TAG) && groupId != null && groupId >= 0){
+            String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+            Long groupId = contactsModel.getProperty(R.string.prop_selected_group_id, Long.class);
+            String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
+            if(displayedFragment != null && displayedFragment.equals(getString(R.string.tag_no_tabs_fragment)) && groupId != null && groupId >= 0){
                 intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
-                intent.putExtra(SELECTED_GROUP_ID, groupId);
-                intent.putExtra(SELECTED_GROUP_NAME, groupName);
+                intent.putExtra(getString(R.string.prop_selected_group_id), groupId);
+                intent.putExtra(getString(R.string.prop_selected_group_name), groupName);
             }
             startService(intent);
         }
@@ -150,8 +146,8 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        String displayedFragment = contactsModel.getProperty(DISPLAYED_FRAGMENT, String.class);
-        if(displayedFragment == null || displayedFragment.equals(TABS_FRAGMENT_TAG)){
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+        if(displayedFragment == null || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
             Log.i(TAG, "Closing ContactsActivity");
             finish();
         }
@@ -161,9 +157,9 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     private void backAction(){
-        String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
+        String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         Log.d(TAG, "Leaving Group: " + groupName);
-        FragmentChanger.displayTabsFragment(getSupportFragmentManager());
+        fragmentChanger.displayTabsFragment(getSupportFragmentManager());
     }
 
     @Override

@@ -26,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import io.craigmiller160.contacts5.ContactsApp;
+import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
@@ -35,7 +36,6 @@ import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import io.craigmiller160.contacts5.util.PreferenceHelper;
 
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.*;
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
 
 /**
  * Created by craig on 6/19/16.
@@ -126,7 +126,7 @@ public class ContactsService extends Service{
             this.intent = intent;
             this.startId = startId;
             this.tagid = tagid;
-            this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
+            this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         }
 
         @Override
@@ -188,8 +188,8 @@ public class ContactsService extends Service{
             }
 
             if(loadContactsInGroup){
-                groupId = intent.getLongExtra(SELECTED_GROUP_ID, -1);
-                groupName = intent.getStringExtra(SELECTED_GROUP_NAME);
+                groupId = intent.getLongExtra(getString(R.string.prop_selected_group_id), -1);
+                groupName = intent.getStringExtra(getString(R.string.prop_selected_group_name));
                 if(groupId >= 0){
                     Log.d(tagid, String.format("Running query for contacts in group '%s'", groupName));
                     contactsInGroupQuery = service.submit(new ContactsInGroupQuery(getContext(), groupId, tagid));
@@ -230,7 +230,7 @@ public class ContactsService extends Service{
             if(contactsInGroupQuery != null){
                 List<Contact> contactsInGroup = contactsInGroupQuery.get();
                 Log.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
-                contactsModel.setProperty(CONTACTS_IN_GROUP_LIST, contactsInGroup);
+                contactsModel.setProperty(R.string.prop_contacts_in_group_list, contactsInGroup);
             }
 
             if(Thread.currentThread().isInterrupted()){
@@ -241,7 +241,7 @@ public class ContactsService extends Service{
             if(allGroupsQuery != null){
                 List<ContactGroup> groups = allGroupsQuery.get();
                 Log.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
-                contactsModel.setProperty(GROUPS_LIST, groups);
+                contactsModel.setProperty(R.string.prop_groups_list, groups);
             }
 
             if(Thread.currentThread().isInterrupted()){
@@ -280,8 +280,8 @@ public class ContactsService extends Service{
                 Log.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
                 Log.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
 
-                contactsModel.setProperty(CONTACTS_LIST, contacts);
-                contactsModel.setProperty(FAVORITES_LIST, favorites);
+                contactsModel.setProperty(R.string.prop_contacts_list, contacts);
+                contactsModel.setProperty(R.string.prop_favorites_list, favorites);
             }
 
         }

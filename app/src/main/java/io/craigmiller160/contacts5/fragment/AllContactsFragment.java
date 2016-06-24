@@ -8,8 +8,6 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.model.Contact;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_LIST;
-
 /**
  * Created by craig on 6/5/16.
  */
@@ -27,7 +25,7 @@ public class AllContactsFragment extends AbstractContactsPageFragment<Contact> {
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
-        return new ContactsArrayAdapter(getContext(), CONTACTS_LIST);
+        return new ContactsArrayAdapter(getContext(), R.string.prop_contacts_list);
     }
 
     @Override

@@ -17,11 +17,6 @@ import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_IN_GROUP_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_ID;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECTED_GROUP_NAME;
-
 /**
  * Created by craig on 6/5/16.
  */
@@ -33,24 +28,24 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
 
     @Override
     protected ArrayAdapter<Contact> getArrayAdapter() {
-        return new ContactsArrayAdapter(getContext(), CONTACTS_IN_GROUP_LIST);
+        return new ContactsArrayAdapter(getContext(), R.string.prop_contacts_in_group_list);
     }
 
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         Log.v(TAG, "ContactsInGroupFragment created");
-        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         AndroidSystemUtil androidSystemUtil = new AndroidSystemUtil(getActivity());
 
-        Long groupId = contactsModel.getProperty(SELECTED_GROUP_ID, Long.class);
-        String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
+        Long groupId = contactsModel.getProperty(R.string.prop_selected_group_id, Long.class);
+        String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
 
         if(groupId != null && groupId >= 0 && androidSystemUtil.permissions().hasReadContactsPermission() && savedInstance == null){
             Intent intent = new Intent(getActivity(), ContactsService.class);
             intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
-            intent.putExtra(SELECTED_GROUP_ID, groupId);
-            intent.putExtra(SELECTED_GROUP_NAME, groupName);
+            intent.putExtra(getString(R.string.prop_selected_group_id), groupId);
+            intent.putExtra(getString(R.string.prop_selected_group_name), groupName);
 
             getActivity().startService(intent);
         }
@@ -65,7 +60,7 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
         View viewPager = activity.findViewById(R.id.contactsTabsViewPager);
         viewPager.setVisibility(View.GONE);
 
-        String groupName = contactsModel.getProperty(SELECTED_GROUP_NAME, String.class);
+        String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         if(groupName != null){
             activity.setTitle(groupName);
         }

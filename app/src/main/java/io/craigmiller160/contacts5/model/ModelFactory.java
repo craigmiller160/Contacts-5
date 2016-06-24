@@ -29,12 +29,16 @@ public class ModelFactory extends AbstractAndroidUtil{
         synchronized (models){
             model = models.get(modelName);
             if(model == null){
-                model = new AndroidModel();
+                model = new AndroidModel(getContext());
                 model.setModelName(modelName);
                 models.put(modelName, model);
             }
         }
         return model;
+    }
+
+    public AndroidModel getModel(int resId){
+        return getModel(getString(resId));
     }
 
     public <T> T getModel(String modelName, Class<T> modelType){
@@ -55,5 +59,9 @@ public class ModelFactory extends AbstractAndroidUtil{
                     .addContextValue("Specified Return Type", modelType.getName());
         }
         return (T) model;
+    }
+
+    public <T> T getModel(int resId, Class<T> modelType){
+        return getModel(getString(resId), modelType);
     }
 }

@@ -11,14 +11,10 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.model.ContactGroup;
 import io.craigmiller160.contacts5.util.ContactIconProvider;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.GROUPS_LIST;
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_GROUP_CONTROLLER;
 
 /**
  * Created by craig on 5/29/16.
@@ -28,7 +24,7 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
     private final ContactIconProvider contactIconProvider;
 
     public GroupsArrayAdapter(Context context){
-        super(context, R.layout.group_row, GROUPS_LIST);
+        super(context, R.layout.group_row, R.string.prop_groups_list);
         contactIconProvider = new ContactIconProvider(context);
     }
 
@@ -46,8 +42,6 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             TextView accountTextView = (TextView) view.findViewById(R.id.accountName);
             nameTextView.setText(group.getGroupName() + " (" + group.getGroupSize() + ")");
             accountTextView.setText(group.getAccountName());
-            view.setTag(R.string.group_id, group.getGroupId());
-            view.setTag(R.string.group_name, group.getGroupName());
 
             Drawable groupIcon = contactIconProvider.createSquareContactIcon(group.getGroupName() + group.getAccountName(), group.getGroupName().charAt(0));
 
@@ -55,8 +49,8 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             groupIconView.setImageDrawable(groupIcon);
 
             Map<String,Object> args = new HashMap<>();
-            args.put(getContext().getString(R.string.group_id), group.getGroupId());
-            args.put(getContext().getString(R.string.group_name), group.getGroupName());
+            args.put(getContext().getString(R.string.prop_selected_group_id), group.getGroupId());
+            args.put(getContext().getString(R.string.prop_selected_group_name), group.getGroupName());
 
             view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.GROUPS_LIST));
         }

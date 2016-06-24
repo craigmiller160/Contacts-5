@@ -53,9 +53,9 @@ public class TabsFragment extends Fragment {
             groupsFragment = new AllGroupsFragment();
         }
 
-        AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL);
-        contactsModel.clearProperty(SELECTED_GROUP_ID);
-        contactsModel.clearProperty(SELECTED_GROUP_NAME);
+        AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
+        contactsModel.clearProperty(R.string.prop_selected_group_id);
+        contactsModel.clearProperty(R.string.prop_selected_group_name);
     }
 
     @Nullable

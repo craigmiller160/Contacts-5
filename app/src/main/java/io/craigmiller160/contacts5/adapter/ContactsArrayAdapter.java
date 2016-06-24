@@ -16,13 +16,10 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.util.ContactIconProvider;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_CONTROLLER;
 
 /**
  * Created by Craig on 1/22/2016.
@@ -34,6 +31,10 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
     public ContactsArrayAdapter(Context context, String propertyName){
         super(context, R.layout.contact_row, propertyName);
         this.contactIconProvider = new ContactIconProvider(context);
+    }
+
+    public ContactsArrayAdapter(Context context, int resId){
+        this(context, context.getString(resId));
     }
 
     @Override

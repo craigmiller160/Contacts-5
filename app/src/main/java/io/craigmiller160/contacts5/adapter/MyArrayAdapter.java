@@ -10,8 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.CONTACTS_MODEL;
+import io.craigmiller160.contacts5.R;
 
 /**
  * Created by craig on 6/5/16.
@@ -24,8 +23,12 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     protected MyArrayAdapter(Context context, int resource, String propertyName) {
         super(context, resource);
         this.propertyName = propertyName;
-        ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).addPropertyChangeListener(this);
-        contents = ContactsApp.getApp().modelFactory().getModel(CONTACTS_MODEL).getProperty(propertyName, List.class);
+        ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts).addPropertyChangeListener(this);
+        contents = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts).getProperty(propertyName, List.class);
+    }
+
+    protected MyArrayAdapter(Context context, int resource, int resId){
+        this(context, resource, context.getString(resId));
     }
 
     public void setContents(final List<T> contents){
