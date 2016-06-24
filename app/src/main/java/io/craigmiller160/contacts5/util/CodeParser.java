@@ -4,7 +4,9 @@ import android.app.Activity;
 
 import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
+import static io.craigmiller160.contacts5.util.ContactsConstants.NEW_CONTACT_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
+import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 
 /**
  * Created by craig on 6/12/16.

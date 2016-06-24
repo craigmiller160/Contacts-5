@@ -2,10 +2,6 @@ package io.craigmiller160.contacts5.model;
 
 import android.net.Uri;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**

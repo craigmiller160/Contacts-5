@@ -35,7 +35,29 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import io.craigmiller160.contacts5.util.PreferenceHelper;
 
-import static io.craigmiller160.contacts5.service.ContactsQueryConstants.*;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME_ALT;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_HAS_PHONE;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_STARRED;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_NAME;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_NAME_ALT;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_GROUP_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_MIMETYPE;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_ACCOUNT;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_COUNT;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_COUNT_PHONES;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_TITLE;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW_ACCOUNT;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW_CONTACT_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.MIMETYPE_GROUP_MEMBERSHIP;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_CONTACTS;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_DATA;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_GROUPS;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_RAW_CONTACTS;
 
 /**
  * Created by craig on 6/19/16.

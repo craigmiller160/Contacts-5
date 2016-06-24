@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import com.amulyakhare.textdrawable.TextDrawable;
 
 import io.craigmiller160.contacts5.R;
-import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
  * Created by craig on 6/4/16.

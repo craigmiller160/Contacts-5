@@ -12,8 +12,6 @@ import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 import io.craigmiller160.utils.reflect.ObjectCreator;
 
-import static io.craigmiller160.contacts5.util.ContactsConstants.*;
-
 /**
  * Created by craig on 6/12/16.
  */
