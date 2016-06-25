@@ -105,7 +105,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.grantPermissions);
+        MenuItem item = menu.findItem(R.id.menu_grant_permissions_id);
         if(item != null){
             item.setVisible(!androidSystemUtil.permissions().hasReadContactsPermission());
         }
@@ -191,12 +191,12 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.displaySettings) {
+        if (item.getItemId() == R.id.menu_display_settings_id) {
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
             startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
             return true;
         }
-        else if(item.getItemId() == R.id.grantPermissions){
+        else if(item.getItemId() == R.id.menu_grant_permissions_id){
             if(!androidSystemUtil.permissions().hasReadContactsPermission()){
                 androidSystemUtil.permissions().requestReadContactsPermission(this);
             }
