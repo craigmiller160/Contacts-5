@@ -17,7 +17,8 @@
     <string name="tag_tabs_fragment" translatable="false">TabsFragment</string>
     <string name="tag_no_tabs_fragment" translatable="false">NoTabsFragment</string>
 
-    <!-- Other Constants -->
+    <!-- Controller Argument Keys -->
+    <string name="on_click_controller_type" translatable="false">OnClickControllerType</string>
     <string name="contact_uri" translatable="false">ContactUri</string>
     <string name="contact_name" translatable="false">ContactName</string>
 

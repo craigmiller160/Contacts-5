@@ -48,11 +48,12 @@ public class GroupsArrayAdapter extends MyArrayAdapter<ContactGroup>{
             ImageView groupIconView = (ImageView) view.findViewById(R.id.group_icon);
             groupIconView.setImageDrawable(groupIcon);
 
-            Map<String,Object> args = new HashMap<>();
-            args.put(getContext().getString(R.string.prop_selected_group_id), group.getGroupId());
-            args.put(getContext().getString(R.string.prop_selected_group_name), group.getGroupName());
+            OnClickController onClickController = new OnClickController(getContext());
+            onClickController.addArg(R.string.on_click_controller_type, OnClickController.GROUPS_LIST);
+            onClickController.addArg(R.string.prop_selected_group_id, group.getGroupId());
+            onClickController.addArg(R.string.prop_selected_group_name, group.getGroupName());
 
-            view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.GROUPS_LIST));
+            view.setOnClickListener(onClickController);
         }
 
         return view;

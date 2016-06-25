@@ -63,11 +63,12 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
             ImageView photoImageView = (ImageView) view.findViewById(R.id.contact_photo);
             ImageLoader.getInstance().displayImage(contact.getUri().toString(), new ImageViewAware(photoImageView), options);
 
-            Map<String,Object> args = new HashMap<>();
-            args.put(getContext().getString(R.string.contact_uri), contact.getUri());
-            args.put(getContext().getString(R.string.contact_name), contact.getDisplayName());
+            OnClickController onClickController = new OnClickController(getContext());
+            onClickController.addArg(R.string.on_click_controller_type, OnClickController.CONTACTS_LIST);
+            onClickController.addArg(R.string.contact_uri, contact.getUri());
+            onClickController.addArg(R.string.contact_name, contact.getDisplayName());
 
-            view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.CONTACTS_LIST));
+            view.setOnClickListener(onClickController);
         }
 
         return view;
