@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".activity.ContactsActivity"
-    android:id="@+id/activity_contacts_layout">
+    android:id="@+id/activity_contacts_layout"
+    android:animateLayoutChanges="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/contacts_activity_appbar"

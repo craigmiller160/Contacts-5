@@ -16,8 +16,6 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
  */
 public abstract class AbstractContactsFragment<T> extends Fragment {
 
-    private static final String PROPERTY_NAME = "PropertyName";
-
     private AndroidSystemUtil androidSystemUtil;
     private ArrayAdapter<T> arrayAdapter;
 

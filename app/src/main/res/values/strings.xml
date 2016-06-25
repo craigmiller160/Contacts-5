@@ -20,6 +20,10 @@
     <string name="tab_favorites">Favorites</string>
     <string name="tab_groups">Groups</string>
 
+    <!-- Search Strings -->
+    <string name="search_label">Search</string>
+    <string name="search_hint">Search for Contact</string>
+
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
 
