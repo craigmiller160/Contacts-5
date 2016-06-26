@@ -49,6 +49,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:id="@+id/add_contact_fab"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/add_contact_icon" />
 
 </android.support.design.widget.CoordinatorLayout>

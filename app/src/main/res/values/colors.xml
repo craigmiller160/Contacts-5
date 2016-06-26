@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#0232D1</color>
     <color name="colorPrimaryDark">#021EBD</color>
-    <color name="colorAccent">#0232D1</color>
+    <color name="colorAccent">#0288d1</color>
 
     <array name="letter_tile_colors">
         <item>#f16364</item>
