@@ -7,19 +7,36 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:searchViewStyle">@style/SearchTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:searchViewStyle">@style/SearchTheme</item>
     </style>
 
     <style name="AppTheme.PreferencesTheme" parent="AppTheme">
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:searchViewStyle">@style/SearchTheme</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:searchViewStyle">@style/SearchTheme</item>
+    </style>
+
+    <style name="SearchTheme" parent="Widget.AppCompat.Light.SearchView">
+        <!--<item name="suggestionRowLayout">@layout/contact_row</item>-->
+        <item name="android:colorPrimary">@android:color/white</item>
+        <item name="android:closeIcon">@drawable/contacts5icon</item>
+        <item name="android:voiceIcon">@drawable/contacts5icon</item>
+        <item name="android:queryBackground">@android:color/holo_blue_dark</item>
+        <item name="android:submitBackground">@android:color/holo_green_dark</item>
+        <item name="android:windowBackground">@android:color/white</item>
+
+    </style>
 
 </resources>

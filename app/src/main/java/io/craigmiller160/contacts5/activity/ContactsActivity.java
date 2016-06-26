@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.view.View;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
+import io.craigmiller160.contacts5.controller.SearchController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsService;
@@ -62,8 +64,9 @@ public class ContactsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
 
-        //noinspection ConstantConditions
-        findViewById(R.id.add_contact_fab).setOnClickListener(new OnClickController(this, null, OnClickController.ADD_BUTTON));
+        OnClickController onClickController = new OnClickController(this);
+        onClickController.addArg(R.string.on_click_controller_type, OnClickController.ADD_BUTTON);
+        findViewById(R.id.add_contact_fab).setOnClickListener(onClickController);
 
         //Check permissions
         if(!androidSystemUtil.permissions().hasReadContactsPermission()){
@@ -108,6 +111,13 @@ public class ContactsActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_id).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        SearchController searchController = new SearchController(this);
+        searchController.addArg(R.string.search_view, searchView);
+        searchView.setOnCloseListener(searchController);
+        searchView.setOnQueryTextListener(searchController);
+
+        MenuItem item = menu.findItem(R.id.menu_search_id);
+        MenuItemCompat.setOnActionExpandListener(item, searchController);
 
         return true;
     }
@@ -133,6 +143,21 @@ public class ContactsActivity extends AppCompatActivity {
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
         reloadContacts();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent){
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            startSearch("", false, null, false);
+        }
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+
+
+        return super.onSearchRequested();
     }
 
     private void reloadContacts(){
