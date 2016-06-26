@@ -112,7 +112,6 @@ public class ContactsActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_id).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         SearchController searchController = new SearchController(this);
-        searchController.addArg(R.string.search_view, searchView);
         searchView.setOnCloseListener(searchController);
         searchView.setOnQueryTextListener(searchController);
 

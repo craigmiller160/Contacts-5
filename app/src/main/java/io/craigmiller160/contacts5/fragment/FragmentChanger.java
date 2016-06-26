@@ -19,18 +19,22 @@ public class FragmentChanger extends AbstractAndroidUtil{
 
     private static final String TAG = "FragmentChanger";
 
+    private AndroidModel contactsModel;
+
     public FragmentChanger(Context context) {
         super(context);
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
     }
 
     public void displayTabsFragment(FragmentManager fm){
         Log.d(TAG, "Displaying TabsFragment");
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         displayFragment(fm, R.id.tabs_fragment_container, TabsFragment.class,
-                getString(R.string.tag_tabs_fragment), new String[]{getString(R.string.tag_no_tabs_fragment)});
+                getString(R.string.tag_tabs_fragment), new String[]{displayedFragment}, true);
     }
 
-    private void displayFragment(FragmentManager fm, int displayContainerId, Class<? extends Fragment> displayFragmentType,
-                                        String displayFragmentTag, String[] fragmentsToRemoveTags){
+    public void displayFragment(FragmentManager fm, int displayContainerId, Class<? extends Fragment> displayFragmentType,
+                                        String displayFragmentTag, String[] fragmentsToRemoveTags, boolean changeProp){
         AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         FragmentTransaction transaction = fm.beginTransaction();
 
@@ -41,15 +45,28 @@ public class FragmentChanger extends AbstractAndroidUtil{
             }
         }
 
+        transaction.commit();
+        transaction = fm.beginTransaction();
+
         transaction.replace(displayContainerId, ObjectCreator.instantiateClass(displayFragmentType), displayFragmentTag);
         transaction.commit();
-        contactsModel.setProperty(R.string.prop_displayed_fragment, displayFragmentTag);
+        if(changeProp){
+            contactsModel.setProperty(R.string.prop_displayed_fragment, displayFragmentTag);
+        }
     }
 
     public void displayNoTabsFragment(FragmentManager fm){
         Log.d(TAG, "Displaying NoTabsFragment");
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         displayFragment(fm, R.id.no_tabs_fragment_container, ContactsInGroupFragment.class,
-                getString(R.string.tag_no_tabs_fragment), new String[]{getString(R.string.tag_tabs_fragment)});
+                getString(R.string.tag_no_tabs_fragment), new String[]{displayedFragment}, true);
+    }
+
+    public void displaySearchFragment(FragmentManager fm) {
+        Log.d(TAG, "Displaying SearchFragment");
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+        displayFragment(fm, R.id.no_tabs_fragment_container, SearchFragment.class,
+                getString(R.string.tag_search_fragment), new String[]{displayedFragment}, false);
     }
 
 }
