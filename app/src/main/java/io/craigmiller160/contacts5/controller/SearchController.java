@@ -26,6 +26,7 @@ public class SearchController extends AbstractAndroidController implements Searc
     private final FragmentChanger fragmentChanger;
     private final AndroidModel contactsModel;
     private MyArrayAdapter<Contact> adapter;
+    private boolean isSearchOpen = false;
 
     public SearchController(AppCompatActivity activity) {
         this(activity, new HashMap<String, Object>());
@@ -64,7 +65,7 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onQueryTextChange(String query) {
-        if(adapter == null){
+        if(adapter == null && isSearchOpen){
             findAdapter();
         }
 
@@ -76,6 +77,7 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
+        isSearchOpen = false;
         if(adapter != null){
             adapter.clearFilter();
             adapter = null;
@@ -94,6 +96,7 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
+        isSearchOpen = true;
         getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.GONE);
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
