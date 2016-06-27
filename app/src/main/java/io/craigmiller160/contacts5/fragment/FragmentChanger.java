@@ -69,9 +69,9 @@ public class FragmentChanger extends AbstractAndroidUtil{
     }
 
     public void displayContactsFragment(FragmentManager fm) {
-        Log.d(TAG, "Displaying SearchFragment");
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
+            Log.d(TAG, "Displaying SearchFragment");
             Fragment fragment = new AllContactsFragment();
             displayFragment(fm, R.id.no_tabs_fragment_container, fragment,
                     getString(R.string.tag_search_fragment), new String[]{displayedFragment}, false);
