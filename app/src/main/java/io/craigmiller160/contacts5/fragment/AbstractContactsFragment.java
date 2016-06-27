@@ -46,6 +46,13 @@ public abstract class AbstractContactsFragment<T> extends Fragment {
         }
     }
 
-    protected abstract ArrayAdapter<T> getArrayAdapter();
+    public final ArrayAdapter<T> getArrayAdapter(){
+        if(arrayAdapter == null){
+            arrayAdapter = newArrayAdapter();
+        }
+        return arrayAdapter;
+    }
+
+    protected abstract ArrayAdapter<T> newArrayAdapter();
 
 }

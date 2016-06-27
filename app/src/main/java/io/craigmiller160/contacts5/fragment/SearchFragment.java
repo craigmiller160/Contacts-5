@@ -26,7 +26,7 @@ public class SearchFragment extends AbstractContactsFragment<Contact> {
     private AndroidModel contactsModel;
 
     @Override
-    protected ArrayAdapter<Contact> getArrayAdapter() {
+    protected ArrayAdapter<Contact> newArrayAdapter() {
         return new ContactsArrayAdapter(getContext(), R.string.prop_filtered_contacts);
     }
 

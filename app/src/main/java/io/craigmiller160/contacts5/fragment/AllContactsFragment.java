@@ -24,7 +24,7 @@ public class AllContactsFragment extends AbstractContactsPageFragment<Contact> {
     }
 
     @Override
-    protected ArrayAdapter<Contact> getArrayAdapter() {
+    protected ArrayAdapter<Contact> newArrayAdapter() {
         return new ContactsArrayAdapter(getContext(), R.string.prop_contacts_list);
     }
 

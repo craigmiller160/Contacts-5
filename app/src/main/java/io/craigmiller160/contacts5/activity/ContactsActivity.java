@@ -112,7 +112,6 @@ public class ContactsActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_id).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         SearchController searchController = new SearchController(this);
-        searchView.setOnCloseListener(searchController);
         searchView.setOnQueryTextListener(searchController);
 
         MenuItem item = menu.findItem(R.id.menu_search_id);
@@ -142,21 +141,6 @@ public class ContactsActivity extends AppCompatActivity {
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
         reloadContacts();
-    }
-
-    @Override
-    public void onNewIntent(Intent intent){
-        if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            startSearch("", false, null, false);
-        }
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-
-
-        return super.onSearchRequested();
     }
 
     private void reloadContacts(){

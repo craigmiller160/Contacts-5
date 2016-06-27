@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.model.AndroidModel;
 
 /**
  * Created by craig on 6/5/16.
@@ -18,17 +19,25 @@ import io.craigmiller160.contacts5.R;
 public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements PropertyChangeListener {
 
     private List<T> contents;
+    private List<T> originalContents;
     private final String propertyName;
+    private final AndroidModel contactsModel;
 
     protected MyArrayAdapter(Context context, int resource, String propertyName) {
         super(context, resource);
         this.propertyName = propertyName;
-        ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts).addPropertyChangeListener(this);
-        contents = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts).getProperty(propertyName, List.class);
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
+        this.contactsModel.addPropertyChangeListener(this);
+        refreshContentsFromModel();
     }
 
     protected MyArrayAdapter(Context context, int resource, int resId){
         this(context, resource, context.getString(resId));
+    }
+
+    protected void refreshContentsFromModel(){
+        setContents(contactsModel.getProperty(propertyName, List.class));
+        setOriginalContents(contactsModel.getProperty(propertyName, List.class));
     }
 
     public void setContents(final List<T> contents){
@@ -48,8 +57,41 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
         }
     }
 
+    public void setOriginalContents(final List<T> contents){
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            this.originalContents = contents;
+            notifyDataSetChanged();
+        }
+        else{
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    MyArrayAdapter.this.originalContents = contents;
+                    MyArrayAdapter.this.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    public void clearFilter(){
+        refreshContentsFromModel();
+    }
+
+    public void filter(String query){
+        getFilter().filter(query);
+    }
+
     public List<T> getContents(){
         return contents;
+    }
+
+    public List<T> getOriginalContents(){
+        return originalContents;
+    }
+
+    public String getPropertyName(){
+        return propertyName;
     }
 
     @Override
@@ -60,7 +102,7 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     @Override
     public void propertyChange(PropertyChangeEvent event) {
         if(event.getPropertyName().equals(propertyName)){
-            setContents((List<T>) event.getNewValue());
+            refreshContentsFromModel();
         }
     }
 }
