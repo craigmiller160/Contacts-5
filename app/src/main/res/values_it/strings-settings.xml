@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Settings Labels -->
+    <string name="settings_category_contacts_label">Impostazioni Contatti</string>
+    <string name="settings_category_general_label">Impostazioni Generali</string>
+    <string name="settings_category_groups_label">Impostazioni Gruppi</string>
+
+    <string name="setting_accounts_to_display_label">Conti per Visualizzare</string>
+    <string name="setting_phones_only_label">Mostra Solo i Telefoni</string>
+
+    <string name="setting_contact_sort_order_label">Contatto Ordine</string>
+    <string name="setting_contact_name_format_label">Nome del Contatto Formato</string>
+    <string name="setting_contact_sort_by_label">Contatto Sort By</string>
+
+    <string name="setting_group_empty_label">Mostra Gruppi Vuoti</string>
+    <string name="setting_group_sort_order_label">Gruppo Ordine</string>
+    <string name="setting_group_sort_by_label">Gruppo Sort By</string>
+
+    <string name="setting_phones_only_summary_on">Nascondi contatti senza numeri di telefono</string>
+    <string name="setting_phones_only_summary_off">Mostra contatti senza numeri di telefono</string>
+    <string name="setting_empty_group_summary_on">Mostra gruppi senza contatti</string>
+    <string name="setting_empty_group_summary_off">Nascondi gruppi senza contatti</string>
+
+    <!-- Array constant value labels -->
+    <string name="array_sort_order_asc_label">Ascendente</string>
+    <string name="array_sort_order_desc_label">Discendente</string>
+
+    <string name="array_contact_sort_by_first_label">Nome</string>
+    <string name="array_contact_sort_by_last_label">Cognome</string>
+
+    <string name="array_group_sort_by_group_label">Nome del Gruppo/Nome Utente</string>
+    <string name="array_group_sort_by_account_label">Nome Utente/Nome del Gruppo</string>
+
+    <string name="array_name_format_first_last_label">Primo Ultimo</string>
+    <string name="array_name_format_last_first_label">Ultimo, Primo</string>
+
+</resources>
