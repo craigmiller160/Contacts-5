@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Settings Labels -->
+    <string name="settings_category_contacts_label">Configuración de Contactos</string>
+    <string name="settings_category_general_label">Configuración General</string>
+    <string name="settings_category_groups_label">Configuración de Groupos</string>
+
+    <string name="setting_accounts_to_display_label">Cuentas a Display</string>
+    <string name="setting_phones_only_label">Mostrar únicamente Móviles</string>
+
+    <string name="setting_contact_sort_order_label">Contacto Orden de Clasificación</string>
+    <string name="setting_contact_name_format_label">Contacto Nombre Formato</string>
+    <string name="setting_contact_sort_by_label">Contact Seleccionar por</string>
+
+    <string name="setting_group_empty_label">Mostrar Grupos Vacíos</string>
+    <string name="setting_group_sort_order_label">Ordenamiento de grupos</string>
+    <string name="setting_group_sort_by_label">Grupo Ordenar Por</string>
+
+    <string name="setting_phones_only_summary_on">Ocultar contactos sin números de teléfono</string>
+    <string name="setting_phones_only_summary_off">Mostrar contactos sin números de teléfono</string>
+    <string name="setting_empty_group_summary_on">Mostrar los grupos que carecen de contactos</string>
+    <string name="setting_empty_group_summary_off">Ocultar grupos que carecen de contactos</string>
+
+    <!-- Array constant value labels -->
+    <string name="array_sort_order_asc_label">Ascendente</string>
+    <string name="array_sort_order_desc_label">Descendente</string>
+
+    <string name="array_contact_sort_by_first_label">Nombre de Pila</string>
+    <string name="array_contact_sort_by_last_label">Apellido</string>
+
+    <string name="array_group_sort_by_group_label">Nombre del Grupo/Nombre del Cuenta</string>
+    <string name="array_group_sort_by_account_label">Nombre del Cuenta/Nombre del Grupo</string>
+
+    <string name="array_name_format_first_last_label">Primero Último</string>
+    <string name="array_name_format_last_first_label">Último, Primero</string>
+
+</resources>

@@ -1,0 +1,22 @@
+<resources>
+    <!-- App and Activity Names -->
+
+    <!--App, Activity, and Service Labels -->
+    <string name="activity_contacts_name_label">Contactos 5+</string>
+    <string name="activity_settings_name_label">Configuración de Pantalla</string>
+    <string name="service_contacts_label">ContactosServicio</string>
+
+    <!-- Main Menu Item Labels -->
+    <string name="menu_settings_label">Configuración de Pantalla</string>
+    <string name="menu_grant_permissions_label">Conceder Permisos</string>
+    <string name="menu_about_contacts_label">Acerca de Contactos 5+</string>
+
+    <!-- Tab Name Labels -->
+    <string name="tab_contacts">Todos Contactos</string>
+    <string name="tab_favorites">Favoritos</string>
+    <string name="tab_groups">Grupos</string>
+
+    <!-- Other Strings -->
+    <string name="permission_denied_snackbar_text">¡Permiso denegado!</string>
+
+</resources>
