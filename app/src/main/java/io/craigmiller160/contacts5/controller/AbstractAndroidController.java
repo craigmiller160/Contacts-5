@@ -28,12 +28,24 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
         this.args = args != null ? args : this.args;
     }
 
+    public void addArg(String key, Object value){
+        args.put(key, value);
+    }
+
+    public void addArg(int resId, Object value){
+        args.put(getString(resId), value);
+    }
+
     public Map<String,Object> getArgs(){
         return args;
     }
 
     public Object getArg(String key){
         return args.get(key);
+    }
+
+    public Object getArg(int resId){
+        return args.get(getString(resId));
     }
 
     public <T> T getArg(String key, Class<T> returnType){
@@ -54,5 +66,9 @@ public abstract class AbstractAndroidController extends AbstractAndroidUtil{
                     .addContextValue("Specified Return Type", returnType.getName());
         }
         return (T) value;
+    }
+
+    public <T> T getArg(int resId, Class<T> returnType){
+        return getArg(getString(resId), returnType);
     }
 }

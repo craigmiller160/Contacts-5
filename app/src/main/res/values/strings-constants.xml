@@ -12,13 +12,17 @@
     <string name="prop_displayed_fragment" translatable="false">DisplayedFragment</string>
     <string name="prop_selected_group_id" translatable="false">SelectedGroupId</string>
     <string name="prop_selected_group_name" translatable="false">SelectedGroupName</string>
+    <string name="prop_filtered_contacts" translatable="false">FilteredContacts</string>
 
     <!-- Fragment Tags -->
     <string name="tag_tabs_fragment" translatable="false">TabsFragment</string>
     <string name="tag_no_tabs_fragment" translatable="false">NoTabsFragment</string>
+    <string name="tag_search_fragment" translatable="false">SearchFragment</string>
 
-    <!-- Other Constants -->
+    <!-- Controller Argument Keys -->
+    <string name="on_click_controller_type" translatable="false">OnClickControllerType</string>
     <string name="contact_uri" translatable="false">ContactUri</string>
     <string name="contact_name" translatable="false">ContactName</string>
+    <string name="search_view" translatable="false">SearchView</string>
 
 </resources>

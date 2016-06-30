@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +14,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.R;
@@ -63,13 +68,52 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
             ImageView photoImageView = (ImageView) view.findViewById(R.id.contact_photo);
             ImageLoader.getInstance().displayImage(contact.getUri().toString(), new ImageViewAware(photoImageView), options);
 
-            Map<String,Object> args = new HashMap<>();
-            args.put(getContext().getString(R.string.contact_uri), contact.getUri());
-            args.put(getContext().getString(R.string.contact_name), contact.getDisplayName());
+            OnClickController onClickController = new OnClickController(getContext());
+            onClickController.addArg(R.string.on_click_controller_type, OnClickController.CONTACTS_LIST);
+            onClickController.addArg(R.string.contact_uri, contact.getUri());
+            onClickController.addArg(R.string.contact_name, contact.getDisplayName());
 
-            view.setOnClickListener(new OnClickController(getContext(), args, OnClickController.CONTACTS_LIST));
+            view.setOnClickListener(onClickController);
         }
 
         return view;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new ContactsFilter(this);
+    }
+
+    private static class ContactsFilter extends Filter{
+
+        private final ContactsArrayAdapter callbackAdapter;
+        private final List<Contact> contacts;
+
+        public ContactsFilter(ContactsArrayAdapter callbackAdapter){
+            this.callbackAdapter = callbackAdapter;
+            this.contacts = new ArrayList<>();
+            contacts.addAll(callbackAdapter.getOriginalContents());
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Contact> values = new ArrayList<>();
+            for(Contact c : contacts){
+                if(StringUtils.containsIgnoreCase(c.getDisplayName(), charSequence)){
+                    values.add(c);
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.count = values.size();
+            results.values = values;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            callbackAdapter.setContents((List<Contact>) filterResults.values);
+        }
     }
 }

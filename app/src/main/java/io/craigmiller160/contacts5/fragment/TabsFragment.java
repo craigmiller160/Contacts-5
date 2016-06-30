@@ -61,12 +61,8 @@ public class TabsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getActivity().setTitle(getString(R.string.activity_contacts_name_label));
-
         TabLayout tabLayout = (TabLayout) inflater.inflate(R.layout.tab_layout, container, false);
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
-        viewPager.setVisibility(View.VISIBLE);
 
         boolean setDefaultTab = false;
 
@@ -94,7 +90,24 @@ public class TabsFragment extends Fragment {
             viewPager.setCurrentItem(1);
         }
 
+        setViewPagerViewVisibility(View.VISIBLE);
+
         return tabLayout;
     }
 
+    private void setViewPagerViewVisibility(int visibility){
+        ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
+        viewPager.setVisibility(visibility);
+        int childCount = viewPager.getChildCount();
+        for(int i = 0; i < childCount; i++){
+            View view = viewPager.getChildAt(i);
+            view.setVisibility(visibility);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        setViewPagerViewVisibility(View.GONE);
+        super.onDestroyView();
+    }
 }

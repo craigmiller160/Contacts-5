@@ -1,11 +1,15 @@
 package io.craigmiller160.contacts5.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +19,7 @@ import android.view.View;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
+import io.craigmiller160.contacts5.controller.SearchController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsService;
@@ -59,8 +64,9 @@ public class ContactsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
 
-        //noinspection ConstantConditions
-        findViewById(R.id.add_contact_fab).setOnClickListener(new OnClickController(this, null, OnClickController.ADD_BUTTON));
+        OnClickController onClickController = new OnClickController(this);
+        onClickController.addArg(R.string.on_click_controller_type, OnClickController.ADD_BUTTON);
+        findViewById(R.id.add_contact_fab).setOnClickListener(onClickController);
 
         //Check permissions
         if(!androidSystemUtil.permissions().hasReadContactsPermission()){
@@ -100,12 +106,23 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        //Set up the search component
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_id).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        SearchController searchController = new SearchController(this);
+        searchView.setOnQueryTextListener(searchController);
+
+        MenuItem item = menu.findItem(R.id.menu_search_id);
+        MenuItemCompat.setOnActionExpandListener(item, searchController);
+
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.grantPermissions);
+        MenuItem item = menu.findItem(R.id.menu_grant_permissions_id);
         if(item != null){
             item.setVisible(!androidSystemUtil.permissions().hasReadContactsPermission());
         }
@@ -191,12 +208,12 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.displaySettings) {
+        if (item.getItemId() == R.id.menu_display_settings_id) {
             Intent intent = new Intent(this, DisplaySettingsActivity.class);
             startActivityForResult(intent, SETTINGS_ACTIVITY_REQUEST);
             return true;
         }
-        else if(item.getItemId() == R.id.grantPermissions){
+        else if(item.getItemId() == R.id.menu_grant_permissions_id){
             if(!androidSystemUtil.permissions().hasReadContactsPermission()){
                 androidSystemUtil.permissions().requestReadContactsPermission(this);
             }

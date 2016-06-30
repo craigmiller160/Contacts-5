@@ -24,7 +24,7 @@ public class AllGroupsFragment extends AbstractContactsPageFragment<ContactGroup
     }
 
     @Override
-    protected ArrayAdapter<ContactGroup> getArrayAdapter() {
+    protected ArrayAdapter<ContactGroup> newArrayAdapter() {
         return new GroupsArrayAdapter(getContext());
     }
 

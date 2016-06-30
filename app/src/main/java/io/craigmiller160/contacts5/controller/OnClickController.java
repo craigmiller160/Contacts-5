@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
@@ -31,28 +32,37 @@ public class OnClickController extends AbstractAndroidController implements View
     public static final int GROUPS_LIST = 502;
     public static final int ADD_BUTTON = 503;
 
-    private final int type;
     private final AndroidModel contactsModel;
     private FragmentChanger fragmentChanger;
 
-    public OnClickController(Context context, Map<String,Object> args, int type){
+//    public OnClickController(Context context, Map<String,Object> args, int type){
+//        super(context, args);
+//        switch(type){
+//            case CONTACTS_LIST:
+//            case GROUPS_LIST:
+//            case ADD_BUTTON:
+//                this.type = type;
+//                break;
+//            default:
+//                throw new IllegalArgumentCtxException("Provided type not supported by this controller")
+//                        .addContextValue("Type", type);
+//        }
+//
+//    }
+
+    public OnClickController(Context context){
+        this(context, new HashMap<String, Object>());
+    }
+
+    public OnClickController(Context context, Map<String,Object> args){
         super(context, args);
-        switch(type){
-            case CONTACTS_LIST:
-            case GROUPS_LIST:
-            case ADD_BUTTON:
-                this.type = type;
-                break;
-            default:
-                throw new IllegalArgumentCtxException("Provided type not supported by this controller")
-                        .addContextValue("Type", type);
-        }
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         this.fragmentChanger = new FragmentChanger(context);
     }
 
     @Override
     public void onClick(View view) {
+        int type = getArg(R.string.on_click_controller_type, Integer.class);
         switch (type){
             case CONTACTS_LIST:
                 onClickContact(view);

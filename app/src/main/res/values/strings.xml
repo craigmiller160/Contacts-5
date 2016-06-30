@@ -13,11 +13,16 @@
     <string name="menu_settings_label">Display Settings</string>
     <string name="menu_grant_permissions_label">Grant Permissions</string>
     <string name="menu_about_contacts_label">About Contacts 5+</string>
+    <string name="menu_search_label">Search</string>
 
     <!-- Tab Name Labels -->
     <string name="tab_contacts">All Contacts</string>
     <string name="tab_favorites">Favorites</string>
     <string name="tab_groups">Groups</string>
+
+    <!-- Search Strings -->
+    <string name="search_label">Search</string>
+    <string name="search_hint">Search for Contact</string>
 
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
