@@ -29,10 +29,10 @@
     <string name="array_contact_sort_by_first_label">Nombre de Pila</string>
     <string name="array_contact_sort_by_last_label">Apellido</string>
 
-    <string name="array_group_sort_by_group_label">Nombre del Grupo/Nombre del Cuenta</string>
-    <string name="array_group_sort_by_account_label">Nombre del Cuenta/Nombre del Grupo</string>
+    <string name="array_group_sort_by_group_label">Nombre del Grupo / Nombre del Cuenta</string>
+    <string name="array_group_sort_by_account_label">Nombre del Cuenta / Nombre del Grupo</string>
 
-    <string name="array_name_format_first_last_label">Primero Último</string>
-    <string name="array_name_format_last_first_label">Último, Primero</string>
+    <string name="array_name_format_first_last_label">Nombre de Pila Apellido</string>
+    <string name="array_name_format_last_first_label">Apellido, Nombre de Pila</string>
 
 </resources>

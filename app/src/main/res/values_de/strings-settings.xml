@@ -29,10 +29,10 @@
     <string name="array_contact_sort_by_first_label">Vorname</string>
     <string name="array_contact_sort_by_last_label">Nachname</string>
 
-    <string name="array_group_sort_by_group_label">Gruppennamen/Kontoname</string>
-    <string name="array_group_sort_by_account_label">Kontoname/Gruppennamen</string>
+    <string name="array_group_sort_by_group_label">Gruppennamen / Kontoname</string>
+    <string name="array_group_sort_by_account_label">Kontoname / Gruppennamen</string>
 
-    <string name="array_name_format_first_last_label">Erstes Letzen</string>
-    <string name="array_name_format_last_first_label">Letzen, Erstes</string>
+    <string name="array_name_format_first_last_label">Vorname Nachname</string>
+    <string name="array_name_format_last_first_label">Nachname, Vorname</string>
 
 </resources>

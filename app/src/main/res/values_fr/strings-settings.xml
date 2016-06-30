@@ -29,10 +29,10 @@
     <string name="array_contact_sort_by_first_label">Prénom</string>
     <string name="array_contact_sort_by_last_label">Nom de Famille</string>
 
-    <string name="array_group_sort_by_group_label">Nom de Groupe/Nom du Compte</string>
-    <string name="array_group_sort_by_account_label">Nom du Compte/Nom de Groupe</string>
+    <string name="array_group_sort_by_group_label">Nom de Groupe / Nom du Compte</string>
+    <string name="array_group_sort_by_account_label">Nom du Compte / Nom de Groupe</string>
 
-    <string name="array_name_format_first_last_label">Premier Dernier</string>
-    <string name="array_name_format_last_first_label">Dernier, Premier</string>
+    <string name="array_name_format_first_last_label">Prénom Nom de Famille</string>
+    <string name="array_name_format_last_first_label">Nom de Famille, Prénom</string>
 
 </resources>

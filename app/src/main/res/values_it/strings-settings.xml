@@ -29,10 +29,10 @@
     <string name="array_contact_sort_by_first_label">Nome</string>
     <string name="array_contact_sort_by_last_label">Cognome</string>
 
-    <string name="array_group_sort_by_group_label">Nome del Gruppo/Nome Utente</string>
-    <string name="array_group_sort_by_account_label">Nome Utente/Nome del Gruppo</string>
+    <string name="array_group_sort_by_group_label">Nome del Gruppo / Nome Utente</string>
+    <string name="array_group_sort_by_account_label">Nome Utente / Nome del Gruppo</string>
 
-    <string name="array_name_format_first_last_label">Primo Ultimo</string>
-    <string name="array_name_format_last_first_label">Ultimo, Primo</string>
+    <string name="array_name_format_first_last_label">Nome Cognome</string>
+    <string name="array_name_format_last_first_label">Cognome, Nome</string>
 
 </resources>

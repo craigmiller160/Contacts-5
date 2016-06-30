@@ -94,10 +94,10 @@
     <string name="array_contact_sort_by_first_label">First Name</string>
     <string name="array_contact_sort_by_last_label">Last Name</string>
 
-    <string name="array_group_sort_by_group_label">Group Name/Account Name</string>
-    <string name="array_group_sort_by_account_label">Account Name/Group Name</string>
+    <string name="array_group_sort_by_group_label">Group Name / Account Name</string>
+    <string name="array_group_sort_by_account_label">Account Name / Group Name</string>
 
-    <string name="array_name_format_first_last_label">First Last</string>
-    <string name="array_name_format_last_first_label">Last, First</string>
+    <string name="array_name_format_first_last_label">First Name Last Name</string>
+    <string name="array_name_format_last_first_label">Last Name, First Name</string>
 
 </resources>

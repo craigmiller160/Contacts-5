@@ -29,10 +29,10 @@
     <string name="array_contact_sort_by_first_label">名字</string>
     <string name="array_contact_sort_by_last_label">姓</string>
 
-    <string name="array_group_sort_by_group_label">組名稱/用戶名</string>
-    <string name="array_group_sort_by_account_label">用戶名/組名稱</string>
+    <string name="array_group_sort_by_group_label">組名稱 / 用戶名</string>
+    <string name="array_group_sort_by_account_label">用戶名 / 組名稱</string>
 
-    <string name="array_name_format_first_last_label">名姓</string>
-    <string name="array_name_format_last_first_label">最後，第一</string>
+    <string name="array_name_format_first_last_label">名字 姓</string>
+    <string name="array_name_format_last_first_label">姓, 名字</string>
 
 </resources>
