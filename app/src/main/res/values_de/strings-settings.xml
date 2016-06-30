@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Settings Labels -->
+    <string name="settings_category_contacts_label">Kontakte Einstellungen</string>
+    <string name="settings_category_general_label">Allgemeine Einstellungen</string>
+    <string name="settings_category_groups_label">Gruppen Einstellungen</string>
+
+    <string name="setting_accounts_to_display_label">Konten zum Anzeigen</string>
+    <string name="setting_phones_only_label">Nur Telefone</string>
+
+    <string name="setting_contact_sort_order_label">Kontakt Sortierreihenfolge</string>
+    <string name="setting_contact_name_format_label">Kontakt Name Format</string>
+    <string name="setting_contact_sort_by_label">Kontakt Sortieren Nach</string>
+
+    <string name="setting_group_empty_label">Anzeigen Leer Gruppen</string>
+    <string name="setting_group_sort_order_label">Gruppe Sortierreihenfolge</string>
+    <string name="setting_group_sort_by_label">Gruppe Sortieren Nach</string>
+
+    <string name="setting_phones_only_summary_on">Verbergen kontakt ohne telefonnummern</string>
+    <string name="setting_phones_only_summary_off">Zeigen sie kontakt ohne telefonnummern</string>
+    <string name="setting_empty_group_summary_on">Anzeigen gruppen ohne kontakte</string>
+    <string name="setting_empty_group_summary_off">Ausblenden gruppen ohne kontakte</string>
+
+    <!-- Array constant value labels -->
+    <string name="array_sort_order_asc_label">Aufsteigend</string>
+    <string name="array_sort_order_desc_label">Absteigend</string>
+
+    <string name="array_contact_sort_by_first_label">Vorname</string>
+    <string name="array_contact_sort_by_last_label">Nachname</string>
+
+    <string name="array_group_sort_by_group_label">Gruppennamen/Kontoname</string>
+    <string name="array_group_sort_by_account_label">Kontoname/Gruppennamen</string>
+
+    <string name="array_name_format_first_last_label">Erstes Letzen</string>
+    <string name="array_name_format_last_first_label">Letzen, Erstes</string>
+
+</resources>
