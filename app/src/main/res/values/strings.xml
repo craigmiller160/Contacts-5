@@ -7,12 +7,12 @@
     <!--App, Activity, and Service Labels -->
     <string name="activity_contacts_name_label">Contacts 5+</string>
     <string name="activity_settings_name_label">Display Settings</string>
-    <string name="service_contacts_label">ContactsService</string>
+    <string name="service_contacts_label">Contacts Service</string>
 
     <!-- Main Menu Item Labels -->
     <string name="menu_settings_label">Display Settings</string>
     <string name="menu_grant_permissions_label">Grant Permissions</string>
-    <string name="menu_about_contacts_label">About Contacts5+</string>
+    <string name="menu_about_contacts_label">About Contacts 5+</string>
 
     <!-- Tab Name Labels -->
     <string name="tab_contacts">All Contacts</string>
