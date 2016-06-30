@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Settings Labels -->
+    <string name="settings_category_contacts_label">聯繫人設置</string>
+    <string name="settings_category_general_label">常規設置</string>
+    <string name="settings_category_groups_label">組設置</string>
+
+    <string name="setting_accounts_to_display_label">賬戶顯示</string>
+    <string name="setting_phones_only_label">僅顯示電話</string>
+
+    <string name="setting_contact_sort_order_label">聯繫方式排序</string>
+    <string name="setting_contact_name_format_label">聯繫人名稱的格式</string>
+    <string name="setting_contact_sort_by_label">聯繫方式排序</string>
+
+    <string name="setting_group_empty_label">顯示空組</string>
+    <string name="setting_group_sort_order_label">組排序順序</string>
+    <string name="setting_group_sort_by_label">組排序</string>
+
+    <string name="setting_phones_only_summary_on">隱藏聯繫人沒有電話號碼</string>
+    <string name="setting_phones_only_summary_off">顯示聯繫人沒有電話號碼</string>
+    <string name="setting_empty_group_summary_on">顯示群組沒有接觸</string>
+    <string name="setting_empty_group_summary_off">隱藏組沒有接觸</string>
+
+    <!-- Array constant value labels -->
+    <string name="array_sort_order_asc_label">上升</string>
+    <string name="array_sort_order_desc_label">降序</string>
+
+    <string name="array_contact_sort_by_first_label">名字</string>
+    <string name="array_contact_sort_by_last_label">姓</string>
+
+    <string name="array_group_sort_by_group_label">組名稱/用戶名</string>
+    <string name="array_group_sort_by_account_label">用戶名/組名稱</string>
+
+    <string name="array_name_format_first_last_label">名姓</string>
+    <string name="array_name_format_last_first_label">最後，第一</string>
+
+</resources>

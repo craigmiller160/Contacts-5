@@ -1,0 +1,22 @@
+<resources>
+    <!-- App and Activity Names -->
+
+    <!--App, Activity, and Service Labels -->
+    <string name="activity_contacts_name_label">往來 5+</string>
+    <string name="activity_settings_name_label">顯示設置</string>
+    <string name="service_contacts_label">聯繫服務</string>
+
+    <!-- Main Menu Item Labels -->
+    <string name="menu_settings_label">顯示設置</string>
+    <string name="menu_grant_permissions_label">授予權限</string>
+    <string name="menu_about_contacts_label">關於通訊錄 5+</string>
+
+    <!-- Tab Name Labels -->
+    <string name="tab_contacts">所有聯繫人</string>
+    <string name="tab_favorites">收藏夾</string>
+    <string name="tab_groups">組</string>
+
+    <!-- Other Strings -->
+    <string name="permission_denied_snackbar_text">沒有權限！</string>
+
+</resources>
