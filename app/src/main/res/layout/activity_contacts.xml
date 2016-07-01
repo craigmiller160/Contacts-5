@@ -50,6 +50,6 @@
         android:clickable="true"
         android:id="@+id/add_contact_fab"
         android:backgroundTint="@color/colorPrimary"
-        android:src="@drawable/add_contact_icon" />
+        android:src="@drawable/add_contact_icon_new" />
 
 </android.support.design.widget.CoordinatorLayout>
