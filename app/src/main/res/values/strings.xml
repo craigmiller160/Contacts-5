@@ -26,5 +26,6 @@
 
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
+    <string name="grant_permission_snackbar_button">Grant</string>
 
 </resources>

@@ -35,8 +35,6 @@ public class ContactsActivity extends AppCompatActivity {
 
     private static final String TAG = "ContactsActivity";
 
-    private static final String REQUEST_PERMISSION_ACTION = "Grant";
-
     private AndroidSystemUtil androidSystemUtil;
     private FragmentChanger fragmentChanger;
     private AndroidModel contactsModel;
@@ -194,7 +192,7 @@ public class ContactsActivity extends AppCompatActivity {
                     Log.e(TAG, "Necessary permissions were denied!");
                     View view = findViewById(R.id.activity_contacts_layout);
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
-                            .setAction(REQUEST_PERMISSION_ACTION, new View.OnClickListener(){
+                            .setAction(getString(R.string.grant_permission_snackbar_button), new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v) {
                                     androidSystemUtil.permissions().requestReadContactsPermission(ContactsActivity.this);

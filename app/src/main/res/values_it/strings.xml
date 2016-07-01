@@ -18,5 +18,6 @@
 
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permesso Negato!</string>
+    <string name="grant_permission_snackbar_button">Concedere</string>
 
 </resources>
