@@ -3,11 +3,11 @@
 
     <!--App, Activity, and Service Labels -->
     <string name="activity_contacts_name_label">Contacts 5+</string>
-    <string name="activity_settings_name_label">Paramètres D'affichage</string>
+    <string name="activity_settings_name_label">Paramètres D\'affichage</string>
     <string name="service_contacts_label">Contacts Service</string>
 
     <!-- Main Menu Item Labels -->
-    <string name="menu_settings_label">Paramètres D'affichage</string>
+    <string name="menu_settings_label">Paramètres D\'affichage</string>
     <string name="menu_grant_permissions_label">Accorder des Autorisations</string>
     <string name="menu_about_contacts_label">À Propos de Contacts 5+</string>
 

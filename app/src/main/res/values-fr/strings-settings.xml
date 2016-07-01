@@ -9,7 +9,7 @@
     <string name="setting_accounts_to_display_label">Comptes à Afficher</string>
     <string name="setting_phones_only_label">Afficher Uniquement les Téléphones</string>
 
-    <string name="setting_contact_sort_order_label">Contactez L'ordre de Tri</string>
+    <string name="setting_contact_sort_order_label">Contactez L\'ordre de Tri</string>
     <string name="setting_contact_name_format_label">Contact Nom Format</string>
     <string name="setting_contact_sort_by_label">Contact Trier Par</string>
 
