@@ -8,14 +8,48 @@ android {
         applicationId "io.craigmiller160.contacts5"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 1
+        versionCode 2
         versionName "1.0"
+        archivesBaseName = "$applicationId-$versionName"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+    signingConfigs {
+        if(project.hasProperty("MyProject.properties") && file(project.property("MyProject.properties")).exists()){
+            Properties props = new Properties();
+            props.load(new FileInputStream(file(project.property("MyProject.properties"))))
+
+            release {
+                storeFile file(props['RELEASE_STORE_FILE'])
+                storePassword props['RELEASE_STORE_PASSWORD']
+                keyAlias props['RELEASE_KEY_ALIAS']
+                keyPassword props['RELEASE_KEY_PASSWORD']
+            }
         }
+        else{
+            release {
+                storeFile file("dummy-keystore")
+                storePassword "dummy-password"
+                keyAlias "dummy-alias"
+                keyPassword "dummy-password"
+            }
+        }
+    }
+
+    buildTypes {
+        if(project.hasProperty("MyProject.properties")){
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                signingConfig signingConfigs.release
+            }
+        }
+        else{
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+        }
+
     }
 
     repositories {
