@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
@@ -25,6 +30,7 @@ import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.CodeParser;
+import io.craigmiller160.contacts5.util.MD5;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVITY_REQUEST;
 
@@ -57,10 +63,18 @@ public class ContactsActivity extends AppCompatActivity {
         }
         else{
             setTitle(getString(R.string.activity_contacts_name_label));
+            MobileAds.initialize(getApplicationContext(), getString(R.string.admob_app_id));
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
+
+        AdView mAdView = (AdView) findViewById(R.id.ad_activity_banner);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice(getString(R.string.device_id_md5))
+                .build();
+        mAdView.loadAd(adRequest);
 
         OnClickController onClickController = new OnClickController(this);
         onClickController.addArg(R.string.on_click_controller_type, OnClickController.ADD_BUTTON);
@@ -74,6 +88,11 @@ public class ContactsActivity extends AppCompatActivity {
         if(contactsModel.getProperty(R.string.prop_displayed_fragment, String.class) == null){
             fragmentChanger.displayTabsFragment(getSupportFragmentManager());
         }
+    }
+
+    private String getAndroidIdMd5(){
+        String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return MD5.encode(androidId);
     }
 
     @Override
