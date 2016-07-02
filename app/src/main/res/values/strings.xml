@@ -24,6 +24,11 @@
     <string name="search_label">Search</string>
     <string name="search_hint">Search for Contact</string>
 
+    <!-- Ad IDs -->
+    <string name="device_id_md5" translatable="false">CF15F5919B4A3AC54DA59F55AFD</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-4673825444478857~2136464527</string>
+    <string name="ad_id_activity_banner" translatable="false">ca-app-pub-4673825444478857/3613197725</string>
+
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Denied!</string>
     <string name="grant_permission_snackbar_button">Grant</string>

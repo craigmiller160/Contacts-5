@@ -57,4 +57,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.0.0'
     compile 'org.slf4j:slf4j-android:1.7.21'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.google.firebase:firebase-ads:9.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
