@@ -10,6 +10,11 @@
     <string name="menu_settings_label">顯示設置</string>
     <string name="menu_grant_permissions_label">授予權限</string>
     <string name="menu_about_contacts_label">關於通訊錄 5+</string>
+    <string name="menu_search_label">搜索</string>
+
+    <!-- Search Strings -->
+    <string name="search_label">搜索</string>
+    <string name="search_hint">搜索聯繫人</string>
 
     <!-- Tab Name Labels -->
     <string name="tab_contacts">所有聯繫人</string>
@@ -19,5 +24,6 @@
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">沒有權限！</string>
     <string name="grant_permission_snackbar_button">格兰特</string>
+
 
 </resources>

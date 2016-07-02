@@ -10,6 +10,11 @@
     <string name="menu_settings_label">Anzeigeeinstellungen</string>
     <string name="menu_grant_permissions_label">Grant Berechtigungen</string>
     <string name="menu_about_contacts_label">Über uns Kontakte 5+</string>
+    <string name="menu_search_label">Suche</string>
+
+    <!-- Search Strings -->
+    <string name="search_label">Suche</string>
+    <string name="search_hint">Suche nach Kontakt</string>
 
     <!-- Tab Name Labels -->
     <string name="tab_contacts">Alle Kontakte</string>
