@@ -11,7 +11,7 @@
     <application
         android:name=".ContactsApp"
         android:allowBackup="true"
-        android:icon="@drawable/contacts5icon"
+        android:icon="@drawable/contacts5icon_new"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
