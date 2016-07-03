@@ -15,6 +15,8 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
 import io.craigmiller160.contacts5.model.AndroidModel;
+import io.craigmiller160.contacts5.model.Contact;
+import io.craigmiller160.contacts5.model.ContactGroup;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.getFragmentPageTag;
 
@@ -25,9 +27,9 @@ public class TabsFragment extends Fragment {
 
     private static final String TAG = "TabsFragment";
 
-    private Fragment contactsFragment;
-    private Fragment groupsFragment;
-    private Fragment favoritesFragment;
+    private AbstractContactsFragment<Contact> contactsFragment;
+    private AbstractContactsFragment<ContactGroup> groupsFragment;
+    private AbstractContactsFragment<Contact> favoritesFragment;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -36,9 +38,9 @@ public class TabsFragment extends Fragment {
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
-            favoritesFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, FavContactsFragment.PAGE_INDEX));
-            contactsFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllContactsFragment.PAGE_INDEX));
-            groupsFragment = getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllGroupsFragment.PAGE_INDEX));
+            favoritesFragment = (AbstractContactsFragment<Contact>) getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, FavContactsFragment.PAGE_INDEX));
+            contactsFragment = (AbstractContactsFragment<Contact>) getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllContactsFragment.PAGE_INDEX));
+            groupsFragment = (AbstractContactsFragment<ContactGroup>) getFragmentManager().findFragmentByTag(getFragmentPageTag(R.id.contactsTabsViewPager, AllGroupsFragment.PAGE_INDEX));
         }
 
         if(favoritesFragment == null){
@@ -56,6 +58,20 @@ public class TabsFragment extends Fragment {
         AndroidModel contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         contactsModel.clearProperty(R.string.prop_selected_group_id);
         contactsModel.clearProperty(R.string.prop_selected_group_name);
+    }
+
+    public void refreshTabs(){
+        if(favoritesFragment != null){
+            favoritesFragment.refreshView();
+        }
+
+        if(contactsFragment != null){
+            contactsFragment.refreshView();
+        }
+
+        if(groupsFragment != null){
+            groupsFragment.refreshView();
+        }
     }
 
     @Nullable
