@@ -15,7 +15,7 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 /**
  * Created by craig on 6/5/16.
  */
-public abstract class AbstractContactsFragment<T> extends Fragment {
+public abstract class AbstractContactsFragment<T> extends Fragment implements RefreshableView {
 
     private AndroidSystemUtil androidSystemUtil;
     private ArrayAdapter<T> arrayAdapter;
@@ -54,6 +54,7 @@ public abstract class AbstractContactsFragment<T> extends Fragment {
         }
     }
 
+    @Override
     public void refreshView(){
         FrameLayout layout = (FrameLayout) getView();
         attachChildView(layout, getActivity().getLayoutInflater());

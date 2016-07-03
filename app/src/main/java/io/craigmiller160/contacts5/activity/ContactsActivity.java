@@ -26,6 +26,7 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.controller.SearchController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
+import io.craigmiller160.contacts5.fragment.RefreshableView;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsService;
@@ -203,8 +204,9 @@ public class ContactsActivity extends AppCompatActivity {
             case AndroidSystemUtil.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     Log.d(TAG, "Necessary permissions were granted");
-                    TabsFragment tabsFragment = (TabsFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_tabs_fragment));
-                    tabsFragment.refreshTabs();
+                    String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+                    RefreshableView refreshableView = (RefreshableView) getSupportFragmentManager().findFragmentByTag(displayedFragment);
+                    refreshableView.refreshView();
                     reloadContacts();
                 }
                 else{

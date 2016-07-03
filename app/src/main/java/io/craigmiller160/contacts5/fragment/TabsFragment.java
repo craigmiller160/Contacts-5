@@ -23,7 +23,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.getFragmentPage
 /**
  * Created by craig on 6/5/16.
  */
-public class TabsFragment extends Fragment {
+public class TabsFragment extends Fragment implements RefreshableView {
 
     private static final String TAG = "TabsFragment";
 
@@ -60,7 +60,8 @@ public class TabsFragment extends Fragment {
         contactsModel.clearProperty(R.string.prop_selected_group_name);
     }
 
-    public void refreshTabs(){
+    @Override
+    public void refreshView(){
         if(favoritesFragment != null){
             favoritesFragment.refreshView();
         }
