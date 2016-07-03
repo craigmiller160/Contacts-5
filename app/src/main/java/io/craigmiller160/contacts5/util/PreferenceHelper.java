@@ -44,10 +44,10 @@ public class PreferenceHelper extends AbstractAndroidUtil{
         String sort = getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
 
         if(getString(R.string.array_contact_sort_by_first).equals(sortBy)){
-            return String.format("%1$s %2$s", displayNameColumn, sort);
+            return String.format("lower(%1$s) %2$s", displayNameColumn, sort);
         }
         else{
-            return String.format("%1$s %2$s", displayNameAltColumn, sort);
+            return String.format("lower(%1$s) %2$s", displayNameAltColumn, sort);
         }
     }
 
@@ -60,10 +60,10 @@ public class PreferenceHelper extends AbstractAndroidUtil{
         String sort = getString(R.string.array_sort_order_asc).equals(sortOrder) ? "ASC" : "DESC";
 
         if(getString(R.string.array_group_sort_by_group).equals(sortBy)){
-            return String.format("%1$s %2$s, %3$s %2$s", COL_GROUP_TITLE, sort, COL_GROUP_ACCOUNT);
+            return String.format("lower(%1$s) %2$s, lower(%3$s) %2$s", COL_GROUP_TITLE, sort, COL_GROUP_ACCOUNT);
         }
         else{
-            return String.format("%1$s %2$s, %3$s %2$s", COL_GROUP_ACCOUNT, sort, COL_GROUP_TITLE);
+            return String.format("lower(%1$s) %2$s, lower(%3$s) %2$s", COL_GROUP_ACCOUNT, sort, COL_GROUP_TITLE);
         }
     }
 
