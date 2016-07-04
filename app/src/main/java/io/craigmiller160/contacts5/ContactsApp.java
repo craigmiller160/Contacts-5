@@ -23,6 +23,7 @@ public class ContactsApp extends Application {
     private static final Object factoryLock = new Object();
 
     private ModelFactory modelFactory;
+    private Thread.UncaughtExceptionHandler defaultUncaughtHandler;
 
     public static ContactsApp getApp(){
         return instance;
@@ -37,6 +38,7 @@ public class ContactsApp extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.display_settings, false);
 
         synchronized (factoryLock){
+            this.defaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler();
             modelFactory = new ModelFactory(this);
         }
 
@@ -56,6 +58,12 @@ public class ContactsApp extends Application {
     public ModelFactory modelFactory(){
         synchronized (factoryLock){
             return modelFactory;
+        }
+    }
+
+    public Thread.UncaughtExceptionHandler getDefaultUncaughtHandler(){
+        synchronized (factoryLock){
+            return defaultUncaughtHandler;
         }
     }
 
