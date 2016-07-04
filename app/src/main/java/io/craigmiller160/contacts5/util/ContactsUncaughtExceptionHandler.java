@@ -1,8 +1,8 @@
 package io.craigmiller160.contacts5.util;
 
-import android.util.Log;
 
 import io.craigmiller160.contacts5.ContactsApp;
+import io.craigmiller160.contacts5.log.Logger;
 
 /**
  * Created by craig on 6/5/16.
@@ -10,6 +10,7 @@ import io.craigmiller160.contacts5.ContactsApp;
 public class ContactsUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = "UncaughtException";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private final Thread.UncaughtExceptionHandler defaultUncaughtHandler;
 
@@ -19,7 +20,8 @@ public class ContactsUncaughtExceptionHandler implements Thread.UncaughtExceptio
 
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
-        Log.e(TAG, String.format("Uncaught exception in thread %d", thread.getId()), throwable);
+        logger.e(TAG, String.format("Uncaught exception in thread %d", thread.getId()), throwable);
+        logger.flushCache();
         defaultUncaughtHandler.uncaughtException(thread, throwable);
     }
 

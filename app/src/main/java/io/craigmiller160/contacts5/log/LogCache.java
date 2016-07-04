@@ -1,22 +1,30 @@
 package io.craigmiller160.contacts5.log;
 
 import android.content.Context;
+import android.os.Environment;
+import android.support.v4.os.EnvironmentCompat;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AndroidRuntimeException;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 
 /**
  * Created by craig on 7/3/16.
  */
 public class LogCache extends AbstractAndroidUtil{
+
+    private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+    private static final String reportStart = "Contacts 5+ Crash Report - %s";
 
     private static final Object instanceLock = new Object();
     private static LogCache instance;
@@ -64,10 +72,12 @@ public class LogCache extends AbstractAndroidUtil{
         }
     }
 
-    public synchronized void flushCache(){
-        File filesDir = getContext().getFilesDir();
-        File logFile = new File(filesDir, "contacts5.log");
+    public synchronized void flushCache() {
+        File filesDir = getContext().getExternalFilesDir(null);
+        File logFile = new File(filesDir, "contacts5-crash.log");
         try(FileWriter writer = new FileWriter(logFile)){
+            writer.write(String.format(reportStart, dateFormat.format(new Date())));
+            writer.write(System.lineSeparator() + System.lineSeparator());
             for(String entry : logs){
                 writer.write(entry);
                 writer.write(System.lineSeparator());
