@@ -46,58 +46,72 @@ public class Logger {
     }
 
     public int d(String tag, String msg, Throwable t){
+        cacheLog(DEBUG, tag, msg, t);
         return Log.d(tag, msg, t);
     }
 
     public int d(String tag, String msg){
+        cacheLog(DEBUG, tag, msg, null);
         return Log.d(tag, msg);
     }
 
     public int e(String tag, String msg){
+        cacheLog(ERROR, tag, msg, null);
         return Log.e(tag, msg);
     }
 
     public int e(String tag, String msg, Throwable t){
+        cacheLog(ERROR, tag, msg, t);
         return Log.e(tag, msg, t);
     }
 
     public int i(String tag, String msg){
+        cacheLog(INFO, tag, msg, null);
         return Log.i(tag, msg);
     }
 
     public int i(String tag, String msg, Throwable t){
+        cacheLog(INFO, tag, msg, t);
         return Log.i(tag, msg, t);
     }
 
     public int v(String tag, String msg){
+        cacheLog(VERBOSE, tag, msg, null);
         return Log.v(tag, msg);
     }
 
     public int v(String tag, String msg, Throwable t){
+        cacheLog(VERBOSE, tag, msg, t);
         return Log.v(tag, msg, t);
     }
 
     public int w(String tag, String msg){
+        cacheLog(WARN, tag, msg, null);
         return Log.w(tag, msg);
     }
 
     public int w(String tag, String msg, Throwable t){
+        cacheLog(WARN, tag, msg, t);
         return Log.w(tag, msg, t);
     }
 
     public int w(String tag, Throwable t){
+        cacheLog(WARN, tag, null, t);
         return Log.w(tag, t);
     }
 
     public int wtf(String tag, String msg){
+        cacheLog(WTF, tag, msg, null);
         return Log.wtf(tag, msg);
     }
 
     public int wtf(String tag, String msg, Throwable t){
+        cacheLog(WTF, tag, msg, t);
         return Log.wtf(tag, msg, t);
     }
 
     public int wtf(String tag, Throwable t){
+        cacheLog(WTF, tag, null, t);
         return Log.wtf(tag, t);
     }
 
