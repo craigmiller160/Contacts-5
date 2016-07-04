@@ -3,7 +3,6 @@ package io.craigmiller160.contacts5.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.ArrayAdapter;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.service.ContactsService;
@@ -23,6 +23,7 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
 
     private static final String TAG = "ContactsInGroupFragment";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private AndroidModel contactsModel;
 
@@ -34,7 +35,7 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        Log.v(TAG, "ContactsInGroupFragment created");
+        logger.v(TAG, "ContactsInGroupFragment created");
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         AndroidSystemUtil androidSystemUtil = new AndroidSystemUtil(getActivity());
 

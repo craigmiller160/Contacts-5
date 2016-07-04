@@ -9,7 +9,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 /**
@@ -29,9 +29,12 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static final BindSummaryToValueListener bindSummaryListener = new BindSummaryToValueListener();
 
+    private static final Logger logger = Logger.newLogger(TAG);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        logger.i(TAG, "Creating DisplaySettingsActivity");
         setTitle(getString(R.string.activity_settings_name_label));
 
         ActionBar actionBar = getSupportActionBar();
@@ -50,7 +53,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     }
 
     private void closeAction(){
-        Log.i(TAG, "Closing DisplaySettingsActivity");
+        logger.i(TAG, "Closing DisplaySettingsActivity");
         finish();
     }
 
@@ -81,7 +84,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstance){
             super.onCreate(savedInstance);
-            Log.d(TAG, "Creating DisplaySettingsFragment");
+            logger.d(TAG, "Creating DisplaySettingsFragment");
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
             this.androidSystemUtil = new AndroidSystemUtil(getActivity());
@@ -109,7 +112,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
         private void configurePreference(Preference pref){
             String key = pref.getKey();
-            Log.v(TAG, "Configuring preference: " + key);
+            logger.v(TAG, "Configuring preference: " + key);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             pref.setOnPreferenceChangeListener(bindSummaryListener);
 

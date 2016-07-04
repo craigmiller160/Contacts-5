@@ -8,11 +8,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.craigmiller160.contacts5.log.Logger;
 
 /**
  * Created by craig on 6/19/16.
@@ -22,6 +23,7 @@ public class AndroidSystemUtil extends AbstractAndroidUtil{
     public static final int CONTACTS_PERMISSION_REQUEST = 101;
 
     private static final String TAG = "AndroidSystemUtil";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private final Permissions permissions;
     private final Accounts accounts;
@@ -47,13 +49,14 @@ public class AndroidSystemUtil extends AbstractAndroidUtil{
         }
 
         public boolean hasReadContactsPermission(){
+            logger.d(TAG, "Checking if ReadContacts permission has been granted");
             return ContextCompat.checkSelfPermission(
                     getContext(), Manifest.permission.READ_CONTACTS) ==
                     PackageManager.PERMISSION_GRANTED;
         }
 
         public void requestReadContactsPermission(Activity activity){
-            Log.d(TAG, "Requesting permission to read contacts");
+            logger.d(TAG, "Requesting permission to read contacts");
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.READ_CONTACTS},
                     CONTACTS_PERMISSION_REQUEST);
@@ -77,7 +80,7 @@ public class AndroidSystemUtil extends AbstractAndroidUtil{
             AccountManager accountManager = (AccountManager) getContext().getSystemService(Context.ACCOUNT_SERVICE);
             Account[] accounts = accountManager.getAccountsByType(GOOGLE_ACCOUNT);
             String[] accountNames = new String[accounts.length];
-            Log.d(TAG, "All account names retrieved. Size: " + accountNames.length);
+            logger.d(TAG, "All account names retrieved. Size: " + accountNames.length);
             for(int i = 0; i < accounts.length; i++){
                 accountNames[i] = accounts[i].name;
             }

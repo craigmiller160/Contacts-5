@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
-import io.craigmiller160.contacts5.IllegalArgumentCtxException;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
@@ -34,21 +33,6 @@ public class OnClickController extends AbstractAndroidController implements View
 
     private final AndroidModel contactsModel;
     private FragmentChanger fragmentChanger;
-
-//    public OnClickController(Context context, Map<String,Object> args, int type){
-//        super(context, args);
-//        switch(type){
-//            case CONTACTS_LIST:
-//            case GROUPS_LIST:
-//            case ADD_BUTTON:
-//                this.type = type;
-//                break;
-//            default:
-//                throw new IllegalArgumentCtxException("Provided type not supported by this controller")
-//                        .addContextValue("Type", type);
-//        }
-//
-//    }
 
     public OnClickController(Context context){
         this(context, new HashMap<String, Object>());

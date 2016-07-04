@@ -12,7 +12,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,7 @@ import io.craigmiller160.contacts5.controller.OnClickController;
 import io.craigmiller160.contacts5.controller.SearchController;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.fragment.RefreshableView;
-import io.craigmiller160.contacts5.fragment.TabsFragment;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.service.ContactsService;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
@@ -43,6 +42,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private static final String TAG = "ContactsActivity";
 
+    private static final Logger logger = Logger.newLogger(TAG);
     private AndroidSystemUtil androidSystemUtil;
     private FragmentChanger fragmentChanger;
     private AndroidModel contactsModel;
@@ -51,7 +51,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        Log.i(TAG, "Creating ContactsActivity");
+        logger.i(TAG, "Creating ContactsActivity");
         setContentView(R.layout.activity_contacts);
 
         this.androidSystemUtil = new AndroidSystemUtil(this);
@@ -59,7 +59,7 @@ public class ContactsActivity extends AppCompatActivity {
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
 
         if(savedInstance != null){
-            Log.v(TAG, "Restoring ContactsModel state on Activity creation");
+            logger.v(TAG, "Restoring ContactsModel state on Activity creation");
             contactsModel.restoreState(savedInstance);
             reloadContacts = false;
         }
@@ -99,7 +99,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        Log.i(TAG, "Restarting ContactsActivity");
+        logger.i(TAG, "Restarting ContactsActivity");
         super.onRestart();
         reloadContacts = true;
     }
@@ -116,7 +116,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstance){
         if(contactsModel != null && contactsModel.getPropertyCount() == 0){
-            Log.v(TAG, "Restoring ContactsModel state on Activity restore");
+            logger.v(TAG, "Restoring ContactsModel state on Activity restore");
             contactsModel.restoreState(savedInstance);
         }
         super.onRestoreInstanceState(savedInstance);
@@ -151,14 +151,14 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedState){
-        Log.v(TAG, "Storing ContactsModel state");
+        logger.v(TAG, "Storing ContactsModel state");
         contactsModel.storeState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
+        logger.d(TAG, "Activity result received. Request: " + CodeParser.parseRequestCode(requestCode) + " Response: " + CodeParser.parseResultCode(resultCode));
         reloadContacts();
     }
 
@@ -184,7 +184,7 @@ public class ContactsActivity extends AppCompatActivity {
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(displayedFragment == null || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
-            Log.i(TAG, "Closing ContactsActivity");
+            logger.i(TAG, "Closing ContactsActivity");
             finish();
         }
         else{
@@ -194,7 +194,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void backAction(){
         String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
-        Log.d(TAG, "Leaving Group: " + groupName);
+        logger.d(TAG, "Leaving Group: " + groupName);
         fragmentChanger.displayTabsFragment(getSupportFragmentManager());
     }
 
@@ -203,14 +203,14 @@ public class ContactsActivity extends AppCompatActivity {
         switch (requestCode) {
             case AndroidSystemUtil.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Log.d(TAG, "Necessary permissions were granted");
+                    logger.d(TAG, "Necessary permissions were granted");
                     String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
                     RefreshableView refreshableView = (RefreshableView) getSupportFragmentManager().findFragmentByTag(displayedFragment);
                     refreshableView.refreshView();
                     reloadContacts();
                 }
                 else{
-                    Log.e(TAG, "Necessary permissions were denied!");
+                    logger.e(TAG, "Necessary permissions were denied!");
                     View view = findViewById(R.id.activity_contacts_layout);
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.grant_permission_snackbar_button), new View.OnClickListener(){

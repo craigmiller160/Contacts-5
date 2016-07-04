@@ -4,17 +4,13 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-
-import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 import io.craigmiller160.utils.reflect.ObjectCreator;
-
-import static io.craigmiller160.contacts5.util.ContactsConstants.getFragmentPageTag;
 
 /**
  * Created by craig on 6/12/16.
@@ -22,6 +18,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.getFragmentPage
 public class FragmentChanger extends AbstractAndroidUtil{
 
     private static final String TAG = "FragmentChanger";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private AndroidModel contactsModel;
 
@@ -31,7 +28,6 @@ public class FragmentChanger extends AbstractAndroidUtil{
     }
 
     public void displayTabsFragment(FragmentManager fm){
-        Log.d(TAG, "Displaying TabsFragment");
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         displayFragment(fm, R.id.tabs_fragment_container, TabsFragment.class,
                 getString(R.string.tag_tabs_fragment), new String[]{displayedFragment}, true);
@@ -45,6 +41,7 @@ public class FragmentChanger extends AbstractAndroidUtil{
 
     public void displayFragment(FragmentManager fm, int displayContainerId, Fragment displayFragment,
                                     String displayFragmentTag, String[] fragmentsToRemoveTags, boolean changeProp){
+        logger.d(TAG, "Displaying " + displayFragmentTag);
         FragmentTransaction transaction = fm.beginTransaction();
 
         for(String tag : fragmentsToRemoveTags){
@@ -62,7 +59,6 @@ public class FragmentChanger extends AbstractAndroidUtil{
     }
 
     public void displayNoTabsFragment(FragmentManager fm){
-        Log.d(TAG, "Displaying NoTabsFragment");
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         displayFragment(fm, R.id.no_tabs_fragment_container, ContactsInGroupFragment.class,
                 getString(R.string.tag_no_tabs_fragment), new String[]{displayedFragment}, true);
@@ -71,7 +67,6 @@ public class FragmentChanger extends AbstractAndroidUtil{
     public void displayContactsFragment(FragmentManager fm) {
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
-            Log.d(TAG, "Displaying SearchFragment");
             Fragment fragment = new AllContactsFragment();
             displayFragment(fm, R.id.no_tabs_fragment_container, fragment,
                     getString(R.string.tag_search_fragment), new String[]{displayedFragment}, false);

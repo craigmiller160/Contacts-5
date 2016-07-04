@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import java.util.concurrent.Future;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
@@ -65,6 +65,7 @@ import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_RAW
 public class ContactsService extends Service{
 
     private static final String TAG = "ContactsService";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     public static final String LOAD_CONTACTS = "LoadContacts";
     public static final String LOAD_GROUPS = "LoadGroups";
@@ -99,10 +100,10 @@ public class ContactsService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(androidSystemUtil.permissions().hasReadContactsPermission()){
             String tagid = String.format(Locale.getDefault(), "%s-%03d", TAG, startId);
-            Log.d(tagid, "Start command received. Contacts permissions are available");
+            logger.d(tagid, "Start command received. Contacts permissions are available");
             if(queries != null && !queries.isDone()){
                 queries.cancel(true);
-                Log.e(tagid, "ContactsService already running, terminating before starting new operation");
+                logger.e(tagid, "ContactsService already running, terminating before starting new operation");
             }
 
             ExecuteQueries executeQueries = new ExecuteQueries(this, intent, startId, tagid);
@@ -114,7 +115,7 @@ public class ContactsService extends Service{
             }
         }
         else{
-            Log.e(TAG, "ContactsService start command received. Contacts permissions NOT available");
+            logger.e(TAG, "ContactsService start command received. Contacts permissions NOT available");
         }
 
         return START_NOT_STICKY;
@@ -152,18 +153,18 @@ public class ContactsService extends Service{
         @Override
         public void run() {
             long startTime = System.currentTimeMillis();
-            Log.i(tagid, "Service is starting");
+            logger.i(tagid, "Service is starting");
 
             try{
                 runService();
                 long endTime = System.currentTimeMillis();
-                Log.i(tagid, String.format("Service finished. Time: %dms", (endTime - startTime)));
+                logger.i(tagid, String.format("Service finished. Time: %dms", (endTime - startTime)));
             }
             catch(InterruptedException ex){
-                Log.e(tagid, "Service was interrupted during execution", ex);
+                logger.e(tagid, "Service was interrupted during execution", ex);
             }
             catch(ExecutionException ex){
-                Log.e(tagid, "Service failed during execution", ex);
+                logger.e(tagid, "Service failed during execution", ex);
             }
             finally{
                 service.stopSelf(startId);
@@ -211,7 +212,7 @@ public class ContactsService extends Service{
                 groupId = intent.getLongExtra(getString(R.string.prop_selected_group_id), -1);
                 groupName = intent.getStringExtra(getString(R.string.prop_selected_group_name));
                 if(groupId >= 0){
-                    Log.d(tagid, String.format("Running query for contacts in group '%s'", groupName));
+                    logger.d(tagid, String.format("Running query for contacts in group '%s'", groupName));
                     contactsInGroupQuery = service.submit(new ContactsInGroupQuery(getContext(), groupId, tagid));
                 }
             }
@@ -222,8 +223,8 @@ public class ContactsService extends Service{
             }
 
             if(loadContacts){
-                Log.d(tagid, "Running query for all contacts");
-                Log.d(tagid, "Running query for favorite contacts");
+                logger.d(tagid, "Running query for all contacts");
+                logger.d(tagid, "Running query for favorite contacts");
                 allContactsQuery = service.submit(new AllContactsQuery(getContext(), tagid));
                 exclusionsQuery = service.submit(new ExclusionsQuery(getContext(), tagid));
             }
@@ -234,7 +235,7 @@ public class ContactsService extends Service{
             }
 
             if(loadGroups){
-                Log.d(tagid, "Running query for all groups");
+                logger.d(tagid, "Running query for all groups");
                 allGroupsQuery = service.submit(new AllGroupsQuery(getContext(), tagid));
             }
 
@@ -249,7 +250,7 @@ public class ContactsService extends Service{
 
             if(contactsInGroupQuery != null){
                 List<Contact> contactsInGroup = contactsInGroupQuery.get();
-                Log.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
+                logger.d(tagid, String.format("Loaded contacts for group '%s'. Count: %d", groupName, contactsInGroup.size()));
                 contactsModel.setProperty(R.string.prop_contacts_in_group_list, contactsInGroup);
             }
 
@@ -260,7 +261,7 @@ public class ContactsService extends Service{
 
             if(allGroupsQuery != null){
                 List<ContactGroup> groups = allGroupsQuery.get();
-                Log.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
+                logger.d(tagid, String.format("Loaded all groups. Count: %d", groups.size()));
                 contactsModel.setProperty(R.string.prop_groups_list, groups);
             }
 
@@ -297,8 +298,8 @@ public class ContactsService extends Service{
                     }
                 }
 
-                Log.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
-                Log.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
+                logger.d(tagid, String.format("Loaded all contacts. Count: %d", contacts.size()));
+                logger.d(tagid, String.format("Loaded all favorites. Count: %d", favorites.size()));
 
                 contactsModel.setProperty(R.string.prop_contacts_list, contacts);
                 contactsModel.setProperty(R.string.prop_favorites_list, favorites);
@@ -320,6 +321,7 @@ public class ContactsService extends Service{
 
         @Override
         public Map<String,List<Contact>> call() throws Exception {
+            logger.v(TAG, "Starting AllContactsQuery");
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
             Cursor cursor = null;
@@ -336,7 +338,7 @@ public class ContactsService extends Service{
 
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
-                            Log.e(tagid, "All Contacts query was interrupted");
+                            logger.e(tagid, "All Contacts query was interrupted");
                             throw new InterruptedException();
                         }
 
@@ -377,6 +379,8 @@ public class ContactsService extends Service{
             results.put(getString(R.string.prop_contacts_list), allContacts);
             results.put(getString(R.string.prop_favorites_list), favContacts);
 
+            logger.v(TAG, "Finishing AllContactsQuery");
+
             return results;
         }
     }
@@ -394,6 +398,7 @@ public class ContactsService extends Service{
 
         @Override
         public Set<Long> call() throws Exception {
+            logger.v(TAG, "Starting ExclusionsQuery");
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = prefHelper.getAccountsToDisplay();
@@ -409,7 +414,7 @@ public class ContactsService extends Service{
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
-                            Log.e(tagid, "Exclusions query was interrupted");
+                            logger.e(tagid, "Exclusions query was interrupted");
                             throw new InterruptedException();
                         }
 
@@ -427,6 +432,8 @@ public class ContactsService extends Service{
                     cursor.close();
                 }
             }
+
+            logger.v(TAG, "Finishing ExclusionsQuery");
 
             return contactsToExclude;
         }
@@ -446,6 +453,7 @@ public class ContactsService extends Service{
 
         @Override
         public List<ContactGroup> call() throws Exception{
+            logger.v(TAG, "Starting AllGroupsQuery");
             List<ContactGroup> groups = new ArrayList<>();
             Set<String> accountsToDisplay = prefHelper.getAccountsToDisplay();
             boolean useEmptyGroups = prefHelper.useEmptyGroups();
@@ -461,7 +469,7 @@ public class ContactsService extends Service{
                     cursor.moveToFirst();
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
-                            Log.e(tagid, "All Groups query was interrupted");
+                            logger.e(tagid, "All Groups query was interrupted");
                             throw new InterruptedException();
                         }
 
@@ -494,6 +502,8 @@ public class ContactsService extends Service{
                 }
             }
 
+            logger.v(TAG, "Finishing AllGroupsQuery");
+
             return groups;
         }
     }
@@ -513,6 +523,7 @@ public class ContactsService extends Service{
 
         @Override
         public List<Contact> call() throws Exception{
+            logger.v(TAG, "Starting ContactsInGroupQuery");
             List<Contact> contacts = new ArrayList<>();
             Cursor cursor = null;
             try{
@@ -536,7 +547,7 @@ public class ContactsService extends Service{
 
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
-                            Log.e(tagid, "ContactsInGroup query was interrupted");
+                            logger.e(tagid, "ContactsInGroup query was interrupted");
                             throw new InterruptedException("ContactsInGroup query was interrupted");
                         }
 
@@ -568,6 +579,8 @@ public class ContactsService extends Service{
                     cursor.close();
                 }
             }
+
+            logger.v(TAG, "Finishing ContactsInGroupQuery");
 
             return contacts;
         }

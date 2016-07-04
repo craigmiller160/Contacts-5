@@ -10,12 +10,16 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 /**
  * Created by craig on 6/5/16.
  */
 public abstract class AbstractContactsFragment<T> extends Fragment implements RefreshableView {
+
+    private static final String TAG = "AbstractContactFragment";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private AndroidSystemUtil androidSystemUtil;
     private ArrayAdapter<T> arrayAdapter;
@@ -42,6 +46,7 @@ public abstract class AbstractContactsFragment<T> extends Fragment implements Re
     private void attachChildView(FrameLayout layout, LayoutInflater inflater){
         layout.removeAllViews();
         if(androidSystemUtil.permissions().hasReadContactsPermission()){
+            logger.d(TAG, "Has permissions, displaying content list");
             ListView view = (ListView) inflater.inflate(R.layout.content_list, layout, false);
             view.setDivider(null);
             view.setFastScrollEnabled(true);
@@ -49,6 +54,7 @@ public abstract class AbstractContactsFragment<T> extends Fragment implements Re
             layout.addView(view);
         }
         else{
+            logger.d(TAG, "Does not have permissions, displaying placeholder view");
             View view = inflater.inflate(R.layout.content_no_permissions, layout, false);
             layout.addView(view);
         }

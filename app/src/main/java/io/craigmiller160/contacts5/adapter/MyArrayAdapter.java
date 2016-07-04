@@ -11,12 +11,16 @@ import java.util.List;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 
 /**
  * Created by craig on 6/5/16.
  */
 public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements PropertyChangeListener {
+
+    private static final String TAG = "MyArrayAdapter";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private List<T> contents;
     private List<T> originalContents;
@@ -36,6 +40,7 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     }
 
     protected void refreshContentsFromModel(){
+        logger.v(TAG, "Refreshing ArrayAdapter contents from model");
         setContents(contactsModel.getProperty(propertyName, List.class));
         setOriginalContents(contactsModel.getProperty(propertyName, List.class));
     }

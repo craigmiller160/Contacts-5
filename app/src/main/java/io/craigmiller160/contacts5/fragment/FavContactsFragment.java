@@ -1,11 +1,11 @@
 package io.craigmiller160.contacts5.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.Contact;
 
 /**
@@ -14,13 +14,14 @@ import io.craigmiller160.contacts5.model.Contact;
 public class FavContactsFragment extends AbstractContactsPageFragment<Contact> {
 
     private static final String TAG = "FavContactsFragment";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     public static final int PAGE_INDEX = 0;
 
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        Log.v(TAG, "FavContactsFragment created");
+        logger.v(TAG, "FavContactsFragment created");
     }
 
     @Override

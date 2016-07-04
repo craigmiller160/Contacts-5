@@ -15,6 +15,7 @@ import io.craigmiller160.contacts5.adapter.MyArrayAdapter;
 import io.craigmiller160.contacts5.fragment.AbstractContactsFragment;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 
@@ -22,6 +23,9 @@ import io.craigmiller160.contacts5.model.Contact;
  * Created by craig on 6/25/16.
  */
 public class SearchController extends AbstractAndroidController implements SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener{
+
+    private static final String TAG = "SearchController";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private final FragmentChanger fragmentChanger;
     private final AndroidModel contactsModel;
@@ -77,6 +81,7 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
+        logger.d(TAG, "Closing SearchView");
         isSearchOpen = false;
         if(adapter != null){
             adapter.clearFilter();
@@ -96,6 +101,7 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
+        logger.d(TAG, "Opening SearchView");
         isSearchOpen = true;
         getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.GONE);
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);

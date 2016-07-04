@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,7 @@ import android.view.ViewGroup;
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
+import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.model.ContactGroup;
@@ -26,6 +25,7 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.getFragmentPage
 public class TabsFragment extends Fragment implements RefreshableView {
 
     private static final String TAG = "TabsFragment";
+    private static final Logger logger = Logger.newLogger(TAG);
 
     private AbstractContactsFragment<Contact> contactsFragment;
     private AbstractContactsFragment<ContactGroup> groupsFragment;
@@ -34,7 +34,7 @@ public class TabsFragment extends Fragment implements RefreshableView {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        Log.v(TAG, "TabsFragment created");
+        logger.v(TAG, "TabsFragment created");
 
         //Get the existing instances of the fragments, if they exist
         if (savedInstance != null) {
