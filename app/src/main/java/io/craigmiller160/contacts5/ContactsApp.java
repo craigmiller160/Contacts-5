@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 
+import io.craigmiller160.contacts5.log.LogCache;
 import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.util.ContactsUncaughtExceptionHandler;
 
@@ -32,6 +33,7 @@ public class ContactsApp extends Application {
         super.onCreate();
         instance = this;
 
+        LogCache.initialize(this);
         PreferenceManager.setDefaultValues(this, R.xml.display_settings, false);
 
         synchronized (factoryLock){
