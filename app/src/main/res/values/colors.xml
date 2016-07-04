@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0232D1</color>
-    <color name="colorPrimaryDark">#021EBD</color>
+        <color name="colorPrimary">#0264D1</color>
+    <color name="colorPrimaryDark">#024AD1</color>
     <color name="colorAccent">#0288d1</color>
 
     <array name="letter_tile_colors">
