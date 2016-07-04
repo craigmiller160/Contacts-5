@@ -66,7 +66,8 @@ public class LogCache extends AbstractAndroidUtil{
 
     public synchronized void flushCache(){
         File filesDir = getContext().getFilesDir();
-        try(FileWriter writer = new FileWriter(filesDir)){
+        File logFile = new File(filesDir, "contacts5.log");
+        try(FileWriter writer = new FileWriter(logFile)){
             for(String entry : logs){
                 writer.write(entry);
                 writer.write(System.lineSeparator());
