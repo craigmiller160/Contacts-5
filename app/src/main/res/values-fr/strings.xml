@@ -11,6 +11,7 @@
     <string name="menu_grant_permissions_label">Accorder des Autorisations</string>
     <string name="menu_about_contacts_label">À Propos de Contacts 5+</string>
     <string name="menu_search_label">Chercher</string>
+    <string name="menu_write_debug_label">Ecrire les informations de débogage</string>
 
     <!-- Search Strings -->
     <string name="search_label">Chercher</string>

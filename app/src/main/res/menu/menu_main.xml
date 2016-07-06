@@ -14,9 +14,14 @@
         android:title="@string/menu_grant_permissions_label"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/menu_write_debug"
+        android:orderInCategory="102"
+        android:title="@string/menu_write_debug_label"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/menu_search_id"
         android:title="@string/menu_search_label"
-        android:orderInCategory="102"
+        android:orderInCategory="103"
         app:showAsAction="collapseActionView|ifRoom"
         android:icon="@drawable/ic_search_white_24dp"
         app:actionViewClass="android.support.v7.widget.SearchView" />

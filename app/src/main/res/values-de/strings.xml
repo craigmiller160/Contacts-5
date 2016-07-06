@@ -11,6 +11,7 @@
     <string name="menu_grant_permissions_label">Grant Berechtigungen</string>
     <string name="menu_about_contacts_label">Über uns Kontakte 5+</string>
     <string name="menu_search_label">Suche</string>
+    <string name="menu_write_debug_label">Schreiben Sie Debug Info</string>
 
     <!-- Search Strings -->
     <string name="search_label">Suche</string>
