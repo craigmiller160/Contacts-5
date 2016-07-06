@@ -24,7 +24,7 @@ import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 public class LogCache extends AbstractAndroidUtil{
 
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
-    private static final String reportStart = "Contacts 5+ Crash Report - %s";
+    private static final String reportStart = "Contacts 5+ Debug Report - %s";
 
     private static final Object instanceLock = new Object();
     private static LogCache instance;
@@ -74,7 +74,7 @@ public class LogCache extends AbstractAndroidUtil{
 
     public synchronized void flushCache() {
         File filesDir = getContext().getExternalFilesDir(null);
-        File logFile = new File(filesDir, "contacts5-crash.log");
+        File logFile = new File(filesDir, "contacts5-debug.log");
         try(FileWriter writer = new FileWriter(logFile)){
             writer.write(String.format(reportStart, dateFormat.format(new Date())));
             writer.write(System.lineSeparator() + System.lineSeparator());

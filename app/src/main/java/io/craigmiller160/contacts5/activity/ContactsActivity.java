@@ -242,7 +242,21 @@ public class ContactsActivity extends AppCompatActivity {
             backAction();
             return true;
         }
+        else if(item.getItemId() == R.id.menu_write_debug){
+            writeDebug();
+            return true;
+        }
 
         return false;
+    }
+
+    private void writeDebug(){
+        logger.flushCache();
+        View view = findViewById(R.id.activity_contacts_layout);
+        Snackbar.make(view, "Debug info written to: " + getFullDebugInfoPath(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private String getFullDebugInfoPath(){
+        return getExternalFilesDir(null) != null ? getExternalFilesDir(null).getAbsolutePath() : "null";
     }
 }
