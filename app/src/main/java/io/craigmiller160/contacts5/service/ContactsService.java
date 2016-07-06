@@ -275,6 +275,7 @@ public class ContactsService extends Service{
                 List<Contact> contacts = results.get(getString(R.string.prop_contacts_list));
                 List<Contact> favorites = results.get(getString(R.string.prop_favorites_list));
                 Set<Long> exclusions = exclusionsQuery.get();
+                logger.v(tagid, String.format("Exclusion IDs loaded: " + exclusions.size()));
 
                 Iterator<Contact> contactIterator = contacts.iterator();
                 while(contactIterator.hasNext()){
