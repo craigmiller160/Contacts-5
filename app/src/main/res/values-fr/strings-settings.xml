@@ -5,6 +5,7 @@
     <string name="settings_category_contacts_label">Paramètres de Contacts</string>
     <string name="settings_category_general_label">Paramètres de Généraux</string>
     <string name="settings_category_groups_label">Paramètres de Groupes</string>
+    <string name="settings_category_debug_label">Debugging</string>
 
     <string name="setting_accounts_to_display_label">Comptes à Afficher</string>
     <string name="setting_phones_only_label">Afficher Uniquement les Téléphones</string>
@@ -17,10 +18,13 @@
     <string name="setting_group_sort_order_label">Groupe Ordre de Tri</string>
     <string name="setting_group_sort_by_label">Groupe Trier Par</string>
 
+    <string name="setting_debug_label">Ecrire les informations de débogage</string>
+
     <string name="setting_phones_only_summary_on">Masquer les contacts sans numéros de téléphone</string>
     <string name="setting_phones_only_summary_off">Afficher les contacts sans numéros de téléphone</string>
     <string name="setting_empty_group_summary_on">Afficher les groupes sans contacts</string>
     <string name="setting_empty_group_summary_off">Masquer les groupes sans contacts</string>
+    <string name="setting_debug_summary">Chemin de sortie:</string>
 
     <!-- Array constant value labels -->
     <string name="array_sort_order_asc_label">Ascendant</string>

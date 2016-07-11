@@ -25,5 +25,6 @@
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">¡Permiso denegado!</string>
     <string name="grant_permission_snackbar_button">Conceder</string>
+    <string name="write_debug_snackbar_text">información de depuración escrito a:</string>
 
 </resources>

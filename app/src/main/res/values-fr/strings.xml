@@ -25,5 +25,6 @@
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">Permission Refusée!</string>
     <string name="grant_permission_snackbar_button">Subvention</string>
+    <string name="write_debug_snackbar_text">info Debug écrit à:</string>
 
 </resources>

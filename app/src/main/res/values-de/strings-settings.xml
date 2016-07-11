@@ -5,6 +5,7 @@
     <string name="settings_category_contacts_label">Kontakte Einstellungen</string>
     <string name="settings_category_general_label">Allgemeine Einstellungen</string>
     <string name="settings_category_groups_label">Gruppen Einstellungen</string>
+    <string name="settings_category_debug_label">Fehlerbeseitigung</string>
 
     <string name="setting_accounts_to_display_label">Konten zum Anzeigen</string>
     <string name="setting_phones_only_label">Nur Telefone</string>
@@ -17,10 +18,13 @@
     <string name="setting_group_sort_order_label">Gruppe Sortierreihenfolge</string>
     <string name="setting_group_sort_by_label">Gruppe Sortieren Nach</string>
 
+    <string name="setting_debug_label">Schreiben Sie Debug Info</string>
+
     <string name="setting_phones_only_summary_on">Verbergen kontakt ohne telefonnummern</string>
     <string name="setting_phones_only_summary_off">Zeigen sie kontakt ohne telefonnummern</string>
     <string name="setting_empty_group_summary_on">Anzeigen gruppen ohne kontakte</string>
     <string name="setting_empty_group_summary_off">Ausblenden gruppen ohne kontakte</string>
+    <string name="setting_debug_summary">Ausgabepfad :</string>
 
     <!-- Array constant value labels -->
     <string name="array_sort_order_asc_label">Aufsteigend</string>

@@ -25,6 +25,7 @@
     <!-- Other Strings -->
     <string name="permission_denied_snackbar_text">沒有權限！</string>
     <string name="grant_permission_snackbar_button">格兰特</string>
+    <string name="write_debug_snackbar_text">調試信息寫到：</string>
 
 
 </resources>

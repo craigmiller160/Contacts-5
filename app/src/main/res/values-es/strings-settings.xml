@@ -5,6 +5,7 @@
     <string name="settings_category_contacts_label">Configuración de Contactos</string>
     <string name="settings_category_general_label">Configuración General</string>
     <string name="settings_category_groups_label">Configuración de Groupos</string>
+    <string name="settings_category_debug_label">Depuración</string>
 
     <string name="setting_accounts_to_display_label">Cuentas a Display</string>
     <string name="setting_phones_only_label">Mostrar únicamente Móviles</string>
@@ -17,10 +18,13 @@
     <string name="setting_group_sort_order_label">Ordenamiento de grupos</string>
     <string name="setting_group_sort_by_label">Grupo Ordenar Por</string>
 
+    <string name="setting_debug_label">Escribir información de depuración</string>
+
     <string name="setting_phones_only_summary_on">Ocultar contactos sin números de teléfono</string>
     <string name="setting_phones_only_summary_off">Mostrar contactos sin números de teléfono</string>
     <string name="setting_empty_group_summary_on">Mostrar los grupos que carecen de contactos</string>
     <string name="setting_empty_group_summary_off">Ocultar grupos que carecen de contactos</string>
+    <string name="setting_debug_summary">Ruta de salida:</string>
 
     <!-- Array constant value labels -->
     <string name="array_sort_order_asc_label">Ascendente</string>
