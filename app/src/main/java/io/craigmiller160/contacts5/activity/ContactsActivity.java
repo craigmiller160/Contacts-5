@@ -253,7 +253,7 @@ public class ContactsActivity extends AppCompatActivity {
     private void writeDebug(){
         logger.flushCache();
         View view = findViewById(R.id.activity_contacts_layout);
-        Snackbar.make(view, "Debug info written to: " + getFullDebugInfoPath(), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(view, getString(R.string.write_debug_snackbar_text) + " " + getFullDebugInfoPath(), Snackbar.LENGTH_LONG).show(); //TODO translate this stuff here
     }
 
     private String getFullDebugInfoPath(){
