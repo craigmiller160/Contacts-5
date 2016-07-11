@@ -325,6 +325,23 @@ public class ContactsService extends Service{
             logger.v(TAG, "Starting AllContactsQuery");
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
+
+            oldRetrievalMethod(allContacts, favContacts);
+
+            Map<String,List<Contact>> results = new HashMap<>();
+            results.put(getString(R.string.prop_contacts_list), allContacts);
+            results.put(getString(R.string.prop_favorites_list), favContacts);
+
+            logger.v(TAG, "Finishing AllContactsQuery");
+
+            return results;
+        }
+
+        private void newRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
+            //TODO finish this
+        }
+
+        private void oldRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
             Cursor cursor = null;
             try{
                 cursor = getContext().getContentResolver().query(
@@ -375,14 +392,6 @@ public class ContactsService extends Service{
                     cursor.close();
                 }
             }
-
-            Map<String,List<Contact>> results = new HashMap<>();
-            results.put(getString(R.string.prop_contacts_list), allContacts);
-            results.put(getString(R.string.prop_favorites_list), favContacts);
-
-            logger.v(TAG, "Finishing AllContactsQuery");
-
-            return results;
         }
     }
 
