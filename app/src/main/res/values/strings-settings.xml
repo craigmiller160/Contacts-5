@@ -5,6 +5,7 @@
     <string name="settings_category_contacts_key" translatable="false">ContactsSettingCategory</string>
     <string name="settings_category_general_key" translatable="false">GeneralSettingsCategory</string>
     <string name="settings_category_groups_key" translatable="false">GroupsSettingsCategory</string>
+    <string name="settings_category_debug_key" translatable="false">DebuggingCategory</string>
 
     <string name="setting_accounts_to_display_key" translatable="false">AccountsToDisplay</string>
     <string name="setting_phones_only_key" translatable="false">PhonesOnly</string>
@@ -17,10 +18,13 @@
     <string name="setting_group_sort_order_key" translatable="false">GroupSortOrder</string>
     <string name="setting_group_sort_by_key" translatable="false">GroupSortBy</string>
 
+    <string name="setting_debug_key" translatable="false">WriteDebug</string>
+
     <!-- Settings Labels -->
     <string name="settings_category_contacts_label">Contacts Settings</string>
     <string name="settings_category_general_label">General Settings</string>
     <string name="settings_category_groups_label">Groups Settings</string>
+    <string name="settings_category_debug_label">Debugging</string>
 
     <string name="setting_accounts_to_display_label">Accounts to Display</string>
     <string name="setting_phones_only_label">Show Only Phones</string>
@@ -33,10 +37,13 @@
     <string name="setting_group_sort_order_label">Group Sort Order</string>
     <string name="setting_group_sort_by_label">Group Sort By</string>
 
+    <string name="setting_debug_label">Write Debug Info</string>
+
     <string name="setting_phones_only_summary_on">Hide contacts without phone numbers</string>
     <string name="setting_phones_only_summary_off">Show contacts without phone numbers</string>
     <string name="setting_empty_group_summary_on">Show groups with no contacts</string>
     <string name="setting_empty_group_summary_off">Hide groups with no contacts</string>
+    <string name="setting_debug_summary">Output path:</string>
 
     <!-- Settings Constant Values -->
     <string-array name="sort_order_values">

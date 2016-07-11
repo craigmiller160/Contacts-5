@@ -81,4 +81,15 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_category_debug_label"
+        android:key="@string/settings_category_debug_key">
+
+        <Preference
+            android:title="Write Debug Info"
+            android:key="@string/setting_debug_key"
+            android:summary="@string/setting_debug_summary"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

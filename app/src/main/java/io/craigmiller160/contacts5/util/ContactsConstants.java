@@ -1,5 +1,7 @@
 package io.craigmiller160.contacts5.util;
 
+import android.content.Context;
+
 /**
  * A simple class for global constant values
  *
@@ -24,6 +26,10 @@ public class ContactsConstants {
 
     public static String getFragmentPageTag(int containerId, int tabIndex){
         return ADAPTER_FRAGMENT_TAG_PREFIX + containerId + ":" + tabIndex;
+    }
+
+    public static String getFullDebugPath(Context context){
+        return context.getExternalFilesDir(null) != null ? context.getExternalFilesDir(null).getAbsolutePath() : "null";
     }
 
 }

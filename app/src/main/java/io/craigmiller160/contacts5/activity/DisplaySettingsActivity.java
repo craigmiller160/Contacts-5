@@ -1,5 +1,7 @@
 package io.craigmiller160.contacts5.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -8,17 +10,24 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.log.Logger;
+import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 import io.craigmiller160.contacts5.util.AndroidSystemUtil;
+import io.craigmiller160.contacts5.util.ContactsConstants;
 
 /**
  * Created by craig on 5/7/16.
@@ -26,8 +35,6 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
 
     private static final String TAG = "DisplaySettingsActivity";
-
-    private static final BindSummaryToValueListener bindSummaryListener = new BindSummaryToValueListener();
 
     private static final Logger logger = Logger.newLogger(TAG);
 
@@ -80,6 +87,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
     public static class DisplaySettingsFragment extends PreferenceFragment {
 
         private AndroidSystemUtil androidSystemUtil;
+        private PreferenceListener listener;
 
         @Override
         public void onCreate(Bundle savedInstance){
@@ -88,6 +96,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.display_settings);
             setHasOptionsMenu(true);
             this.androidSystemUtil = new AndroidSystemUtil(getActivity());
+            this.listener = new PreferenceListener(getActivity());
 
             configurePreference(findPreference(getString(R.string.setting_accounts_to_display_key)));
             configurePreference(findPreference(getString(R.string.setting_contact_sort_order_key)));
@@ -97,6 +106,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             configurePreference(findPreference(getString(R.string.setting_group_sort_by_key)));
             configurePreference(findPreference(getString(R.string.setting_contact_name_format_key)));
             configurePreference(findPreference(getString(R.string.setting_contact_sort_by_key)));
+            configurePreference(findPreference(getString(R.string.setting_debug_key)));
         }
 
         @Override
@@ -114,7 +124,10 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             String key = pref.getKey();
             logger.v(TAG, "Configuring preference: " + key);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            pref.setOnPreferenceChangeListener(bindSummaryListener);
+
+            if(!key.equals(R.string.setting_debug_key)){
+                pref.setOnPreferenceChangeListener(listener);
+            }
 
             if(key.equals(getString(R.string.setting_accounts_to_display_key))){
                 MultiSelectListPreference mPref = (MultiSelectListPreference) pref;
@@ -129,16 +142,28 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 if(accountsToDisplay != null){
                     mPref.setValues(accountsToDisplay);
                 }
-                bindSummaryListener.onPreferenceChange(mPref, accountsToDisplay);
+                listener.onPreferenceChange(mPref, accountsToDisplay);
+            }
+            else if(key.equals(getString(R.string.setting_debug_key))){
+                pref.setOnPreferenceClickListener(listener);
+                pref.setSummary(Html.fromHtml(String.format("<html>%s<br/>%s", pref.getSummary(), ContactsConstants.getFullDebugPath(getActivity()))));
             }
             else if(!(pref instanceof SwitchPreference)){
                 String value = prefs.getString(key, "");
-                bindSummaryListener.onPreferenceChange(pref, value);
+                listener.onPreferenceChange(pref, value);
             }
         }
+
+
     }
 
-    private static class BindSummaryToValueListener implements Preference.OnPreferenceChangeListener{
+    private static class PreferenceListener extends AbstractAndroidUtil implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener{
+
+        private final Logger logger = Logger.newLogger("PreferenceListener");
+
+        public PreferenceListener(Context context) {
+            super(context);
+        }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -158,6 +183,16 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
                 preference.setSummary(stringValue);
             }
 
+            return true;
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if(preference.getKey().equals(getString(R.string.setting_debug_key))){
+                logger.flushCache();
+                View view = ((Activity) getContext()).findViewById(android.R.id.content);
+                Snackbar.make(view, getString(R.string.write_debug_snackbar_text) + " " + ContactsConstants.getFullDebugPath(getContext()), Snackbar.LENGTH_LONG).show();
+            }
             return true;
         }
     }
