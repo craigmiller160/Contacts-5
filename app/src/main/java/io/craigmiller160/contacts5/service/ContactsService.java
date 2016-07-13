@@ -35,15 +35,18 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import io.craigmiller160.contacts5.util.PreferenceHelper;
 
-import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.*;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME_ALT;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_HAS_PHONE;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_ID;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_STARRED;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_CONTACT_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_DISPLAY_NAME;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_ID;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_NAME;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_CONTACT_NAME_ALT;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_GROUP_GROUP_ID;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_HAS_PHONE;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_DATA_MIMETYPE;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_ACCOUNT;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_GROUP_COUNT;
@@ -326,7 +329,7 @@ public class ContactsService extends Service{
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
 
-            oldRetrievalMethod(allContacts, favContacts);
+            newRetrievalMethod(allContacts, favContacts);
 
             Map<String,List<Contact>> results = new HashMap<>();
             results.put(getString(R.string.prop_contacts_list), allContacts);
@@ -338,7 +341,59 @@ public class ContactsService extends Service{
         }
 
         private void newRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
-            //TODO finish this
+            Cursor cursor = null;
+            try{
+                cursor = getContext().getContentResolver().query(
+                        URI_DATA,
+                        new String[] {COL_DATA_CONTACT_ID, COL_DATA_DISPLAY_NAME, COL_CONTACTS_CONTACT_NAME_ALT,
+                                COL_DATA_HAS_PHONE, COL_CONTACTS_STARRED},
+                        COL_DATA_MIMETYPE + " = ?",
+                        new String[]{MIMETYPE_STRUCTURED_NAME},
+                        prefHelper.getContactSortString(PreferenceHelper.ALL_CONTACTS)
+                );
+
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    logger.v(tagid, "AllContacts cursor contains " + cursor.getCount() + " records");
+
+                    while(!cursor.isAfterLast()){
+                        if(Thread.currentThread().isInterrupted()){
+                            logger.e(tagid, "All Contacts query was interrupted");
+                            throw new InterruptedException();
+                        }
+
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_DATA_HAS_PHONE));
+                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
+                            cursor.moveToNext();
+                            continue;
+                        }
+
+                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_CONTACT_ID));
+                        int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_DATA_DISPLAY_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
+                        String displayName = cursor.getString(displayNameIndex);
+                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+
+                        Contact contact = new Contact();
+                        contact.setDisplayName(displayName);
+                        contact.setUri(contactUri);
+                        contact.setId(contactId);
+
+                        allContacts.add(contact);
+
+                        int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
+                        if(starred == 1){
+                            favContacts.add(contact);
+                        }
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            finally{
+                if(cursor != null){
+                    cursor.close();
+                }
+            }
         }
 
         private void oldRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
@@ -353,6 +408,7 @@ public class ContactsService extends Service{
 
                 if(cursor != null){
                     cursor.moveToFirst();
+                    logger.v(tagid, "AllContacts cursor contains " + cursor.getCount() + " records");
 
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
@@ -422,6 +478,8 @@ public class ContactsService extends Service{
 
                 if(cursor != null){
                     cursor.moveToFirst();
+                    logger.v(tagid, "Exclusions cursor contains " + cursor.getCount() + " records");
+
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
                             logger.e(tagid, "Exclusions query was interrupted");
@@ -477,6 +535,8 @@ public class ContactsService extends Service{
 
                 if(cursor != null){
                     cursor.moveToFirst();
+                    logger.v(tagid, "AllGroups cursor contains " + cursor.getCount() + " records");
+
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
                             logger.e(tagid, "All Groups query was interrupted");
@@ -554,6 +614,7 @@ public class ContactsService extends Service{
 
                 if(cursor != null){
                     cursor.moveToFirst();
+                    logger.v(tagid, "ContactsInGroup cursor contains " + cursor.getCount() + " records");
 
                     while(!cursor.isAfterLast()){
                         if(Thread.currentThread().isInterrupted()){
