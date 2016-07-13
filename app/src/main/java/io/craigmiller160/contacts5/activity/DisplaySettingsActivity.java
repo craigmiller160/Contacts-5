@@ -107,6 +107,7 @@ public class DisplaySettingsActivity extends AppCompatPreferenceActivity {
             configurePreference(findPreference(getString(R.string.setting_contact_name_format_key)));
             configurePreference(findPreference(getString(R.string.setting_contact_sort_by_key)));
             configurePreference(findPreference(getString(R.string.setting_debug_key)));
+            configurePreference(findPreference(getString(R.string.setting_new_retrieval_key)));
         }
 
         @Override

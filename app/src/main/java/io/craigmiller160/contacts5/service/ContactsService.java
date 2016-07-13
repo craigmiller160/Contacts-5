@@ -329,7 +329,14 @@ public class ContactsService extends Service{
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
 
-            newRetrievalMethod(allContacts, favContacts);
+            if(prefHelper.isNewRetrievalMethod()){
+                logger.d(tagid, "Using new method to load all contacts");
+                newRetrievalMethod(allContacts, favContacts);
+            }
+            else{
+                logger.d(tagid, "Using old method to load all contacts");
+                oldRetrievalMethod(allContacts, favContacts);
+            }
 
             Map<String,List<Contact>> results = new HashMap<>();
             results.put(getString(R.string.prop_contacts_list), allContacts);

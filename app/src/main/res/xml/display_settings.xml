@@ -85,6 +85,14 @@
         android:title="@string/settings_category_debug_label"
         android:key="@string/settings_category_debug_key">
 
+        <!-- TODO all of these strings need translation if they stay -->
+        <SwitchPreference
+            android:title="@string/setting_new_retrieval_label"
+            android:key="@string/setting_new_retrieval_key"
+            android:summaryOn="@string/setting_new_retrieval_summary_on"
+            android:summaryOff="@string/setting_new_retrieval_summary_off"
+            android:defaultValue="true"/>
+
         <Preference
             android:title="Write Debug Info"
             android:key="@string/setting_debug_key"
