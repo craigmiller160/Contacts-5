@@ -38,7 +38,7 @@
     <string name="setting_group_sort_order_label">Group Sort Order</string>
     <string name="setting_group_sort_by_label">Group Sort By</string>
 
-    <string name="setting_new_retrieval_label">New Retrieval Method</string>
+    <string name="setting_new_retrieval_label" translatable="false">New Retrieval Method</string> <!-- TODO translate -->
     <string name="setting_debug_label">Write Debug Info</string>
 
     <string name="setting_phones_only_summary_on">Hide contacts without phone numbers</string>
@@ -46,8 +46,8 @@
     <string name="setting_empty_group_summary_on">Show groups with no contacts</string>
     <string name="setting_empty_group_summary_off">Hide groups with no contacts</string>
     <string name="setting_debug_summary">Output path:</string>
-    <string name="setting_new_retrieval_summary_on">Use new all contacts retrieval method</string>
-    <string name="setting_new_retrieval_summary_off">Use old all contacts retrieval method</string>
+    <string name="setting_new_retrieval_summary_on" translatable="false">Use new all contacts retrieval method</string> <!-- TODO translate -->
+    <string name="setting_new_retrieval_summary_off" translatable="false">Use old all contacts retrieval method</string> <!-- TODO translate -->
 
     <!-- Settings Constant Values -->
     <string-array name="sort_order_values">
