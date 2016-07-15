@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import org.apache.commons.lang3.StringUtils;
+
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.log.Logger;
@@ -25,6 +27,32 @@ public class FragmentChanger extends AbstractAndroidUtil{
     public FragmentChanger(Context context) {
         super(context);
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
+    }
+
+    private boolean isFragmentUIActive(Fragment fragment){
+        return fragment != null && fragment.isAdded() && !fragment.isDetached() && !fragment.isRemoving();
+    }
+
+    public void displayCurrentFragment(FragmentManager fm){
+        Fragment fragment = null;
+        int containerId = -1;
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+        if(!StringUtils.isEmpty(displayedFragment)){
+            fragment = fm.findFragmentByTag(displayedFragment);
+            if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
+                containerId = R.id.tabs_fragment_container;
+            }
+            else{
+                containerId = R.id.no_tabs_fragment_container;
+            }
+        }
+
+        if(fragment != null && isFragmentUIActive(fragment)){
+            displayFragment(fm, containerId, fragment, displayedFragment, new String[] {}, true);
+        }
+        else{
+            displayFragment(fm, R.id.tabs_fragment_container, TabsFragment.class, getString(R.string.tag_tabs_fragment), new String[] {}, true);
+        }
     }
 
     public void displayTabsFragment(FragmentManager fm){

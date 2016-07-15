@@ -87,9 +87,9 @@ public class ContactsActivity extends AppCompatActivity {
             androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
 
-        if(contactsModel.getProperty(R.string.prop_displayed_fragment, String.class) == null){
-            fragmentChanger.displayTabsFragment(getSupportFragmentManager());
-        }
+//        if(contactsModel.getProperty(R.string.prop_displayed_fragment, String.class) == null){
+            fragmentChanger.displayCurrentFragment(getSupportFragmentManager());
+//        }
     }
 
     private String getAndroidIdMd5(){
