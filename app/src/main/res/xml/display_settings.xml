@@ -91,7 +91,7 @@
             android:key="@string/setting_new_retrieval_key"
             android:entries="@array/new_retrieval_value_labels"
             android:entryValues="@array/new_retrieval_values"
-            android:defaultValue="@string/array_new_retrieval_raw"/>
+            android:defaultValue="@string/array_new_retrieval_data_group"/>
 
         <Preference
             android:title="Write Debug Info"

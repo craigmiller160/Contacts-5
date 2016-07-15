@@ -474,7 +474,7 @@ public class ContactsService extends Service{
                         URI_DATA,
                         new String[] {COL_DATA_CONTACT_ID, COL_DATA_DISPLAY_NAME, COL_CONTACTS_CONTACT_NAME_ALT,
                                 COL_DATA_HAS_PHONE, COL_CONTACTS_STARRED, COL_DATA_MIMETYPE},
-                        COL_DATA_MIMETYPE + " = ? and " + COL_DATA_MIMETYPE + " = ?",
+                        COL_DATA_MIMETYPE + " = ? or " + COL_DATA_MIMETYPE + " = ?",
                         new String[]{MIMETYPE_STRUCTURED_NAME, MIMETYPE_GROUP_MEMBERSHIP},
                         prefHelper.getContactSortString(PreferenceHelper.ALL_CONTACTS)
                 );
