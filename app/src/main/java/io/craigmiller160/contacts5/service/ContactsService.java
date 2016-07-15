@@ -333,7 +333,7 @@ public class ContactsService extends Service{
 
             if(retrievalMethod.equals(getString(R.string.array_new_retrieval_raw))){
                 logger.v(tagid, "Using rawMethod to retrieval AllContacts");
-
+//                rawMethod(allContacts, favContacts);
             }
             else if(retrievalMethod.equals(getString(R.string.array_new_retrieval_data_group))){
                 logger.v(tagid, "Using dataGroupMethod to retrieval AllContacts");
@@ -355,6 +355,60 @@ public class ContactsService extends Service{
             logger.v(tagid, "Finishing AllContactsQuery");
 
             return results;
+        }
+
+        private void rawMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
+            Cursor cursor = null;
+            try{
+                cursor = getContext().getContentResolver().query(
+                        URI_RAW_CONTACTS,
+                        new String[]{COL_RAW_CONTACT_NAME, COL_CONTACTS_CONTACT_NAME_ALT,
+                                COL_CONTACTS_HAS_PHONE, COL_CONTACTS_ID, COL_CONTACTS_STARRED},
+                        null, null, prefHelper.getContactSortString(PreferenceHelper.ALL_CONTACTS)
+                );
+
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    logger.v(tagid, "AllContacts cursor contains " + cursor.getCount() + " records");
+
+                    while(!cursor.isAfterLast()){
+                        if(Thread.currentThread().isInterrupted()){
+                            logger.e(tagid, "All Contacts query was interrupted");
+                            throw new InterruptedException();
+                        }
+
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_HAS_PHONE));
+                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
+                            cursor.moveToNext();
+                            continue;
+                        }
+
+                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_CONTACTS_ID));
+                        int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
+                        String displayName = cursor.getString(displayNameIndex);
+                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+
+                        Contact contact = new Contact();
+                        contact.setDisplayName(displayName);
+                        contact.setUri(contactUri);
+                        contact.setId(contactId);
+
+                        allContacts.add(contact);
+
+                        int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
+                        if(starred == 1){
+                            favContacts.add(contact);
+                        }
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            finally{
+                if(cursor != null){
+                    cursor.close();
+                }
+            }
         }
 
         private void dataMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
