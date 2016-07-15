@@ -325,29 +325,39 @@ public class ContactsService extends Service{
 
         @Override
         public Map<String,List<Contact>> call() throws Exception {
-            logger.v(TAG, "Starting AllContactsQuery");
+            logger.v(tagid, "Starting AllContactsQuery");
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
 
-            if(prefHelper.isNewRetrievalMethod()){
-                logger.d(tagid, "Using new method to load all contacts");
-                newRetrievalMethod(allContacts, favContacts);
+            String retrievalMethod = prefHelper.getRetrievalMethod();
+
+            if(retrievalMethod.equals(getString(R.string.array_new_retrieval_raw))){
+                logger.v(tagid, "Using rawMethod to retrieval AllContacts");
+
             }
-            else{
-                logger.d(tagid, "Using old method to load all contacts");
-                oldRetrievalMethod(allContacts, favContacts);
+            else if(retrievalMethod.equals(getString(R.string.array_new_retrieval_data_group))){
+                logger.v(tagid, "Using dataGroupMethod to retrieval AllContacts");
+                dataWithGroupMimeMethod(allContacts, favContacts);
+            }
+            else if(retrievalMethod.equals(getString(R.string.array_new_retrieval_data))){
+                logger.v(tagid, "Using dataMethod to retrieval AllContacts");
+                dataMethod(allContacts, favContacts);
+            }
+            else if(retrievalMethod.equals(getString(R.string.array_new_retrieval_contacts))){
+                logger.v(tagid, "Using contactsMethod to retrieval AllContacts");
+                contactsMethod(allContacts, favContacts);
             }
 
             Map<String,List<Contact>> results = new HashMap<>();
             results.put(getString(R.string.prop_contacts_list), allContacts);
             results.put(getString(R.string.prop_favorites_list), favContacts);
 
-            logger.v(TAG, "Finishing AllContactsQuery");
+            logger.v(tagid, "Finishing AllContactsQuery");
 
             return results;
         }
 
-        private void newRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
+        private void dataMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
             Cursor cursor = null;
             try{
                 cursor = getContext().getContentResolver().query(
@@ -403,7 +413,63 @@ public class ContactsService extends Service{
             }
         }
 
-        private void oldRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
+        private void dataWithGroupMimeMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
+            Cursor cursor = null;
+            try{
+                cursor = getContext().getContentResolver().query(
+                        URI_DATA,
+                        new String[] {COL_DATA_CONTACT_ID, COL_DATA_DISPLAY_NAME, COL_CONTACTS_CONTACT_NAME_ALT,
+                                COL_DATA_HAS_PHONE, COL_CONTACTS_STARRED, COL_DATA_MIMETYPE},
+                        COL_DATA_MIMETYPE + " = ? and " + COL_DATA_MIMETYPE + " = ?",
+                        new String[]{MIMETYPE_STRUCTURED_NAME, MIMETYPE_GROUP_MEMBERSHIP},
+                        prefHelper.getContactSortString(PreferenceHelper.ALL_CONTACTS)
+                );
+
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    logger.v(tagid, "AllContacts cursor contains " + cursor.getCount() + " records");
+
+                    while(!cursor.isAfterLast()){
+                        if(Thread.currentThread().isInterrupted()){
+                            logger.e(tagid, "All Contacts query was interrupted");
+                            throw new InterruptedException();
+                        }
+
+                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_DATA_HAS_PHONE));
+                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
+                            cursor.moveToNext();
+                            continue;
+                        }
+
+                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_CONTACT_ID));
+                        int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_DATA_DISPLAY_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
+                        String displayName = cursor.getString(displayNameIndex);
+                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
+
+                        Contact contact = new Contact();
+                        contact.setDisplayName(displayName);
+                        contact.setUri(contactUri);
+                        contact.setId(contactId);
+
+                        allContacts.add(contact);
+
+                        int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
+                        if(starred == 1){
+                            favContacts.add(contact);
+                        }
+
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            finally{
+                if(cursor != null){
+                    cursor.close();
+                }
+            }
+        }
+
+        private void contactsMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
             Cursor cursor = null;
             try{
                 cursor = getContext().getContentResolver().query(
@@ -471,7 +537,7 @@ public class ContactsService extends Service{
 
         @Override
         public Set<Long> call() throws Exception {
-            logger.v(TAG, "Starting ExclusionsQuery");
+            logger.v(tagid, "Starting ExclusionsQuery");
             Set<Long> contactsToExclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = prefHelper.getAccountsToDisplay();
@@ -508,7 +574,7 @@ public class ContactsService extends Service{
                 }
             }
 
-            logger.v(TAG, "Finishing ExclusionsQuery");
+            logger.v(tagid, "Finishing ExclusionsQuery");
 
             return contactsToExclude;
         }
@@ -528,7 +594,7 @@ public class ContactsService extends Service{
 
         @Override
         public List<ContactGroup> call() throws Exception{
-            logger.v(TAG, "Starting AllGroupsQuery");
+            logger.v(tagid, "Starting AllGroupsQuery");
             List<ContactGroup> groups = new ArrayList<>();
             Set<String> accountsToDisplay = prefHelper.getAccountsToDisplay();
             boolean useEmptyGroups = prefHelper.useEmptyGroups();
@@ -579,7 +645,7 @@ public class ContactsService extends Service{
                 }
             }
 
-            logger.v(TAG, "Finishing AllGroupsQuery");
+            logger.v(tagid, "Finishing AllGroupsQuery");
 
             return groups;
         }
@@ -600,7 +666,7 @@ public class ContactsService extends Service{
 
         @Override
         public List<Contact> call() throws Exception{
-            logger.v(TAG, "Starting ContactsInGroupQuery");
+            logger.v(tagid, "Starting ContactsInGroupQuery");
             List<Contact> contacts = new ArrayList<>();
             Cursor cursor = null;
             try{
@@ -658,7 +724,7 @@ public class ContactsService extends Service{
                 }
             }
 
-            logger.v(TAG, "Finishing ContactsInGroupQuery");
+            logger.v(tagid, "Finishing ContactsInGroupQuery");
 
             return contacts;
         }

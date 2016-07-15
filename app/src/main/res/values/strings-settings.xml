@@ -38,7 +38,7 @@
     <string name="setting_group_sort_order_label">Group Sort Order</string>
     <string name="setting_group_sort_by_label">Group Sort By</string>
 
-    <string name="setting_new_retrieval_label" translatable="false">New Retrieval Method</string> <!-- TODO translate -->
+    <string name="setting_new_retrieval_label" translatable="false">Contacts Retrieval Method</string> <!-- TODO translate -->
     <string name="setting_debug_label">Write Debug Info</string>
 
     <string name="setting_phones_only_summary_on">Hide contacts without phone numbers</string>
@@ -66,6 +66,12 @@
         <item>@string/array_name_format_first_last</item>
         <item>@string/array_name_format_last_first</item>
     </string-array>
+    <string-array name="new_retrieval_values">
+        <item>@string/array_new_retrieval_raw</item>
+        <item>@string/array_new_retrieval_data_group</item>
+        <item>@string/array_new_retrieval_data</item>
+        <item>@string/array_new_retrieval_contacts</item>
+    </string-array>
 
     <!-- Settings Constant Values Labels -->
     <string-array name="sort_order_value_labels">
@@ -84,6 +90,12 @@
         <item>@string/array_name_format_first_last_label</item>
         <item>@string/array_name_format_last_first_label</item>
     </string-array>
+    <string-array name="new_retrieval_value_labels">
+        <item>@string/array_new_retrieval_raw_label</item>
+        <item>@string/array_new_retrieval_data_group_label</item>
+        <item>@string/array_new_retrieval_data_label</item>
+        <item>@string/array_new_retrieval_contacts_label</item>
+    </string-array>
 
     <!-- Array constant values -->
     <string name="array_sort_order_asc" translatable="false">SortAsc</string>
@@ -98,6 +110,11 @@
     <string name="array_name_format_first_last" translatable="false">NameFormatFirstLast</string>
     <string name="array_name_format_last_first" translatable="false">NameFormatLastFirst</string>
 
+    <string name="array_new_retrieval_contacts" translatable="false">NewRetrievalContacts</string>
+    <string name="array_new_retrieval_data" translatable="false">NewRetrievalData</string>
+    <string name="array_new_retrieval_data_group" translatable="false">NewRetrievalDataGroup</string>
+    <string name="array_new_retrieval_raw" translatable="false">NewRetrievalRaw</string>
+
     <!-- Array constant value labels -->
     <string name="array_sort_order_asc_label">Ascending</string>
     <string name="array_sort_order_desc_label">Descending</string>
@@ -110,5 +127,11 @@
 
     <string name="array_name_format_first_last_label">First Name Last Name</string>
     <string name="array_name_format_last_first_label">Last Name, First Name</string>
+
+    <!-- TODO these need to be translated if they stay -->
+    <string name="array_new_retrieval_contacts_label" translatable="false">Contacts Method</string>
+    <string name="array_new_retrieval_data_label" translatable="false">Data Method</string>
+    <string name="array_new_retrieval_data_group_label" translatable="false">Data (Group) Method</string>
+    <string name="array_new_retrieval_raw_label" translatable="false">Raw Method</string>
 
 </resources>
