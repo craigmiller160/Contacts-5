@@ -63,6 +63,12 @@ public class ContactsActivityViewChanger extends AbstractAndroidUtil{
     }
 
     public void showTabsFragment(){
+        //Hide No Tabs Fragment stuff
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        activity.setTitle(getString(R.string.activity_contacts_name_label));
+        contactsModel.clearProperty(R.string.prop_contacts_in_group_list);
+
+        //Show Tabs Fragment stuff
         setViewPagerViewVisibility(View.VISIBLE);
         View view = activity.findViewById(R.id.tabs_fragment_container);
         if(view != null){
@@ -70,26 +76,20 @@ public class ContactsActivityViewChanger extends AbstractAndroidUtil{
         }
     }
 
-    public void hideTabsFragment(){
+    public void showNoTabsFragment(){
+        //Hide Tabs Fragment Stuff
         setViewPagerViewVisibility(View.GONE);
         View view = activity.findViewById(R.id.tabs_fragment_container);
         if(view != null){
             view.setVisibility(View.GONE);
         }
-    }
 
-    public void showNoTabsFragment(){
+        //Show No Tabs Fragment Stuff
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         if(groupName != null){
             activity.setTitle(groupName);
         }
-    }
-
-    public void hideNoTabsFragment(){
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        activity.setTitle(getString(R.string.activity_contacts_name_label));
-        contactsModel.clearProperty(R.string.prop_contacts_in_group_list);
     }
 
     private void setViewPagerViewVisibility(int visibility){

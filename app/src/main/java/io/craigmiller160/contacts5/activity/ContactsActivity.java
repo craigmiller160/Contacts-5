@@ -104,11 +104,9 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
             String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
             if(!StringUtils.isEmpty(displayedFragment)){
                 if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
-                    viewChanger.hideNoTabsFragment();
                     viewChanger.showTabsFragment();
                 }
                 else{
-                    viewChanger.hideTabsFragment();
                     viewChanger.showNoTabsFragment();
                 }
             }
@@ -130,11 +128,9 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(!StringUtils.isEmpty(displayedFragment)){
             if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
-                viewChanger.hideNoTabsFragment();
                 viewChanger.showTabsFragment();
             }
             else if(displayedFragment.equals(getString(R.string.tag_no_tabs_fragment))){
-                viewChanger.hideTabsFragment();
                 viewChanger.showNoTabsFragment();
             }
         }
