@@ -98,8 +98,6 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
 
         if(savedInstance == null){
             contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_tabs_fragment));
-            viewChanger.hideNoTabsFragment();
-            viewChanger.showTabsFragment();
             fragmentChanger.addTabsFragment(getSupportFragmentManager());
         }
         else{
@@ -228,7 +226,7 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
     @Override
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
-        if(displayedFragment == null || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){ //TODO need to change this
+        if(StringUtils.isEmpty(displayedFragment) || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
             logger.i(TAG, "Closing ContactsActivity");
             finish();
         }
@@ -241,8 +239,6 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         logger.d(TAG, "Leaving Group: " + groupName);
         contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_tabs_fragment));
-        viewChanger.hideNoTabsFragment();
-        viewChanger.showTabsFragment();
         getSupportFragmentManager().popBackStack();
     }
 
