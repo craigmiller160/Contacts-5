@@ -35,7 +35,7 @@ import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 import io.craigmiller160.contacts5.util.ContactsThreadFactory;
 import io.craigmiller160.contacts5.util.PreferenceHelper;
 
-import static io.craigmiller160.contacts5.service.ContactsQueryConstants.*;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_CONTACT_NAME_ALT;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_HAS_PHONE;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_CONTACTS_ID;
@@ -57,6 +57,7 @@ import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW_CONTACT_ID;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.COL_RAW_ID;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.MIMETYPE_GROUP_MEMBERSHIP;
+import static io.craigmiller160.contacts5.service.ContactsQueryConstants.MIMETYPE_STRUCTURED_NAME;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_CONTACTS;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_DATA;
 import static io.craigmiller160.contacts5.service.ContactsQueryConstants.URI_GROUPS;

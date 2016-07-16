@@ -3,10 +3,7 @@ package io.craigmiller160.contacts5.fragment;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
-
-import org.apache.commons.lang3.StringUtils;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;

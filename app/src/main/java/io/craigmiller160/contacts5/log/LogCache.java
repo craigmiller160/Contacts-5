@@ -1,9 +1,6 @@
 package io.craigmiller160.contacts5.log;
 
 import android.content.Context;
-import android.os.Environment;
-import android.support.v4.os.EnvironmentCompat;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AndroidRuntimeException;
 
 import java.io.File;

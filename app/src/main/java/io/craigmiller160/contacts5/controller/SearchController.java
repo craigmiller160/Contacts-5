@@ -4,9 +4,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
-import android.view.View;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +14,6 @@ import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.adapter.MyArrayAdapter;
 import io.craigmiller160.contacts5.fragment.AbstractContactsFragment;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
-import io.craigmiller160.contacts5.fragment.SearchFragment;
-import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 import io.craigmiller160.contacts5.model.Contact;

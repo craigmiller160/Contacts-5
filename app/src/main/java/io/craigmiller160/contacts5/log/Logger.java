@@ -1,6 +1,5 @@
 package io.craigmiller160.contacts5.log;
 
-import android.icu.text.LocaleDisplayNames;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;

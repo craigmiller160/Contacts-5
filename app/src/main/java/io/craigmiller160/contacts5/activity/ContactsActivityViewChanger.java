@@ -1,7 +1,6 @@
 package io.craigmiller160.contacts5.activity;
 
 import android.content.Context;
-import android.content.res.ObbInfo;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;

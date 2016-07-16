@@ -10,7 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
@@ -22,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
