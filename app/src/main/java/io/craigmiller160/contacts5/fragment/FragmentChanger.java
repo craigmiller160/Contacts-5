@@ -38,6 +38,7 @@ public class FragmentChanger extends AbstractAndroidUtil{
     public void addFragment(FragmentManager fm, int displayContainerId,
                             Fragment displayFragment, String displayFragmentTag){
         logger.d(TAG, "Adding Fragment: " + displayFragmentTag);
+        contactsModel.setProperty(R.string.prop_displayed_fragment, displayFragmentTag);
         fm.beginTransaction()
                 .replace(displayContainerId, displayFragment, displayFragmentTag)
                 .addToBackStack(null)

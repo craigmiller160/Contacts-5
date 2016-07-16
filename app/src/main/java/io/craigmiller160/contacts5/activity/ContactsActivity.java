@@ -96,7 +96,6 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         }
 
         if(savedInstance == null){
-            contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_tabs_fragment));
             fragmentChanger.addTabsFragment(getSupportFragmentManager());
         }
         else{

@@ -94,7 +94,6 @@ public class OnClickController extends AbstractAndroidController implements View
         contactsModel.setProperty(R.string.prop_selected_group_id, groupId);
         contactsModel.setProperty(R.string.prop_selected_group_name, groupName);
 
-        contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_no_tabs_fragment));
         fragmentChanger.addNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
 
         if(groupId >= 0 && androidSystemUtil.permissions().hasReadContactsPermission()){
