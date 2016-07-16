@@ -17,6 +17,8 @@ import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.activity.ContactsActivityViewChanger;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
+import io.craigmiller160.contacts5.service.ContactsService;
+import io.craigmiller160.contacts5.util.AndroidSystemUtil;
 
 import static io.craigmiller160.contacts5.util.ContactsConstants.NEW_CONTACT_REQUEST;
 import static io.craigmiller160.contacts5.util.ContactsConstants.SELECT_CONTACT_REQUEST;
@@ -34,6 +36,7 @@ public class OnClickController extends AbstractAndroidController implements View
 
     private final AndroidModel contactsModel;
     private final FragmentChanger fragmentChanger;
+    private final AndroidSystemUtil androidSystemUtil;
     private final ContactsActivityViewChanger viewChanger;
 
     public OnClickController(Context context){
@@ -45,6 +48,7 @@ public class OnClickController extends AbstractAndroidController implements View
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         this.fragmentChanger = new FragmentChanger(context);
         this.viewChanger = ContactsActivityViewChanger.getInstance();
+        this.androidSystemUtil = new AndroidSystemUtil(context);
     }
 
     @Override
@@ -92,5 +96,14 @@ public class OnClickController extends AbstractAndroidController implements View
 
         contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_no_tabs_fragment));
         fragmentChanger.addNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
+
+        if(groupId >= 0 && androidSystemUtil.permissions().hasReadContactsPermission()){
+            Intent intent = new Intent(getContext(), ContactsService.class);
+            intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
+            intent.putExtra(getString(R.string.prop_selected_group_id), groupId);
+            intent.putExtra(getString(R.string.prop_selected_group_name), groupName);
+
+            getContext().startService(intent);
+        }
     }
 }

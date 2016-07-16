@@ -6,6 +6,8 @@ import android.support.v7.widget.SearchView;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +33,7 @@ public class SearchController extends AbstractAndroidController implements Searc
     private final AndroidModel contactsModel;
     private MyArrayAdapter<Contact> adapter;
     private boolean isSearchOpen = false;
+    private String previousDisplayedFragment;
 
     public SearchController(AppCompatActivity activity) {
         this(activity, new HashMap<String, Object>());
@@ -88,13 +91,12 @@ public class SearchController extends AbstractAndroidController implements Searc
             adapter = null;
         }
 
-        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
-        if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
-//            fragmentChanger.displayFragment(getActivity().getSupportFragmentManager(), R.id.tabs_fragment_container, //TODO fix this
-//                    TabsFragment.class, getString(R.string.tag_tabs_fragment), new String[]{getString(R.string.tag_search_fragment)}, true);
+        if(StringUtils.isEmpty(previousDisplayedFragment)){
+
         }
 
-        getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.VISIBLE);
+        contactsModel.setProperty(R.string.prop_displayed_fragment, previousDisplayedFragment);
+        //TODO restore other fragment
 
         return true;
     }
@@ -103,11 +105,10 @@ public class SearchController extends AbstractAndroidController implements Searc
     public boolean onMenuItemActionExpand(MenuItem item) {
         logger.d(TAG, "Opening SearchView");
         isSearchOpen = true;
-        getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.GONE);
-        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
-        if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
-//            fragmentChanger.displayContactsFragment(getActivity().getSupportFragmentManager()); //TODO fix this
-        }
+
+        previousDisplayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+        contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_search_fragment));
+        //TODO show SearchFragment
 
         return true;
     }

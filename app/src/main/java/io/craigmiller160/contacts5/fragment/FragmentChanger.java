@@ -52,6 +52,10 @@ public class FragmentChanger extends AbstractAndroidUtil{
         addFragment(fm, R.id.no_tabs_fragment_container, ContactsInGroupFragment.class, getString(R.string.tag_no_tabs_fragment));
     }
 
+    public void addSearchFragment(FragmentManager fm){
+        //TODO finish this
+    }
+
 
 
 

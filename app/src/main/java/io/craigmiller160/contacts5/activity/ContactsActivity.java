@@ -74,7 +74,6 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
             MobileAds.initialize(getApplicationContext(), getString(R.string.admob_app_id));
         }
 
-        getSupportFragmentManager().removeOnBackStackChangedListener(this);
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);

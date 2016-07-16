@@ -73,6 +73,11 @@ public abstract class AbstractContactsFragment<T> extends Fragment implements Re
         return arrayAdapter;
     }
 
+    public void setArrayAdapter(ArrayAdapter<T> arrayAdapter){
+        this.arrayAdapter = arrayAdapter;
+        refreshView();
+    }
+
     protected abstract ArrayAdapter<T> newArrayAdapter();
 
 }
