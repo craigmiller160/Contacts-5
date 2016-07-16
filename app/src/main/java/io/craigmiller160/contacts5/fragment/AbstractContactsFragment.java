@@ -62,8 +62,10 @@ public abstract class AbstractContactsFragment<T> extends Fragment implements Re
 
     @Override
     public void refreshView(){
-        FrameLayout layout = (FrameLayout) getView();
-        attachChildView(layout, getActivity().getLayoutInflater());
+        if(getActivity() != null){
+            FrameLayout layout = (FrameLayout) getView();
+            attachChildView(layout, getActivity().getLayoutInflater());
+        }
     }
 
     public final ArrayAdapter<T> getArrayAdapter(){

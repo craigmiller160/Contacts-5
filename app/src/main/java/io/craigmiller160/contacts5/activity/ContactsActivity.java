@@ -104,8 +104,11 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
                 if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
                     viewChanger.showTabsFragment();
                 }
-                else{
+                else if(displayedFragment.equals(getString(R.string.tag_no_tabs_fragment))){
                     viewChanger.showNoTabsFragment();
+                }
+                else{
+                    viewChanger.showSearchFragment();
                 }
             }
         }
@@ -130,6 +133,9 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
             }
             else if(displayedFragment.equals(getString(R.string.tag_no_tabs_fragment))){
                 viewChanger.showNoTabsFragment();
+            }
+            else if(displayedFragment.equals(getString(R.string.tag_search_fragment))){
+                viewChanger.showSearchFragment();
             }
         }
     }
@@ -205,10 +211,9 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
             intent.putExtra(ContactsService.LOAD_CONTACTS, true);
             intent.putExtra(ContactsService.LOAD_GROUPS, true);
 
-            String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
             Long groupId = contactsModel.getProperty(R.string.prop_selected_group_id, Long.class);
             String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
-            if(displayedFragment != null && displayedFragment.equals(getString(R.string.tag_no_tabs_fragment)) && groupId != null && groupId >= 0){
+            if(groupId != null && groupId >= 0){
                 intent.putExtra(ContactsService.LOAD_CONTACTS_IN_GROUP, true);
                 intent.putExtra(getString(R.string.prop_selected_group_id), groupId);
                 intent.putExtra(getString(R.string.prop_selected_group_name), groupName);

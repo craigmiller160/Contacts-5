@@ -13,9 +13,11 @@ import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.adapter.ContactsArrayAdapter;
 import io.craigmiller160.contacts5.adapter.MyArrayAdapter;
 import io.craigmiller160.contacts5.fragment.AbstractContactsFragment;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
+import io.craigmiller160.contacts5.fragment.SearchFragment;
 import io.craigmiller160.contacts5.fragment.TabsFragment;
 import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
@@ -72,13 +74,13 @@ public class SearchController extends AbstractAndroidController implements Searc
 
     @Override
     public boolean onQueryTextChange(String query) {
-        if(adapter == null && isSearchOpen){
-            findAdapter();
-        }
-
-        if(adapter != null){
+        if(isSearchOpen){
             adapter.filter(query);
         }
+
+//        if(adapter != null){
+//            adapter.filter(query);
+//        }
         return true;
     }
 
@@ -91,12 +93,8 @@ public class SearchController extends AbstractAndroidController implements Searc
             adapter = null;
         }
 
-        if(StringUtils.isEmpty(previousDisplayedFragment)){
-
-        }
-
         contactsModel.setProperty(R.string.prop_displayed_fragment, previousDisplayedFragment);
-        //TODO restore other fragment
+        getActivity().getSupportFragmentManager().popBackStack();
 
         return true;
     }
@@ -108,8 +106,17 @@ public class SearchController extends AbstractAndroidController implements Searc
 
         previousDisplayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_search_fragment));
-        //TODO show SearchFragment
+
+        adapter = new ContactsArrayAdapter(getContext(), getAdapterProperty());
+        fragmentChanger.addSearchFragment(getActivity().getSupportFragmentManager(), adapter);
 
         return true;
+    }
+
+    private String getAdapterProperty(){
+        if(previousDisplayedFragment.equals(getString(R.string.tag_tabs_fragment))){
+            return getString(R.string.prop_contacts_list);
+        }
+        return getString(R.string.prop_contacts_in_group_list);
     }
 }

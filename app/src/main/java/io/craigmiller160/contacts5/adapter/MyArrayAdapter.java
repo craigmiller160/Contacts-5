@@ -40,7 +40,7 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     }
 
     protected void refreshContentsFromModel(){
-        logger.v(TAG, "Refreshing ArrayAdapter contents from model");
+        logger.v(TAG, "Refreshing ArrayAdapter contents from model. Property: " + propertyName);
         setContents(contactsModel.getProperty(propertyName, List.class));
         setOriginalContents(contactsModel.getProperty(propertyName, List.class));
     }

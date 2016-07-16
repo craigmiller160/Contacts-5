@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.ArrayAdapter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +12,7 @@ import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.log.Logger;
 import io.craigmiller160.contacts5.model.AndroidModel;
+import io.craigmiller160.contacts5.model.Contact;
 import io.craigmiller160.contacts5.util.AbstractAndroidUtil;
 import io.craigmiller160.utils.reflect.ObjectCreator;
 
@@ -53,8 +55,10 @@ public class FragmentChanger extends AbstractAndroidUtil{
         addFragment(fm, R.id.no_tabs_fragment_container, ContactsInGroupFragment.class, getString(R.string.tag_no_tabs_fragment));
     }
 
-    public void addSearchFragment(FragmentManager fm){
-        //TODO finish this
+    public void addSearchFragment(FragmentManager fm, ArrayAdapter<Contact> adapter){
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArrayAdapter(adapter);
+        addFragment(fm, R.id.no_tabs_fragment_container, fragment, getString(R.string.tag_search_fragment));
     }
 
 

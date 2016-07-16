@@ -63,11 +63,9 @@ public class ContactsActivityViewChanger extends AbstractAndroidUtil{
     }
 
     public void showTabsFragment(){
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        activity.setTitle(getString(R.string.activity_contacts_name_label));
-        contactsModel.clearProperty(R.string.prop_contacts_in_group_list);
+        hideNoTabs();
+        hideSearch();
 
-        activity.findViewById(R.id.add_contact_fab).setVisibility(View.VISIBLE);
         setViewPagerViewVisibility(View.VISIBLE);
         View view = activity.findViewById(R.id.tabs_fragment_container);
         if(view != null){
@@ -76,13 +74,9 @@ public class ContactsActivityViewChanger extends AbstractAndroidUtil{
     }
 
     public void showNoTabsFragment(){
-        setViewPagerViewVisibility(View.GONE);
-        View view = activity.findViewById(R.id.tabs_fragment_container);
-        if(view != null){
-            view.setVisibility(View.GONE);
-        }
+        hideTabs();
+        hideSearch();
 
-        activity.findViewById(R.id.add_contact_fab).setVisibility(View.VISIBLE);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         if(groupName != null){
@@ -91,7 +85,27 @@ public class ContactsActivityViewChanger extends AbstractAndroidUtil{
     }
 
     public void showSearchFragment(){
+        hideTabs();
+        hideNoTabs();
+
         activity.findViewById(R.id.add_contact_fab).setVisibility(View.GONE);
+    }
+
+    private void hideTabs(){
+        setViewPagerViewVisibility(View.GONE);
+        View view = activity.findViewById(R.id.tabs_fragment_container);
+        if(view != null){
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideNoTabs(){
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        activity.setTitle(getString(R.string.activity_contacts_name_label));
+    }
+
+    private void hideSearch(){
+        activity.findViewById(R.id.add_contact_fab).setVisibility(View.VISIBLE);
     }
 
     private void setViewPagerViewVisibility(int visibility){
