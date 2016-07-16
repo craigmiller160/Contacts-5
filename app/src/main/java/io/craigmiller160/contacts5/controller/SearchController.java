@@ -90,8 +90,8 @@ public class SearchController extends AbstractAndroidController implements Searc
 
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
-            fragmentChanger.displayFragment(getActivity().getSupportFragmentManager(), R.id.tabs_fragment_container,
-                    TabsFragment.class, getString(R.string.tag_tabs_fragment), new String[]{getString(R.string.tag_search_fragment)}, true);
+//            fragmentChanger.displayFragment(getActivity().getSupportFragmentManager(), R.id.tabs_fragment_container, //TODO fix this
+//                    TabsFragment.class, getString(R.string.tag_tabs_fragment), new String[]{getString(R.string.tag_search_fragment)}, true);
         }
 
         getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.VISIBLE);
@@ -106,7 +106,7 @@ public class SearchController extends AbstractAndroidController implements Searc
         getActivity().findViewById(R.id.add_contact_fab).setVisibility(View.GONE);
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
         if(getString(R.string.tag_tabs_fragment).equals(displayedFragment)){
-            fragmentChanger.displayContactsFragment(getActivity().getSupportFragmentManager());
+//            fragmentChanger.displayContactsFragment(getActivity().getSupportFragmentManager()); //TODO fix this
         }
 
         return true;

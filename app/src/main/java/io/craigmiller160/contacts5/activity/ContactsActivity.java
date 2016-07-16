@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -19,6 +20,8 @@ import android.view.View;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+
+import org.apache.commons.lang3.StringUtils;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
@@ -38,13 +41,14 @@ import static io.craigmiller160.contacts5.util.ContactsConstants.SETTINGS_ACTIVI
 /**
  * Created by craig on 5/4/16.
  */
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG = "ContactsActivity";
 
     private static final Logger logger = Logger.newLogger(TAG);
     private AndroidSystemUtil androidSystemUtil;
     private FragmentChanger fragmentChanger;
+    private ContactsActivityViewChanger viewChanger;
     private AndroidModel contactsModel;
     private boolean reloadContacts = true;
 
@@ -56,6 +60,8 @@ public class ContactsActivity extends AppCompatActivity {
 
         this.androidSystemUtil = new AndroidSystemUtil(this);
         this.fragmentChanger = new FragmentChanger(this);
+        this.viewChanger = ContactsActivityViewChanger.getInstance();
+        this.viewChanger.setActivity(this);
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
 
         if(savedInstance != null){
@@ -67,6 +73,9 @@ public class ContactsActivity extends AppCompatActivity {
             setTitle(getString(R.string.activity_contacts_name_label));
             MobileAds.initialize(getApplicationContext(), getString(R.string.admob_app_id));
         }
+
+        getSupportFragmentManager().removeOnBackStackChangedListener(this);
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.contacts_activity_toolbar);
         setSupportActionBar(toolbar);
@@ -87,14 +96,50 @@ public class ContactsActivity extends AppCompatActivity {
             androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
 
-//        if(contactsModel.getProperty(R.string.prop_displayed_fragment, String.class) == null){
-            fragmentChanger.displayCurrentFragment(getSupportFragmentManager());
-//        }
+        if(savedInstance == null){
+            contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_tabs_fragment));
+            viewChanger.hideNoTabsFragment();
+            viewChanger.showTabsFragment();
+            fragmentChanger.addTabsFragment(getSupportFragmentManager());
+        }
+        else{
+            String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+            if(!StringUtils.isEmpty(displayedFragment)){
+                if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
+                    viewChanger.hideNoTabsFragment();
+                    viewChanger.showTabsFragment();
+                }
+                else{
+                    viewChanger.hideTabsFragment();
+                    viewChanger.showNoTabsFragment();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setTitle(CharSequence title){
+        super.setTitle(title);
     }
 
     private String getAndroidIdMd5(){
         String androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         return MD5.encode(androidId);
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
+        if(!StringUtils.isEmpty(displayedFragment)){
+            if(displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
+                viewChanger.hideNoTabsFragment();
+                viewChanger.showTabsFragment();
+            }
+            else if(displayedFragment.equals(getString(R.string.tag_no_tabs_fragment))){
+                viewChanger.hideTabsFragment();
+                viewChanger.showNoTabsFragment();
+            }
+        }
     }
 
     @Override
@@ -183,7 +228,7 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
-        if(displayedFragment == null || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){
+        if(displayedFragment == null || displayedFragment.equals(getString(R.string.tag_tabs_fragment))){ //TODO need to change this
             logger.i(TAG, "Closing ContactsActivity");
             finish();
         }
@@ -195,7 +240,10 @@ public class ContactsActivity extends AppCompatActivity {
     private void backAction(){
         String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
         logger.d(TAG, "Leaving Group: " + groupName);
-        fragmentChanger.displayTabsFragment(getSupportFragmentManager());
+        contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_tabs_fragment));
+        viewChanger.hideNoTabsFragment();
+        viewChanger.showTabsFragment();
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override

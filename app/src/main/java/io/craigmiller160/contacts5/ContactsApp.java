@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.L;
 
+import io.craigmiller160.contacts5.activity.ContactsActivityViewChanger;
 import io.craigmiller160.contacts5.log.LogCache;
 import io.craigmiller160.contacts5.model.ModelFactory;
 import io.craigmiller160.contacts5.util.ContactsUncaughtExceptionHandler;
@@ -53,6 +54,8 @@ public class ContactsApp extends Application {
         L.writeLogs(false);
 
         Thread.setDefaultUncaughtExceptionHandler(new ContactsUncaughtExceptionHandler());
+
+        ContactsActivityViewChanger.initialize(this);
     }
 
     public ModelFactory modelFactory(){

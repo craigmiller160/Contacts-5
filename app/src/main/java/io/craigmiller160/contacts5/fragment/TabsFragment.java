@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.apache.commons.lang3.StringUtils;
+
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
 import io.craigmiller160.contacts5.adapter.ContactsTabsPagerAdapter;
@@ -30,6 +32,11 @@ public class TabsFragment extends Fragment implements RefreshableView {
     private AbstractContactsFragment<Contact> contactsFragment;
     private AbstractContactsFragment<ContactGroup> groupsFragment;
     private AbstractContactsFragment<Contact> favoritesFragment;
+    private final AndroidModel contactsModel;
+
+    public TabsFragment(){
+        this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
+    }
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -107,24 +114,6 @@ public class TabsFragment extends Fragment implements RefreshableView {
             viewPager.setCurrentItem(1);
         }
 
-        setViewPagerViewVisibility(View.VISIBLE);
-
         return tabLayout;
-    }
-
-    private void setViewPagerViewVisibility(int visibility){
-        ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.contactsTabsViewPager);
-        viewPager.setVisibility(visibility);
-        int childCount = viewPager.getChildCount();
-        for(int i = 0; i < childCount; i++){
-            View view = viewPager.getChildAt(i);
-            view.setVisibility(visibility);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        setViewPagerViewVisibility(View.GONE);
-        super.onDestroyView();
     }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import io.craigmiller160.contacts5.ContactsApp;
 import io.craigmiller160.contacts5.R;
+import io.craigmiller160.contacts5.activity.ContactsActivityViewChanger;
 import io.craigmiller160.contacts5.fragment.FragmentChanger;
 import io.craigmiller160.contacts5.model.AndroidModel;
 
@@ -32,7 +33,8 @@ public class OnClickController extends AbstractAndroidController implements View
     public static final int ADD_BUTTON = 503;
 
     private final AndroidModel contactsModel;
-    private FragmentChanger fragmentChanger;
+    private final FragmentChanger fragmentChanger;
+    private final ContactsActivityViewChanger viewChanger;
 
     public OnClickController(Context context){
         this(context, new HashMap<String, Object>());
@@ -42,6 +44,7 @@ public class OnClickController extends AbstractAndroidController implements View
         super(context, args);
         this.contactsModel = ContactsApp.getApp().modelFactory().getModel(R.string.model_contacts);
         this.fragmentChanger = new FragmentChanger(context);
+        this.viewChanger = ContactsActivityViewChanger.getInstance();
     }
 
     @Override
@@ -87,9 +90,14 @@ public class OnClickController extends AbstractAndroidController implements View
         contactsModel.setProperty(R.string.prop_selected_group_id, groupId);
         contactsModel.setProperty(R.string.prop_selected_group_name, groupName);
 
-        if(contactsModel.getProperty(R.string.prop_displayed_fragment) == null ||
-                contactsModel.getProperty(R.string.prop_displayed_fragment, String.class).equals(getString(R.string.tag_tabs_fragment))){
-            fragmentChanger.displayNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
-        }
+        contactsModel.setProperty(R.string.prop_displayed_fragment, getString(R.string.tag_no_tabs_fragment));
+        viewChanger.hideTabsFragment();
+        viewChanger.showNoTabsFragment();
+        fragmentChanger.addNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
+//        if(contactsModel.getProperty(R.string.prop_displayed_fragment) == null ||
+//                contactsModel.getProperty(R.string.prop_displayed_fragment, String.class).equals(getString(R.string.tag_tabs_fragment))){
+//            fragmentChanger.displayNoTabsFragment(((AppCompatActivity) view.getContext()).getSupportFragmentManager());
+//
+//        }
     }
 }

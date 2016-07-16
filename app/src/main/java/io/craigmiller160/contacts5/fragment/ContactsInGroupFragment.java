@@ -52,27 +52,4 @@ public class ContactsInGroupFragment extends AbstractContactsFragment<Contact> {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        View view = super.onCreateView(inflater, container, savedInstance);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        String groupName = contactsModel.getProperty(R.string.prop_selected_group_name, String.class);
-        if(groupName != null){
-            activity.setTitle(groupName);
-        }
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        activity.setTitle(getString(R.string.activity_contacts_name_label));
-        contactsModel.clearProperty(R.string.prop_contacts_in_group_list);
-    }
-
 }
