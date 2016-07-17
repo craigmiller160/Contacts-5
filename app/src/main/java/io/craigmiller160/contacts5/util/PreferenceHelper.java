@@ -80,10 +80,6 @@ public class PreferenceHelper extends AbstractAndroidUtil{
         return prefs.getBoolean(getString(R.string.setting_phones_only_key), true) ? 1 : 0;
     }
 
-    public boolean isNewRetrievalMethod(){
-        return prefs.getBoolean(getString(R.string.setting_new_retrieval_key), true);
-    }
-
     public boolean isFirstNameLastName(){
         String nameFormat = prefs.getString(getString(R.string.setting_contact_name_format_key),
                 getString(R.string.array_name_format_first_last));

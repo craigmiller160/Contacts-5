@@ -332,81 +332,6 @@ public class ContactsService extends Service{
             List<Contact> allContacts = new ArrayList<>();
             List<Contact> favContacts = new ArrayList<>();
 
-            if(prefHelper.isNewRetrievalMethod()){
-                logger.d(tagid, "Using new method to load all contacts");
-                newRetrievalMethod(allContacts, favContacts);
-            }
-            else{
-                logger.d(tagid, "Using old method to load all contacts");
-                oldRetrievalMethod(allContacts, favContacts);
-            }
-
-            Map<String,List<Contact>> results = new HashMap<>();
-            results.put(getString(R.string.prop_contacts_list), allContacts);
-            results.put(getString(R.string.prop_favorites_list), favContacts);
-
-            logger.v(TAG, "Finishing AllContactsQuery");
-
-            return results;
-        }
-
-        private void newRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
-            Cursor cursor = null;
-            try{
-                cursor = getContext().getContentResolver().query(
-                        URI_DATA,
-                        new String[] {COL_DATA_CONTACT_ID, COL_DATA_DISPLAY_NAME, COL_CONTACTS_CONTACT_NAME_ALT,
-                                COL_DATA_HAS_PHONE, COL_CONTACTS_STARRED},
-                        COL_DATA_MIMETYPE + " = ?",
-                        new String[]{MIMETYPE_STRUCTURED_NAME},
-                        prefHelper.getContactSortString(PreferenceHelper.ALL_CONTACTS)
-                );
-
-                if(cursor != null){
-                    cursor.moveToFirst();
-                    logger.v(tagid, "AllContacts cursor contains " + cursor.getCount() + " records");
-
-                    while(!cursor.isAfterLast()){
-                        if(Thread.currentThread().isInterrupted()){
-                            logger.e(tagid, "All Contacts query was interrupted");
-                            throw new InterruptedException();
-                        }
-
-                        int hasPhone = cursor.getInt(cursor.getColumnIndex(COL_DATA_HAS_PHONE));
-                        if(prefHelper.isPhonesOnly() == 1 && hasPhone != 1){
-                            cursor.moveToNext();
-                            continue;
-                        }
-
-                        long contactId = cursor.getLong(cursor.getColumnIndex(COL_DATA_CONTACT_ID));
-                        int displayNameIndex = prefHelper.isFirstNameLastName() ? cursor.getColumnIndex(COL_DATA_DISPLAY_NAME) : cursor.getColumnIndex(COL_CONTACTS_CONTACT_NAME_ALT);
-                        String displayName = cursor.getString(displayNameIndex);
-                        Uri contactUri = ContentUris.withAppendedId(URI_CONTACTS, contactId);
-
-                        Contact contact = new Contact();
-                        contact.setDisplayName(displayName);
-                        contact.setUri(contactUri);
-                        contact.setId(contactId);
-
-                        allContacts.add(contact);
-
-                        int starred = cursor.getInt(cursor.getColumnIndex(COL_CONTACTS_STARRED));
-                        if(starred == 1){
-                            favContacts.add(contact);
-                        }
-
-                        cursor.moveToNext();
-                    }
-                }
-            }
-            finally{
-                if(cursor != null){
-                    cursor.close();
-                }
-            }
-        }
-
-        private void oldRetrievalMethod(List<Contact> allContacts, List<Contact> favContacts) throws InterruptedException{
             Cursor cursor = null;
             try{
                 cursor = getContext().getContentResolver().query(
@@ -458,6 +383,14 @@ public class ContactsService extends Service{
                     cursor.close();
                 }
             }
+
+            Map<String,List<Contact>> results = new HashMap<>();
+            results.put(getString(R.string.prop_contacts_list), allContacts);
+            results.put(getString(R.string.prop_favorites_list), favContacts);
+
+            logger.v(TAG, "Finishing AllContactsQuery");
+
+            return results;
         }
     }
 
