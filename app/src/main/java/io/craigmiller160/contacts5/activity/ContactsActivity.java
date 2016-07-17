@@ -95,9 +95,6 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         if(!androidSystemUtil.permissions().hasReadContactsPermission()){
             androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
-        else{
-            toggleRequiresPermissionsUI(true);
-        }
 
         if(savedInstance == null){
             fragmentChanger.addTabsFragment(getSupportFragmentManager());
