@@ -51,6 +51,7 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
     private ContactsActivityViewChanger viewChanger;
     private AndroidModel contactsModel;
     private boolean reloadContacts = true;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -114,6 +115,12 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         }
     }
 
+    private void toggleRequiresPermissionsUI(boolean hasPermission){
+        //TODO finish this
+        View addContactFab = findViewById(R.id.add_contact_fab);
+
+    }
+
     @Override
     public void setTitle(CharSequence title){
         super.setTitle(title);
@@ -168,16 +175,17 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
 
         //Set up the search component
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search_id).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        SearchController searchController = new SearchController(this);
-        searchView.setOnQueryTextListener(searchController);
-
         MenuItem item = menu.findItem(R.id.menu_search_id);
+        SearchView searchView = (SearchView) item.getActionView();
+        SearchController searchController = new SearchController(this);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         MenuItemCompat.setOnActionExpandListener(item, searchController);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(searchController);
 
         return true;
     }
