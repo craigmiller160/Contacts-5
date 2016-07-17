@@ -7,6 +7,8 @@
     <!-- Model Properties -->
     <string name="prop_contacts_list" translatable="false">ContactsList</string>
     <string name="prop_favorites_list" translatable="false">FavoritesList</string>
+    <string name="prop_exclusions_list" translatable="false">ExclusionsList</string>
+    <string name="prop_inclusions_list" translatable="false">InclusionsList</string>
     <string name="prop_groups_list" translatable="false">GroupsList</string>
     <string name="prop_contacts_in_group_list" translatable="false">ContactsInGroupList</string>
     <string name="prop_displayed_fragment" translatable="false">DisplayedFragment</string>

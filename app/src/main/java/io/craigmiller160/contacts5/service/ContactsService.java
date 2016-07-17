@@ -142,7 +142,7 @@ public class ContactsService extends Service{
 
         private Future<List<Contact>> contactsInGroupQuery;
         Future<Map<String,List<Contact>>> allContactsQuery;
-        Future<Set<Long>> exclusionsQuery;
+        Future<Map<String,Set<Long>>> exclusionsQuery;
         Future<List<ContactGroup>> allGroupsQuery;
 
         public ExecuteQueries(ContactsService service, Intent intent, int startId, String tagid){
@@ -274,12 +274,14 @@ public class ContactsService extends Service{
                 throw new InterruptedException();
             }
 
-            if(allContactsQuery != null){
-                Map<String,List<Contact>> results = allContactsQuery.get();
-                List<Contact> contacts = results.get(getString(R.string.prop_contacts_list));
-                List<Contact> favorites = results.get(getString(R.string.prop_favorites_list));
-                Set<Long> exclusions = exclusionsQuery.get();
-                logger.v(tagid, String.format("Exclusion IDs loaded: " + exclusions.size()));
+            if(allContactsQuery != null && exclusionsQuery != null){
+                Map<String,List<Contact>> allAndFavs = allContactsQuery.get();
+                List<Contact> contacts = allAndFavs.get(getString(R.string.prop_contacts_list));
+                List<Contact> favorites = allAndFavs.get(getString(R.string.prop_favorites_list));
+
+                Map<String,Set<Long>> exclusionsAndInclusions = exclusionsQuery.get();
+                Set<Long> exclusions = exclusionsAndInclusions.get(getString(R.string.prop_exclusions_list));
+                Set<Long> inclusions = exclusionsAndInclusions.get(getString(R.string.prop_inclusions_list));
 
                 Iterator<Contact> contactIterator = contacts.iterator();
                 while(contactIterator.hasNext()){
@@ -287,7 +289,7 @@ public class ContactsService extends Service{
                         throw new InterruptedException();
                     }
                     Contact contact = contactIterator.next();
-                    if(exclusions.contains(contact.getId())){
+                    if(exclusions.contains(contact.getId()) && !inclusions.contains(contact.getId())){
                         contactIterator.remove();
                     }
                 }
@@ -298,7 +300,7 @@ public class ContactsService extends Service{
                         throw new InterruptedException();
                     }
                     Contact contact = favIterator.next();
-                    if(exclusions.contains(contact.getId())){
+                    if(exclusions.contains(contact.getId())  && !inclusions.contains(contact.getId())){
                         favIterator.remove();
                     }
                 }
@@ -459,7 +461,7 @@ public class ContactsService extends Service{
         }
     }
 
-    private static class ExclusionsQuery extends AbstractAndroidUtil implements Callable<Set<Long>>{
+    private static class ExclusionsQuery extends AbstractAndroidUtil implements Callable<Map<String,Set<Long>>>{
 
         private final PreferenceHelper prefHelper;
         private final String tagid;
@@ -471,9 +473,10 @@ public class ContactsService extends Service{
         }
 
         @Override
-        public Set<Long> call() throws Exception {
+        public Map<String,Set<Long>> call() throws Exception {
             logger.v(TAG, "Starting ExclusionsQuery");
             Set<Long> contactsToExclude = new HashSet<>();
+            Set<Long> contactsToInclude = new HashSet<>();
             Cursor cursor = null;
             Set<String> accountsToDisplay = prefHelper.getAccountsToDisplay();
 
@@ -498,6 +501,9 @@ public class ContactsService extends Service{
                         if(!accountsToDisplay.contains(accountName)){
                             contactsToExclude.add(cursor.getLong(cursor.getColumnIndex(COL_RAW_CONTACT_ID)));
                         }
+                        else{
+                            contactsToInclude.add(cursor.getLong(cursor.getColumnIndex(COL_RAW_CONTACT_ID)));
+                        }
 
                         cursor.moveToNext();
                     }
@@ -511,7 +517,11 @@ public class ContactsService extends Service{
 
             logger.v(TAG, "Finishing ExclusionsQuery");
 
-            return contactsToExclude;
+            Map<String,Set<Long>> results = new HashMap<>();
+            results.put(getString(R.string.prop_exclusions_list), contactsToExclude);
+            results.put(getString(R.string.prop_inclusions_list), contactsToInclude);
+
+            return results;
         }
 
     }
