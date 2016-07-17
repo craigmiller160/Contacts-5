@@ -19,7 +19,8 @@
         android:orderInCategory="103"
         app:showAsAction="collapseActionView|ifRoom"
         android:icon="@drawable/ic_search_white_24dp"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:visible="false"/>
 
     <!--<item-->
         <!--android:id="@+id/aboutApp"-->

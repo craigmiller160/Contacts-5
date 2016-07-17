@@ -56,7 +56,8 @@
             android:clickable="true"
             android:id="@+id/add_contact_fab"
             app:backgroundTint="@color/colorPrimary"
-            android:src="@drawable/add_contact_icon_new" />
+            android:src="@drawable/add_contact_icon_new"
+            android:visibility="gone"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

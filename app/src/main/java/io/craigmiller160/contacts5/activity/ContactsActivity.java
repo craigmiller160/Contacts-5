@@ -95,6 +95,9 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
         if(!androidSystemUtil.permissions().hasReadContactsPermission()){
             androidSystemUtil.permissions().requestReadContactsPermission(this);
         }
+        else{
+            toggleRequiresPermissionsUI(true);
+        }
 
         if(savedInstance == null){
             fragmentChanger.addTabsFragment(getSupportFragmentManager());
@@ -116,9 +119,8 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
     }
 
     private void toggleRequiresPermissionsUI(boolean hasPermission){
-        //TODO finish this
-        View addContactFab = findViewById(R.id.add_contact_fab);
-
+        findViewById(R.id.add_contact_fab).setVisibility(hasPermission ? View.VISIBLE : View.GONE);
+        menu.findItem(R.id.menu_search_id).setVisible(hasPermission);
     }
 
     @Override
@@ -255,6 +257,7 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
             case AndroidSystemUtil.CONTACTS_PERMISSION_REQUEST:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     logger.d(TAG, "Necessary permissions were granted");
+                    toggleRequiresPermissionsUI(true);
                     String displayedFragment = contactsModel.getProperty(R.string.prop_displayed_fragment, String.class);
                     RefreshableView refreshableView = (RefreshableView) getSupportFragmentManager().findFragmentByTag(displayedFragment);
                     refreshableView.refreshView();
@@ -262,6 +265,7 @@ public class ContactsActivity extends AppCompatActivity implements FragmentManag
                 }
                 else{
                     logger.e(TAG, "Necessary permissions were denied!");
+                    toggleRequiresPermissionsUI(false);
                     View view = findViewById(R.id.activity_contacts_layout);
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.permission_denied_snackbar_text), Snackbar.LENGTH_LONG)
                             .setAction(getString(R.string.grant_permission_snackbar_button), new View.OnClickListener(){
