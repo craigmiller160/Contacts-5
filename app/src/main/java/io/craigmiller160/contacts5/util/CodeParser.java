@@ -22,6 +22,7 @@ public class CodeParser {
     private static final String DISPLAY_SETTINGS = "DisplaySettingsActivity";
     private static final String SELECT_CONTACT = "SelectContact-ActionView";
     private static final String NEW_CONTACT = "NewContact-ActionInsert";
+    private static final String UNKNOWN = "Unknown";
 
     private static final String OK = "ResultOk";
     private static final String CANCELED = "ResultCanceled";
@@ -35,8 +36,7 @@ public class CodeParser {
             case NEW_CONTACT_REQUEST:
                 return NEW_CONTACT;
             default:
-                throw new IllegalArgumentCtxException("Unknown request code provided, cannot parse")
-                        .addContextValue("Request Code", requestCode);
+                return UNKNOWN;
         }
     }
 
@@ -47,8 +47,7 @@ public class CodeParser {
             case Activity.RESULT_CANCELED:
                 return CANCELED;
             default:
-                throw new IllegalArgumentCtxException("Unknown result code provided, cannot parse")
-                        .addContextValue("Result Code", resultCode);
+                return UNKNOWN;
         }
     }
 
