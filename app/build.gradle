@@ -8,8 +8,8 @@ android {
         applicationId "io.craigmiller160.contacts5"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 9
-        versionName "1.0.7"
+        versionCode 10
+        versionName "1.0.8"
         archivesBaseName = "$applicationId-$versionName"
     }
 
