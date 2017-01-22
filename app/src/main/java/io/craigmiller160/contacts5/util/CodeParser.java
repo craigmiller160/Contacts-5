@@ -36,7 +36,7 @@ public class CodeParser {
             case NEW_CONTACT_REQUEST:
                 return NEW_CONTACT;
             default:
-                return UNKNOWN;
+                return UNKNOWN + " " + requestCode;
         }
     }
 
@@ -47,7 +47,7 @@ public class CodeParser {
             case Activity.RESULT_CANCELED:
                 return CANCELED;
             default:
-                return UNKNOWN;
+                return UNKNOWN + " " + resultCode;
         }
     }
 
