@@ -79,9 +79,6 @@ public class SearchController extends AbstractAndroidController implements Searc
             adapter.filter(query);
         }
 
-//        if(adapter != null){
-//            adapter.filter(query);
-//        }
         return true;
     }
 
