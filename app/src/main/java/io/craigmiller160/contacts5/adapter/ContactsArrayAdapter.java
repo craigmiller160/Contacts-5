@@ -85,6 +85,7 @@ public class ContactsArrayAdapter extends MyArrayAdapter<Contact> /*implements S
 
     @Override
     public Filter getFilter() {
+        //Do not call this method directly, use the superclass filter(String) and clearFilter() methods instead
         return new ContactsFilter(this);
     }
 

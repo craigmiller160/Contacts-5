@@ -32,6 +32,7 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     private List<T> originalContents;
     private final String propertyName;
     private final AndroidModel contactsModel;
+    private String filterQuery;
 
     protected MyArrayAdapter(Context context, int resource, String propertyName) {
         super(context, resource);
@@ -46,50 +47,52 @@ public abstract class MyArrayAdapter<T> extends ArrayAdapter<T> implements Prope
     }
 
     protected void refreshContentsFromModel(){
+        if(Looper.myLooper() == Looper.getMainLooper()){
+            safelyRefreshContactsFromModel();
+        }
+        else{
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(new Runnable() {
+                @Override
+                public void run() {
+                    safelyRefreshContactsFromModel();
+                }
+            });
+        }
+    }
+
+    private void safelyRefreshContactsFromModel(){
         logger.v(TAG, "Refreshing ArrayAdapter contents from model. Property: " + propertyName);
-        setContents(contactsModel.getProperty(propertyName, List.class));
         setOriginalContents(contactsModel.getProperty(propertyName, List.class));
+        if(!isFiltered()){
+            setContents(contactsModel.getProperty(propertyName, List.class));
+        }
+        else{
+            filter(filterQuery);
+        }
     }
 
     public void setContents(final List<T> contents){
-        if(Looper.myLooper() == Looper.getMainLooper()){
-            this.contents = contents;
-            notifyDataSetChanged();
-        }
-        else{
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(new Runnable() {
-                @Override
-                public void run() {
-                    MyArrayAdapter.this.contents = contents;
-                    MyArrayAdapter.this.notifyDataSetChanged();
-                }
-            });
-        }
+        this.contents = contents;
+        notifyDataSetChanged();
     }
 
     public void setOriginalContents(final List<T> contents){
-        if(Looper.myLooper() == Looper.getMainLooper()){
-            this.originalContents = contents;
-            notifyDataSetChanged();
-        }
-        else{
-            Handler h = new Handler(Looper.getMainLooper());
-            h.post(new Runnable() {
-                @Override
-                public void run() {
-                    MyArrayAdapter.this.originalContents = contents;
-                    MyArrayAdapter.this.notifyDataSetChanged();
-                }
-            });
-        }
+        this.originalContents = contents;
+        notifyDataSetChanged();
+    }
+
+    public boolean isFiltered(){
+        return filterQuery != null;
     }
 
     public void clearFilter(){
+        this.filterQuery = null;
         refreshContentsFromModel();
     }
 
     public void filter(String query){
+        this.filterQuery = query;
         getFilter().filter(query);
     }
 
